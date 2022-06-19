@@ -48,6 +48,12 @@ Route::group(['middleware' => ['auth']], function() {
     // roles and permissions
     Route::prefix('roles')->group(function() {
         Route::get('', [RoleController::class, 'index'])->name('roles');
+        Route::get('/{id}/show', [RoleController::class, 'show'])->name('show.role');
+        Route::get('/create', [RoleController::class, 'create'])->name('create.role');
+        Route::post('/store', [RoleController::class, 'store'])->name('store.role');
+        Route::post('/{id}/edit', [RoleController::class, 'edit'])->name('edit.role');
+        Route::post('/{id}/update', [RoleController::class, 'update'])->name('update.role');
+        Route::post('/{id}/delete', [RoleController::class, 'destroy'])->name('delete.role');
     });
     // student Routes
     Route::prefix('students')->group(function () {

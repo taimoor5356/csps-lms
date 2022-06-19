@@ -174,12 +174,6 @@
             var _this = $(this);
             var courseId = _this.attr('data-course-id');
             $.get('courses/' + courseId + '/show', function(data) {
-                // $('span.batch-no').html(data.batch_no);
-                // $('span.reg-no').html(data.reg_no);
-                // $('span.applied-for').html(data.applied_for);
-                // var url = '{{ asset('public/assets/img/courses/:image') }}';
-                // url = url.replace(':image', data.user.photo);
-                // $('img.profile-img').attr('src', url);
             });
             $('#modal-default').modal('show');
         });

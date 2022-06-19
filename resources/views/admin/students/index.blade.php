@@ -48,37 +48,6 @@
         .shadow-none {
             box-shadow: none !important;
         }
-
-        /* .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-            border-radius: 50px !important;
-            background-color: #596CFF !important;
-            color: white !important;
-        } */
         .child-table>tr>td {
             border: 1px solid lightgrey;
         }

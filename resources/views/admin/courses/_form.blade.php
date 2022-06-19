@@ -25,31 +25,31 @@
         <div class="form-group">
             <label for="name" class="form-control-label">Course Name *</label>
             <input class="form-control name" id="name" name="name" type="text"
-                value="@isset($course){{ $course->name }}@endisset" onfocus="focused(this)"
+                value="@isset($course) {{ $course->name }} @endisset" onfocus="focused(this)"
                 onfocusout="defocused(this)" placeholder="Course Name">
         </div>
     </div>
     <div class=" col-md-4">
-            <div class="form-group">
-                <label for="fee" class="form-control-label">Fee *</label>
-                <input class="form-control fee" id="fee" name="fee" type="number"
-                    value="@isset($course){{ $course->fee }}@endisset" onfocus="focused(this)"
-                    onfocusout="defocused(this)" placeholder="Enter Fee">
-            </div>
+        <div class="form-group">
+            <label for="fee" class="form-control-label">Fee *</label>
+            <input class="form-control fee" id="fee" name="fee" type="number"
+                value="@isset($course) {{ $course->fee }} @endisset" onfocus="focused(this)"
+                onfocusout="defocused(this)" placeholder="Enter Fee">
         </div>
-        <div class="col-sm-4">
-            <label for="image" class="form-control-label">Course Image *</label>
-            <input type="file" name="image"
-                onchange="document.getElementById('image').src = window.URL.createObjectURL(this.files[0])"
-                class="form-control">
-            <div class="row img-preview">
-                <div class="col-md-3 my-2">
-                    <img class="rounded"
-                        src="@isset($course) {{ asset('public/assets/img/courses/' . $course->image . '') }}@else{{ asset('public/assets/img/user-profile.jpg') }} @endisset"
-                        alt="Product Image" id="image" width="100" height="100">
-                </div>
+    </div>
+    <div class="col-sm-4">
+        <label for="image" class="form-control-label">Course Image *</label>
+        <input type="file" name="image"
+            onchange="document.getElementById('image').src = window.URL.createObjectURL(this.files[0])"
+            class="form-control">
+        <div class="row img-preview">
+            <div class="col-md-3 my-2">
+                <img class="rounded"
+                    src="@isset($course) {{ asset('public/assets/img/courses/' . $course->image . '') }}@else{{ asset('public/assets/img/user-profile.jpg') }} @endisset"
+                    alt="Product Image" id="image" width="100" height="100">
             </div>
         </div>
     </div>
+</div>
 </div>
 <hr class="horizontal dark">
