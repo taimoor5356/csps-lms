@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\User;
 use App\Models\Student;
 use Illuminate\Support\Facades\Auth;
@@ -51,9 +52,23 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/show', [RoleController::class, 'show'])->name('show.role');
         Route::get('/create', [RoleController::class, 'create'])->name('create.role');
         Route::post('/store', [RoleController::class, 'store'])->name('store.role');
-        Route::post('/{id}/edit', [RoleController::class, 'edit'])->name('edit.role');
+        Route::get('/{id}/edit', [RoleController::class, 'edit'])->name('edit.role');
         Route::post('/{id}/update', [RoleController::class, 'update'])->name('update.role');
         Route::post('/{id}/delete', [RoleController::class, 'destroy'])->name('delete.role');
+        Route::post('/assign-permission-to-role', [RoleController::class, 'assignPermissionToRole'])->name('assign_permission_to_role');
+    });
+    // admins Routes
+    Route::prefix('admins')->group(function () {
+        Route::get('', [AdminController::class, 'index'])->name('admins');
+        Route::get('/{id}/show', [AdminController::class, 'show'])->name('show.admin');
+        Route::get('/create', [AdminController::class, 'create'])->name('create.admin');
+        Route::post('/store', [AdminController::class, 'store'])->name('store.admin');
+        Route::get('/{id}/edit', [AdminController::class, 'edit'])->name('edit.admin');
+        Route::post('/{id}/update', [AdminController::class, 'update'])->name('update.admin');
+        Route::post('/{id}/delete', [AdminController::class, 'destroy'])->name('delete.admin');
+        Route::get('/trashed', [AdminController::class, 'trashed'])->name('trashed.admins');
+        Route::get('/{id}/restore', [AdminController::class, 'restore'])->name('restore.admin');
+        Route::post('/{id}/permanent-delete', [AdminController::class, 'permanentDelete'])->name('permanent_delete.admin');
     });
     // student Routes
     Route::prefix('students')->group(function () {
@@ -67,6 +82,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/trashed', [StudentController::class, 'trashed'])->name('trashed.students');
         Route::get('/{id}/restore', [StudentController::class, 'restore'])->name('restore.student');
         Route::post('/{id}/permanent-delete', [StudentController::class, 'permanentDelete'])->name('permanent_delete.student');
+        // Route::get('/{id}/enrolled-courses', [StudentController::class, 'enrolledCourses'])->name('student.enrolled.courses');
     });
     // courses Routes
     Route::prefix('courses')->group(function () {

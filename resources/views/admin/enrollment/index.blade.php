@@ -86,7 +86,9 @@
                     </div>
                     <div class="header-buttons ms-auto text-end">
                         <a href="{{ route('enroll-student.create') }}" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i> Add New</a>
+                        @can('enrollment_delete')
                         <a href="{{ route('trashed.enrollments') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">

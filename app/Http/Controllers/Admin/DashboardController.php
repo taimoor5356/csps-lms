@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Student;
+use App\Models\Enrollment;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -17,6 +20,11 @@ class DashboardController extends Controller
     {
         //
         $data['totalStudents'] = Student::count();
+        $data['totalStudentEnrolled'] = Enrollment::groupBy('user_id')->count();
+        $data['totalCourses'] = Course::count();
+        if (Auth::user()->hasRole('student')) {
+            $data['totalStudentEnrolled'] = Enrollment::where('user_id', Auth::user()->id)->count();
+        }
         return view('admin.dashboard.index')->with($data);
     }
 

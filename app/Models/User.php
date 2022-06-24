@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Admin;
+use App\Models\Course;
 use App\Models\Student;
 use App\Models\Instructor;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -41,15 +44,27 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // relation with students
-    public function student()
+    // relation with instructors
+    public function admin()
     {
-        return $this->hasOne(Student::class, 'user_id', 'id');
+        return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
     // relation with instructors
     public function instructor()
     {
         return $this->hasOne(Instructor::class, 'user_id', 'id');
+    }
+
+    // relation with students
+    public function student()
+    {
+        return $this->hasOne(Student::class, 'user_id', 'id');
+    }
+
+    // relation with courses
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'user_id', 'id');
     }
 }

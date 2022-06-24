@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Spatie\Permission\Models\Permission;
 
 class RoleController extends Controller
@@ -113,6 +114,8 @@ class RoleController extends Controller
     public function show($id)
     {
         //
+        $permissions = DB::table('role_has_permissions')->where('role_id', $id)->pluck('permission_id')->all();
+        return $permissions;
     }
 
     /**
@@ -124,6 +127,7 @@ class RoleController extends Controller
     public function edit($id)
     {
         //
+        dd('Under Construction');
     }
 
     /**
@@ -136,6 +140,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         //
+        dd('Under Construction');
     }
 
     /**
@@ -147,5 +152,36 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
+        dd('Under Construction');
+    }
+
+    public function assignRoleToModel(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->assignRole($request->role);
+    }
+
+    public function assignPermissionToRole(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $role = Role::find($request->input('role_id'));
+            $allPermissions = Permission::get();
+            if ($request->input('role_id') != 1) {
+                $permissions = $request->input('permissions');
+                $role->revokePermissionTo($allPermissions);
+                $role->syncPermissions($permissions);
+            } else {
+                // $role->syncPermissions($allPermissions);
+                
+                $permissions = $request->input('permissions');
+                $role->revokePermissionTo($allPermissions);
+                $role->syncPermissions($permissions);
+            }
+            DB::commit();
+            return response()->json(['status' => true, 'message' => 'Updated Successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['status', false, 'message' => 'Something went wrong']);
+        }
     }
 }

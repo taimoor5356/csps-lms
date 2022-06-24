@@ -3,7 +3,7 @@
 @section('style')
     <!-- Styling Here -->
     <style>
-        .student-modal-card {
+        .admin-modal-card {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -15,7 +15,7 @@
             border-radius: .25rem;
         }
 
-        .student-modal-card-body {
+        .admin-modal-card-body {
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1rem;
@@ -59,9 +59,9 @@
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Students</span></li>
+                    class="text-light">Admins</span></li>
         </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Students</h6>
+        <h6 class="font-weight-bolder text-white mb-0">Admins</h6>
     </nav>
 @endsection
 <div class="container-fluid py-4">
@@ -69,7 +69,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>All Students</h6>
+                    <h6>All Admins</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,19 +84,12 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @can('student_create')
-                            <a href="{{ route('create.student') }}" class="btn btn-primary" target="_blank"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endcan
-                        @can('student_delete')
-                            <a href="{{ route('trashed.students') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
-                        @endcan
-                        @if (Auth::user()->hasRole('student'))
-                            <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
-                        @endif
+                        <a href="{{ route('create.admin') }}" class="btn btn-primary" target="_blank"><i class="fa fa-user-plus"></i> Add New</a>
+                        <a href="{{ route('trashed.admins') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('admin.students._table')
+                    @include('admin.all_admins._table')
                 </div>
             </div>
         </div>
@@ -112,7 +105,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">Student Detail</h6>
+                        <h6 class="modal-title" id="modal-title-default">Admin Detail</h6>
                         <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -148,39 +141,8 @@
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">Applied For:</h6>
-                                                    <span class="text-secondary applied-for">CSS</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Domicile:</h6>
                                                     <span class="text-secondary domicile">Punjab</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">Degree:</h6>
-                                                    <span class="text-secondary degree">BA</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">Subjects:</h6>
-                                                    <span class="text-secondary subject">Arts</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">CGPA:</h6>
-                                                    <span class="text-secondary cgpa">2.78</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">Board/University:</h6>
-                                                    <span class="text-secondary board-university">The Univeristy of
-                                                        Lahore, Lahore</span>
-                                                </li>
-                                                <li
-                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                                    <h6 class="mb-0">Occupation:</h6>
-                                                    <span class="text-secondary occupation">Engineer</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -192,8 +154,8 @@
                                         <hr>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="card mb-3 student-modal-card">
-                                            <div class="card-body student-modal-card-body">
+                                        <div class="card mb-3 admin-modal-card">
+                                            <div class="card-body admin-modal-card-body">
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Full Name</h6>
@@ -218,15 +180,6 @@
                                                     </div>
                                                     <div class="col-sm-9 text-secondary father-name">
                                                         asfij nasfi
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <h6 class="mb-0">Father Occupation</h6>
-                                                    </div>
-                                                    <div class="col-sm-9 text-secondary father-occupation">
-                                                        PAF
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -278,64 +231,8 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        SUBJECTS:
-                                        <hr>
-                                        <div class="row gutters-sm">
-                                            <div class="col-sm-6 mb-3">
-                                                <div class="card p-0 h-100">
-                                                    <div class="card-body">
-                                                        <h6 class="d-flex align-items-center mb-3">Compulsory Subjects
-                                                        </h6>
-                                                        <hr>
-                                                        <small>English Essay</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>English Precis & Composition</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>General Science & Ability</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Pakistan Affairs</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Current Affairs</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Islamic Studies</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6 mb-3">
-                                                <div class="card p-0 h-100">
-                                                    <div class="card-body">
-                                                        <h6 class="d-flex align-items-center mb-3">Optional Subjects
-                                                        </h6>
-                                                        <hr>
-                                                        <small>English Essay</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>English Precis & Composition</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>General Science & Ability</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Pakistan Affairs</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Current Affairs</small>
-                                                        <div class="mb-3" style="height: 5px">
-                                                        </div>
-                                                        <small>Islamic Studies</small>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -370,7 +267,7 @@
                 '</tr>' +
                 '<tr>' +
                     '<td>Father Name:</td>' +
-                    '<td>'+ user.student.father_name +'</td>' +
+                    '<td>'+ user.admin.father_name +'</td>' +
                 '</tr>' +
             '</table>'
         );
@@ -397,15 +294,9 @@
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('students') }}"
+                url: "{{ route('admins') }}"
             },
             columns: [
-                // {
-                //     className: 'dt-control',
-                //     orderable: false,
-                //     data: null,
-                //     defaultContent: '',
-                // },
                 {
                     data: 'image',
                     name: 'image',
@@ -417,29 +308,13 @@
                     name: 'name_email'
                 },
                 {
-                    data: 'fathername_occupation',
-                    name: 'fathername_occupation'
+                    data: 'role',
+                    name: 'role'
                 },
                 {
                     data: 'dob_cnic',
                     name: 'dob_cnic'
                 },
-                {
-                    data: 'domicile',
-                    name: 'domicile'
-                },
-                {
-                    data: 'degree_university',
-                    name: 'degree_university'
-                },
-                {
-                    data: 'subject_cgpa',
-                    name: 'subject_cgpa'
-                },
-                // {
-                //     data: 'distinction',
-                //     name: 'distinction'
-                // },
                 {
                     data: 'action',
                     name: 'action',
@@ -476,30 +351,23 @@
         // Child Row ends
 
         // Open Modal to View Information
-        $(document).on('click', '.view-student-detail', function() {
+        $(document).on('click', '.view-admin-detail', function() {
             var _this = $(this);
-            var studentId = _this.attr('data-student-id');
-            $.get('students/' + studentId + '/show', function(data) {
+            var adminId = _this.attr('data-admin-id');
+            $.get('admins/' + adminId + '/show', function(data) {
                 $('span.batch-no').html(data.batch_no);
                 $('span.reg-no').html(data.reg_no);
-                $('span.applied-for').html(data.applied_for);
-                $('span.domicile').html(data.domicile);
-                $('span.degree').html(data.degree);
-                $('span.subject').html(data.major_subjects);
-                $('span.cgpa').html(data.cgpa);
-                $('span.board-university').html(data.board_university);
-                $('span.occupation').html(data.student_occupation);
-                $('span.distinction').html(data.distinction);
-                $('div.full-name').html(data.user.name);
-                $('div.email').html(data.user.email);
                 $('div.father-name').html(data.father_name);
-                $('div.father-occupation').html(data.father_occupation);
                 $('div.dob').html(data.dob);
                 $('div.cnic').html(data.cnic);
+                $('span.domicile').html(data.domicile);
+                $('span.distinction').html(data.distinction);
+                $('div.address').html(data.address);
                 $('div.contact-res').html(data.contact_res);
                 $('div.cell-no').html(data.cell_no);
-                $('div.address').html(data.address);
-                var url = '{{ asset('public/assets/img/students/:image') }}';
+                $('div.full-name').html(data.user.name);
+                $('div.email').html(data.user.email);
+                var url = '{{ asset('public/assets/img/admins/:image') }}';
                 url = url.replace(':image', data.user.photo);
                 $('img.profile-img').attr('src', url);
             });
@@ -513,10 +381,10 @@
         });
         // Close Modal
 
-        // Open Delete Student Modal
-        $(document).on('click', '.delete-student', function(e) {
+        // Open Delete admin Modal
+        $(document).on('click', '.delete-admin', function(e) {
             e.preventDefault();
-            var studentId = $(this).attr('data-student-id');
+            var adminId = $(this).attr('data-admin-id');
             Swal.fire({
                 title: 'Are you sure?',
                 icon: 'warning',
@@ -526,11 +394,11 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post('students/' + studentId + '/delete', {_token: '{{ csrf_token() }}'},function() {
+                    $.post('admins/' + adminId + '/delete', {_token: '{{ csrf_token() }}'},function() {
                     });
                     Swal.fire({
                         title: 'Deleted!',
-                        text: 'Student has been deleted.',
+                        text: 'Admin has been deleted.',
                         icon: 'success',
                         timer: 4500,
                         showCancelButton: false,
@@ -540,7 +408,7 @@
                 }
             });
         });
-        // Ends Open Delete Student Modal
+        // Ends Open Delete admin Modal
     });
 </script>
 <!-- Scripting Here -->

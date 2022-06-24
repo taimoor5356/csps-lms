@@ -4,19 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Student;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
-use App\Models\Enrollment;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use PHPUnit\Framework\MockObject\Builder\Stub;
+use Spatie\Permission\Models\Role;
 
-class StudentController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,7 +32,7 @@ class StudentController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/students/' . $row->user->photo . '" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/admins/' . $row->user->photo . '" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -44,7 +41,7 @@ class StudentController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/students/" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/admins/" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -65,15 +62,19 @@ class StudentController extends Controller
                     return 'No Data';
                 }
             })
-            ->addColumn('fathername_occupation', function ($row) {
-                return '
-                <div class="d-flex px-2 py-1">
-                    <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . $row->father_name . '</h6>
-                        <p class="text-sm text-secondary mb-0">' . $row->father_occupation . '</p>
+            ->addColumn('role', function ($row) {
+                if (isset($row->user)) {
+                    $roleName = $row->user->getRoleNames();
+                    return '
+                    <div class="d-flex px-2 py-1">
+                        <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">' . $roleName[0] . '</h6>
+                        </div>
                     </div>
-                </div>
-                ';
+                    ';
+                } else {
+                    return 'No Data';
+                }
             })
             ->addColumn('dob_cnic', function ($row) {
                 return '
@@ -85,62 +86,23 @@ class StudentController extends Controller
                 </div>
                 ';
             })
-            ->addColumn('domicile', function ($row) {
-                return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->domicile . '</h6>
-                        </div>
-                    </div>
-                ';
-            })
-            ->addColumn('degree_university', function ($row) {
-                return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->degree . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->board_university . '</p>
-                        </div>
-                    </div>
-                ';
-            })
-            ->addColumn('subject_cgpa', function ($row) {
-                $val = '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->major_subjects . '</h6>
-                            <p class="text-sm text-secondary mb-0">';
-                            if ($row->cgpa < 4) {
-                                $val .= number_format($row->cgpa, 2) . 'GGPA';
-                            } else if ($row->cgpa > 40) {
-                                $val .= number_format($row->cgpa, 2) . '%';
-                            }
-                    $val .= '</p>
-                        </div>
-                    </div>
-                ';
-                return $val;
-            })
-            ->addColumn('distinction', function ($row) {
-                return $row->distinction;
-            })
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="#" class="btn btn-success bg-success p-1 view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
-                        <a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>
+                        <a href="#" class="btn btn-success bg-success p-1 view-admin-detail" data-admin-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="admins/'. $row->id .'/edit" data-admin-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
+                        <a href="admins/'. $row->id .'/delete" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Delete"><i class="fa fa-trash-o"></i></a>
                     ';
                 } else {
                     $btn .= '
-                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
-                        <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
+                        <a href="'. $row->id .'/restore" data-admin-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
+                        <a href="'. $row->id .'/delete" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
                     ';
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action'])
+            ->rawColumns(['image', 'name_email', 'role', 'dob_cnic', 'action'])
             ->make(true);
     }
     // showTableData for Index and Trashed
@@ -149,14 +111,11 @@ class StudentController extends Controller
     {
         //
         try {
-            $studentsDetail = Student::with('user')->get();
-            if (Auth::user()->hasRole('student')) {
-                $studentsDetail = Student::with('user')->where('user_id', Auth::user()->id)->get();
-            }
+            $adminsDetail = Admin::with('user')->get();
             if ($request->ajax()) {
-                return $this->showTableData($studentsDetail, $trashed = null);
+                return $this->showTableData($adminsDetail, $trashed = null);
             }
-            return view('admin.students.index');
+            return view('admin.all_admins.index');
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
         }
@@ -170,7 +129,8 @@ class StudentController extends Controller
     public function create()
     {
         //
-        return view('admin.students.create');
+        $roles = Role::get();
+        return view('admin.all_admins.create', compact('roles'));
     }
 
     /**
@@ -184,25 +144,26 @@ class StudentController extends Controller
         //
         try {
             DB::beginTransaction();
+            $file = 'admin-profile.png';
             if ($request->hasFile('photo')) {
                 if ($request->file('photo')->getSize() > 500000) {
                     return redirect()->back()->with('error', 'Max 500KB photo size allowed');
                 }
                 $file = time().'.'.$request->photo->extension();
-                $request->photo->move(public_path('assets/img/students/'), $file);
+                $request->photo->move(public_path('assets/img/admins/'), $file);
             } else {
-                return redirect()->with('error', 'Profile Photo Required');
+                // return redirect()->back()->with('error', 'Profile Photo Required');
             }
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'role_id' => $request->role,
-                'registration_date' => Carbon::now()->format('d-m-Y'),
+                'registration_date' => Carbon::now()->format('Y-m-d'),
                 'approved_status' => 0,
                 'photo' => $file
             ]);
-            $student = Student::create([
+            $admin = Admin::create([
                 'user_id' => $user->id,
                 'batch_no' => $request->batch_no,
                 'reg_no' => $request->reg_no,
@@ -212,7 +173,7 @@ class StudentController extends Controller
                 'dob' => $request->dob,
                 'cnic' => $request->cnic,
                 'domicile' => $request->domicile,
-                'student_occupation' => $request->student_occupation,
+                'admin_occupation' => $request->admin_occupation,
                 'degree' => $request->degree,
                 'major_subjects' => $request->major_subjects,
                 'cgpa' => $request->cgpa,
@@ -222,10 +183,11 @@ class StudentController extends Controller
                 'contact_res' => $request->contact_res,
                 'cell_no' => $request->cell_no
             ]);
-            $user->assignRole(3);
+            $user->assignRole($request->role);
             DB::commit();
             return redirect()->back()->with('success', 'Successfully Saved');
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return redirect()->back()->with('error', 'Something went wrong');
         }
@@ -240,9 +202,9 @@ class StudentController extends Controller
     public function show($id)
     {
         //
-        $student = Student::with('user')->where('id', $id)->first();
-        if (isset($student)) {
-            return $student;
+        $admin = Admin::with('user')->where('id', $id)->first();
+        if (isset($admin)) {
+            return $admin;
         }
     }
 
@@ -256,10 +218,9 @@ class StudentController extends Controller
     {
         //
         try {
-            $roles = Role::get();
-            $student = Student::with('user')->where('id', $id)->first();
-            if (isset($student)) {
-                return view('admin.students.edit', compact('student', 'id', 'roles'));
+            $admin = Admin::with('user')->where('id', $id)->first();
+            if (isset($admin)) {
+                return view('admin.all_admins.edit', compact('admin', 'id'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
@@ -280,39 +241,39 @@ class StudentController extends Controller
         //
         try {
             DB::beginTransaction();
-            $student = Student::with('user')->where('id', $id)->first();
-            if (isset($student)) {
-                $student->applied_for = $request->applied_for;
-                $student->batch_no = $request->batch_no;
-                $student->reg_no = $request->reg_no;
-                $student->user->name = $request->name;
-                $student->user->email = $request->email;
-                $student->user->password = Hash::make($request->password);
+            $admin = Admin::with('user')->where('id', $id)->first();
+            if (isset($admin)) {
+                $admin->applied_for = $request->applied_for;
+                $admin->batch_no = $request->batch_no;
+                $admin->reg_no = $request->reg_no;
+                $admin->user->name = $request->name;
+                $admin->user->email = $request->email;
+                $admin->user->password = Hash::make($request->password);
                 if ($request->hasFile('photo')) {
                     if ($request->file('photo')->getSize() > 500000) {
                         return redirect()->back()->with('error', 'Max 500KB photo size allowed');
                     }
                     $file = time().'.'.$request->photo->extension();
-                    $request->photo->move(public_path('assets/img/students/'), $file);
-                    $student->user->photo = $file;
+                    $request->photo->move(public_path('assets/img/admins/'), $file);
+                    $admin->user->photo = $file;
                 }
-                $student->father_name = $request->father_name;
-                $student->father_occupation = $request->father_occupation;
-                $student->dob = $request->dob;
-                $student->cnic = $request->cnic;
-                $student->domicile = $request->domicile;
-                $student->student_occupation = $request->student_occupation;
-                $student->address = $request->address;
-                $student->contact_res = $request->contact_res;
-                $student->cell_no = $request->cell_no;
-                $student->degree = $request->degree;
-                $student->major_subjects = $request->major_subjects;
-                $student->cgpa = $request->cgpa;
-                $student->board_university = $request->board_university;
-                $student->distinction = $request->distinction;
-                $student->save();
-                $student->user->save();
-                $student->user->assignRole($request->role);
+                $admin->father_name = $request->father_name;
+                $admin->father_occupation = $request->father_occupation;
+                $admin->dob = $request->dob;
+                $admin->cnic = $request->cnic;
+                $admin->domicile = $request->domicile;
+                $admin->admin_occupation = $request->admin_occupation;
+                $admin->address = $request->address;
+                $admin->contact_res = $request->contact_res;
+                $admin->cell_no = $request->cell_no;
+                $admin->degree = $request->degree;
+                $admin->major_subjects = $request->major_subjects;
+                $admin->cgpa = $request->cgpa;
+                $admin->board_university = $request->board_university;
+                $admin->distinction = $request->distinction;
+                $admin->save();
+                $admin->user->save();
+                $admin->user->assignRole(3);
                 DB::commit();
                 return redirect()->back()->with('success', 'Updated Successfully');
             } else {
@@ -334,11 +295,11 @@ class StudentController extends Controller
     {
         //
         try {
-            $student = Student::with('user')->where('id', $id)->first();
-            if (isset($student)) {
-                if (isset($student->user)) {
-                    $student->user->delete();
-                    $student->delete();
+            $admin = Admin::with('user')->where('id', $id)->first();
+            if (isset($admin)) {
+                if (isset($admin->user)) {
+                    $admin->user->delete();
+                    $admin->delete();
                     return redirect()->back()->with('success', 'Deleted Successfully');
                 }
             } else {
@@ -356,12 +317,12 @@ class StudentController extends Controller
     public function trashed(Request $request)
     {
         //
-        $trashedStudents = Student::with(['user' => fn($q) => $q->onlyTrashed()])->onlyTrashed()->get();
+        $trashedadmins = User::with(['admin' => fn($q) => $q->onlyTrashed()])->onlyTrashed()->get();
         try {
             if ($request->ajax()) {
-                return $this->showTableData($trashedStudents, $trashed = 'trashed');
+                return $this->showTableData($trashedadmins, $trashed = 'trashed');
             }
-            return view('admin.students.trashed');
+            return view('admin.all_admins.trashed');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
@@ -370,11 +331,11 @@ class StudentController extends Controller
     public function restore($id)
     {
         try {
-            $trashedStudent = Student::with(['user' => fn($q) => $q->onlyTrashed()])->where('id', $id)->onlyTrashed()->first();
-            if (isset($trashedStudent)) {
-                $trashedStudent->user->restore();
-                $trashedStudent->restore();
-                return redirect()->back()->with('success', 'Student data Restored');
+            $trashedadmin = Admin::with(['user' => fn($q) => $q->onlyTrashed()])->where('id', $id)->onlyTrashed()->first();
+            if (isset($trashedadmin)) {
+                $trashedadmin->user->restore();
+                $trashedadmin->restore();
+                return redirect()->back()->with('success', 'admin data Restored');
             } else {
                 return redirect()->back()->with('error', 'Something went wrong');
             }
@@ -392,23 +353,5 @@ class StudentController extends Controller
     public function permanentDelete(Request $request, $id)
     {
         //
-    }
-
-    /**
-     * Show Auth Student Courses.
-     *
-     */
-    public function enrolledCourses(Request $request, $id)
-    {
-        //
-        try {
-            $enrolledCourses = Enrollment::where('user_id', Auth::user()->id)->get();
-            if ($request->ajax()) {
-                return $this->showTableData($enrolledCourses, $trashed = null);
-            }
-            return view('admin.enrollment.index');
-        } catch (\Exception $e) {
-            return redirect()->back()->withError('Something went wrong');
-        }
     }
 }

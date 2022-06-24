@@ -11,8 +11,10 @@
     </div>
     <hr class="horizontal dark mt-2">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        @role('admin')
         <ul class="navbar-nav">
             <!-- Menu -->
+            @can('menu_view')
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('create-menus') ? 'active' : '' }}" href="{{ url('create-menus') }}">
                     <div
@@ -22,7 +24,9 @@
                     <span class="nav-link-text ms-1">Menus</span>
                 </a>
             </li>
+            @endcan
             <!-- Dashboard -->
+            {{-- @can('dashboard_view') --}}
             <li class="nav-item">
                 <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
                     <div
@@ -32,7 +36,9 @@
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
+            {{-- @endcan --}}
             <!-- Front Office -->
+            @can('admission_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#front_office" class="nav-link collapsed" aria-controls="front_office"
                     role="button" aria-expanded="false">
@@ -54,7 +60,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Enrollments -->
+            @can('enrollment_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#enrollment" class="nav-link collapsed" aria-controls="enrollment"
                     role="button" aria-expanded="false">
@@ -76,7 +84,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Courses -->
+            @can('courses_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#courses" class="nav-link collapsed" aria-controls="courses"
                     role="button" aria-expanded="false">
@@ -104,7 +114,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Revenue -->
+            @can('expenses_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#revenue" class="nav-link collapsed" aria-controls="revenue"
                     role="button" aria-expanded="false">
@@ -132,7 +144,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Reports -->
+            @can('reports_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#reports" class="nav-link collapsed" aria-controls="reports"
                     role="button" aria-expanded="false">
@@ -154,7 +168,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Expenses -->
+            @can('expenses_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#expenses" class="nav-link collapsed" aria-controls="expenses"
                     role="button" aria-expanded="false">
@@ -179,7 +195,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Attendance -->
+            @can('attendance_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#attendance" class="nav-link collapsed" aria-controls="attendance"
                     role="button" aria-expanded="false">
@@ -201,7 +219,9 @@
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Weekly Class Schedule -->
+            @can('attendance_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -211,7 +231,9 @@
                     <span class="nav-link-text ms-1">Weekly Class Schedule</span>
                 </a>
             </li>
+            @endcan
             <!-- Inventory -->
+            @can('inventory_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -221,7 +243,9 @@
                     <span class="nav-link-text ms-1">Inventory</span>
                 </a>
             </li>
+            @endcan
             <!-- Communication -->
+            @can('communication_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -231,7 +255,9 @@
                     <span class="nav-link-text ms-1">Communication</span>
                 </a>
             </li>
+            @endcan
             <!-- Users -->
+            @can('users_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#users"
                     class="nav-link collapsed {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
@@ -245,21 +271,29 @@
                     id="users" style="">
                     <ul class="nav ms-4">
                         <li class="nav-item ">
-                            <a class="nav-link " href="#">
+                            @can('admins_view')
+                            <a class="nav-link " href="{{ route('admins') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Admins
                             </a>
+                            @endcan
+                            @can('instructor_view')
                             <a class="nav-link " href="#">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Instructors
                             </a>
+                            @endcan
+                            @can('student_view')
                             <a class="nav-link {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
                                 href="{{ route('students') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Students
                             </a>
+                            @endcan
                         </li>
                     </ul>
                 </div>
             </li>
+            @endcan
             <!-- Roles and Permissions -->
+            @can('roles_view')
             <li class="nav-item">
                 <a class="nav-link " href="{{ route('roles') }}">
                     <div
@@ -269,7 +303,9 @@
                     <span class="nav-link-text ms-1">Roles/Permissions</span>
                 </a>
             </li>
+            @endcan
             <!-- Feedback -->
+            @can('feedback_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -279,7 +315,9 @@
                     <span class="nav-link-text ms-1">Feedback</span>
                 </a>
             </li>
+            @endcan
             <!-- Gallery -->
+            @can('gallery_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -289,7 +327,9 @@
                     <span class="nav-link-text ms-1">Gallery</span>
                 </a>
             </li>
+            @endcan
             <!-- Manage CSPs -->
+            @can('settings_view')
             <li class="nav-item">
                 <a class="nav-link " href="/profile.html">
                     <div
@@ -299,6 +339,131 @@
                     <span class="nav-link-text ms-1">Manage CSPs</span>
                 </a>
             </li>
+            @endcan
         </ul>
+        @endrole
+        @role('student')
+        <ul class="navbar-nav">
+            <!-- Home -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Home</span>
+                </a>
+            </li>
+            <!-- My Profile -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('students') ? 'active' : '' }}" href="{{ url('students') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-circle-08 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Profile</span>
+                </a>
+            </li>
+            <!-- Academic -->
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#academic" class="nav-link collapsed" aria-controls="academic"
+                    role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="fa fa-graduation-cap text-success text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Academic</span>
+                </a>
+                <div class="collapse" id="academic" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{{ route('enrollments') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Subjects
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>My Lecture
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>E-Library
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Faculty
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Batch
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <!-- Evaluation -->
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#evaluation" class="nav-link collapsed" aria-controls="evaluation"
+                    role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="fa fa-check text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Evaluation</span>
+                </a>
+                <div class="collapse" id="evaluation" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item ">
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Self Test
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Assignments
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Quiz
+                            </a>
+                            <a class="nav-link " href="#">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Exam
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <!-- Feedback -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('feedback') ? 'active' : '' }}" href="{{ url('feedback') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-comments text-warning text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Feedback</span>
+                </a>
+            </li>
+            <!-- Alumni -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('alumni') ? 'active' : '' }}" href="{{ url('alumni') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-graduation-cap text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Alumni</span>
+                </a>
+            </li>
+            <!-- Publication -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('publication') ? 'active' : '' }}" href="{{ url('publication') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-newspaper-o text-dark text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Publication</span>
+                </a>
+            </li>
+            <!-- Complaint -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('complaint') ? 'active' : '' }}" href="{{ url('complaint') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-comment-o text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Complaint</span>
+                </a>
+            </li>
+        </ul>
+        @endrole
     </div>
 </aside>

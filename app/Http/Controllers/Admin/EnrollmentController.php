@@ -11,6 +11,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class EnrollmentController extends Controller
 {
@@ -82,15 +83,17 @@ class EnrollmentController extends Controller
             })
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
-                if ($trashed == null) {
-                    $btn .= '
-                        <a href="enrollments/' . $row->id . '/delete" data-enrollment-id="' . $row->id . '" class="btn btn-danger bg-danger p-1 delete-enrollment" title="Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
-                } else {
-                    $btn .= '
-                        <a href="' . $row->id . '/restore" data-enrollment-id="' . $row->id . '" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
-                        <a href="' . $row->id . '/delete" data-enrollment-id="' . $row->id . '" class="btn btn-danger bg-danger p-1 delete-enrollment" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                if (Auth::user()->hasanyrole('admin|manager')) {
+                    if ($trashed == null) {
+                        $btn .= '
+                            <a href="enrollments/' . $row->id . '/delete" data-enrollment-id="' . $row->id . '" class="btn btn-danger bg-danger p-1 delete-enrollment" title="Delete"><i class="fa fa-trash-o"></i></a>
+                        ';
+                    } else {
+                        $btn .= '
+                            <a href="' . $row->id . '/restore" data-enrollment-id="' . $row->id . '" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
+                            <a href="' . $row->id . '/delete" data-enrollment-id="' . $row->id . '" class="btn btn-danger bg-danger p-1 delete-enrollment" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
+                        ';
+                    }
                 }
                 return $btn;
             })
@@ -103,6 +106,9 @@ class EnrollmentController extends Controller
         //
         try {
             $enrollments = Enrollment::get();
+            if (Auth::user()->hasRole('student')) {
+                $enrollments = Enrollment::where('user_id', Auth::user()->id)->get();
+            }
             if ($request->ajax()) {
                 return $this->showTableData($enrollments, $trashed = null);
             }

@@ -24,19 +24,19 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="applied_for" class="form-control-label">Applying For *</label>
-            <input class="form-control applied_for" id="applied_for" name="applied_for" type="text" value="@isset($student->user){{ $student->applied_for }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Applying For" >
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control applied_for" id="applied_for" name="applied_for" type="text" value="@isset($student->user){{ $student->applied_for }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Applying For" >
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="batch_no" class="form-control-label">Batch No *</label>
-            <input class="form-control batch_no" id="batch_no" name="batch_no" type="text" value="@isset($student->user){{ $student->batch_no }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Batch No" >
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control batch_no" id="batch_no" name="batch_no" type="text" value="@isset($student->user){{ $student->batch_no }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Batch No" >
         </div>
     </div>
     <div class="col-md-4">
         <div class="form-group">
             <label for="reg_no" class="form-control-label">Registration No *</label>
-            <input class="form-control reg_no" id="reg_no" name="reg_no" type="text" value="@isset($student->user){{ $student->reg_no }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Registration No" >
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control reg_no" id="reg_no" name="reg_no" type="text" value="@isset($student->user){{ $student->reg_no }}@endisset" onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Registration No" >
         </div>
     </div>
 </div>
@@ -54,7 +54,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="email" class="form-control-label">Email *</label>
-            <input class="form-control email" id="email" name="email" type="email"
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control email" id="email" name="email" type="email"
                 value="@isset($student->user){{ $student->user->email }}@endisset" onfocus="focused(this)"
                 onfocusout="defocused(this)" placeholder="Enter Email Address" >
         </div>
@@ -62,7 +62,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="password" class="form-control-label">Password *</label>
-            <input class="form-control password" id="password" name="password" type="password"
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control password" id="password" name="password" type="password"
                 value="" onfocus="focused(this)"
                 onfocusout="defocused(this)" placeholder="Enter Password" >
         </div>
@@ -94,7 +94,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="cnic" class="form-control-label">CNIC *</label>
-            <input class="form-control cnic" id="cnic" name="cnic" step="0.01" type="number"
+            <input @if(Auth::user()->hasRole('student')) readonly @endif class="form-control cnic" id="cnic" name="cnic" step="0.01" type="number"
                 value="@isset($student->user){{ $student->cnic }}@endisset" onfocus="focused(this)"
                 onfocusout="defocused(this)" placeholder="Enter CNIC Number" >
         </div>
@@ -196,5 +196,17 @@
                 onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Distinction" >
         </div>
     </div>
+    @if(!Auth::user()->hasRole('student'))
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="name" class="form-control-label">Role</label>
+            <select class="form-control" name="role" id="role">
+                @foreach ($roles as $key => $role)
+                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    @endif
 </div>
 <hr class="horizontal dark">
