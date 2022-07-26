@@ -15,6 +15,9 @@
                     Fee
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Date
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Actions
                 </th>
             </tr>

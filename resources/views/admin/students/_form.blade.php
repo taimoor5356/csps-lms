@@ -201,6 +201,7 @@
         <div class="form-group">
             <label for="name" class="form-control-label">Role</label>
             <select class="form-control" name="role" id="role">
+                <option value="" disabled selected>Select Role</option>
                 @foreach ($roles as $key => $role)
                     <option value="{{ $role->id }}">{{ $role->name }}</option>
                 @endforeach

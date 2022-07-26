@@ -391,6 +391,7 @@
         @endif
         // Data Table Starts
         var table = $('.data-table').DataTable({
+            responsive: true,
             processing: true,
             serverSide: true,
             bDestroy: true,

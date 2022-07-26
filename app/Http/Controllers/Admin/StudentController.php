@@ -170,7 +170,8 @@ class StudentController extends Controller
     public function create()
     {
         //
-        return view('admin.students.create');
+        $roles = Role::get();
+        return view('admin.students.create', compact('roles'));
     }
 
     /**

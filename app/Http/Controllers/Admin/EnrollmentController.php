@@ -33,7 +33,7 @@ class EnrollmentController extends Controller
                     return '    
                     <div class="">
                         <div>
-                            <img src="' . $url . '/public/assets/img/courses/' . $row->course->image . '" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/courses/' . $row->course->image . '" class="avatar avatar-xl"
                                 alt="Course">
                         </div>
                     </div>
@@ -77,6 +77,13 @@ class EnrollmentController extends Controller
                         </div>
                     </div>
                     ';
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('date', function ($row) {
+                if (isset($row)) {
+                    return $row->created_at->format('Y-m-d');
                 } else {
                     return '';
                 }
@@ -127,6 +134,9 @@ class EnrollmentController extends Controller
     {
         //
         $students = Student::with('user')->get();
+        if (Auth::user()->hasRole('student')) {
+            $students = Student::where('user_id', Auth::user()->id)->get();
+        }
         $courses = Course::get();
         return view('admin.enrollment.create', compact('students', 'courses'));
     }

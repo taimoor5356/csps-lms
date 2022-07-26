@@ -152,6 +152,10 @@
                     name: 'fee'
                 },
                 {
+                    data: 'date',
+                    name: 'date'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,

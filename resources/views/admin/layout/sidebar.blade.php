@@ -271,22 +271,16 @@
                     id="users" style="">
                     <ul class="nav ms-4">
                         <li class="nav-item ">
-                            @can('admins_view')
                             <a class="nav-link " href="{{ route('admins') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Admins
                             </a>
-                            @endcan
-                            @can('instructor_view')
                             <a class="nav-link " href="#">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Instructors
                             </a>
-                            @endcan
-                            @can('student_view')
                             <a class="nav-link {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
                                 href="{{ route('students') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Students
                             </a>
-                            @endcan
                         </li>
                     </ul>
                 </div>
