@@ -39,6 +39,9 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <style>
+    .min-height-300 {
+      background-color: #1e73be;
+    }
     ::-webkit-scrollbar {
         width: 5px;
     }
@@ -50,7 +53,7 @@
     .custom-scrollbar::-webkit-scrollbar-thumb {
         border-radius: 0px !important;
         -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3);
-        background-color: #596CFF;
+        background-color: #1e73be;
     }
     .data-table>tbody>tr {
         border: 1px solid rgb(226, 226, 226);
@@ -67,22 +70,22 @@
       width: 5px !important;
     }
     .ps__rail-y.ps--clicking.ps__thumb-y {
-      background-color: #596CFF !important;
+      background-color: #1e73be !important;
       width: 5px !important;
     }
     .ps__thumb-y {
-      background-color: #596CFF !important;
+      background-color: #1e73be !important;
       width: 5px !important;
     }
     .ps__rail-y:hover>.ps__thumb-y {
-      background-color: #596CFF !important;
+      background-color: #1e73be !important;
       width: 5px !important;
     }
   </style>
   @yield('style')
 </head>
 <body class="g-sidenav-show bg-gray-100">
-  <div class="min-height-300 bg-primary position-absolute w-100"></div>
+  <div class="min-height-300 position-absolute w-100"></div>
   @include('admin.layout.sidebar')
   <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
