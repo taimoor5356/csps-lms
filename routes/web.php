@@ -29,7 +29,10 @@ Auth::routes();
 Route::get('/logout', function() {
     Auth::logout();
     return redirect('login');
-});
+})->name('login');
+Route::get('/signup', function() {
+    return redirect('register');
+})->name('signup');
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => ['auth']], function() {
     // dashboard Route
