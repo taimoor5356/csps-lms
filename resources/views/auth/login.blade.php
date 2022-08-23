@@ -1,176 +1,200 @@
 @extends('admin.layout.login_app')
 @section('content')
 @section('style')
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
+
+    {{-- <link rel="stylesheet" href="{{asset('public/carousel-12/fonts/icomoon/style.css')}}"> --}}
+
+    {{-- <link rel="stylesheet" href="{{asset('public/carousel-12/css/owl.carousel.min.css')}}"> --}}
+
+    <!-- Bootstrap CSS -->
+    {{-- <link rel="stylesheet" href="{{asset('public/carousel-12/css/bootstrap.min.css')}}"> --}}
+
+    <!-- Style -->
+    {{-- <link rel="stylesheet" href="{{asset('public/carousel-12/css/style.css')}}"> --}}
     <style>
-        .bg-gray-100 {
-            background-color: #1e73be !important;
+        .divider:after,
+        .divider:before {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #eee;
         }
 
-        .main-content,
-        section {
-            background-color: #1e73be;
+        .h-custom {
+            height: calc(100% - 73px);
+        }
+
+        @media (max-width: 450px) {
+            .h-custom {
+                height: 100%;
+            }
         }
 
         .logo-img {
             border-radius: 50%;
-            height: 70px;
-        }
-
-        .logo-container {
-            position: relative;
-        }
-
-        .vertical-center {
-            margin: 0;
-            position: absolute;
-            -ms-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-
-        .logo-text {
-            font-weight: bold;
-            font-size: 25px;
         }
 
         hr.horizontal.dark {
             background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1), rgba(255, 255, 255, 0)) !important;
         }
 
-        .login-social-icons li {
-            margin: 10px 30px;
-            list-style: none;
-            font-size: 20px;
+        .navbar {
+            box-shadow: none !important;
+        }
+
+        .owl-nav {
+          display: none;
+        }
+        .fa:hover {
+            /* font-size:25px; */
+            transform: scale(1.5);
         }
     </style>
 @endsection
+<div class="container-fluid bg-primary position-sticky z-index-sticky top-0">
+    <div class="row">
+        <div class="col-12">
+            <!-- Navbar -->
+            <nav class="navbar bg-primary navbar-expand-lg top-0 z-index-3 mt-2 py-2 start-0 end-0">
+                <div class="container-fluid justify-content-center">
+                    <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 p-0 text-white"
+                        href="https://www.csps.com.pk">
+                        <img src="{{ asset('public/assets/img/csps-logo.png') }}" height="65" width="70"
+                            class="navbar-brand-img logo-img bg-white p-1" alt="main_logo"> <span
+                            style="font-size: 25px">CSPs - Civil Services Preparatory School</span>
+                    </a>
+                </div>
+            </nav>
+            <hr class="horizontal dark">
+            <!-- End Navbar -->
+        </div>
+    </div>
+</div>
 <main class="main-content">
-  <section>
-    <div class="page-header mt-4">
-        <div class="container">
-            <div class="row">
+    <section>
+        <div class="page-header">
+            <div class="container-fluid">
                 <div class="row">
-                  <div class="col-12">
-                      <div class="col-12 d-flex justify-content-center logo-container">
-                          <div class="vertical-container">
-                              <img src="{{ asset('public/assets/img/csps-logo.png') }}"
-                                  class="navbar-brand-img logo-img bg-white p-1" alt="main_logo">
-                              <span class="logo-text text-white">Civil Services Preparatory School-CSPs</span>
-                          </div>
-                      </div>
-                      <hr class="horizontal dark my-4">
-                  </div>
-                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-0">
-                    <div class="card card-plain bg-white">
-                        <div class="card-header pb-0 text-start">
-                            <h4 class="font-weight-bolder">Sign In</h4>
-                            <span class="mb-0 text-sm">Enter your email and password to sign in</span>
+                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                        <div class="card card-plain bg-white mb-4">
+                            <div class="card-header pb-0">
+                                <h4 class="font-weight-bolder">Notification</h4>
+                            </div>
+                            <div class="card-body pt-0">
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS-2023 Seminar on
+                                    17th August, 2022 at 05:30PM</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS Screening test 2013 in October,
+                                    2022</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS-2013 Exam in Feb, 2023
+                                </p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <form role="form" method="POST" action="{{ route('login') }}">
-                                @csrf
-                                <div class="mb-2">
-                                    <input type="email" name="email" class="form-control form-control-lg"
-                                        placeholder="Email" aria-label="Email" required>
+                        <div class="d-none d-md-block w-100 p-0" style="border-radius: 50px">
+                            <div class="container-fluid p-0">
+                                <div class="content p-0">
+                                    <div class="site-section bg-left-half p-0">
+                                        <div class="container lowl-2-style p-0 card card-plain">
+                                            <div class="owl-carousel owl-2 w-100 p-0" style="padding: 0px !important; margin: 0px !important;">
+                                                <div class="media-29101 p-0">
+                                                    <a href="#">
+                                                      <img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                                <div class="media-29101 p-0">
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                                <div class="media-29101 p-0">
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-0">
-                                    <input type="password" name="password" class="form-control form-control-lg"
-                                        placeholder="Password" aria-label="Password" required>
-                                </div>
-                                <div class="text-center">
-                                    <button type="submit"
-                                        class="btn btn-lg btn-primary btn-lg w-100 mt-2 mb-0">Sign in</button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                            <p class="mb-4 text-sm mx-auto">
-                                Don't have an account?
-                                <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign
-                                    up</a>
-                            </p>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 card pt-4 pb-1 px-4">
-                      <div class="d-flex flex-column justify-content-center overflow-hidden">
-                        <h4 class="text-dark font-weight-bolder position-relative">Notification</h4>
-                        <h6 class="tex">- Free On-Campus CSS-2023 Seminar on 17th August, 2022 at 05:30PM</h6>
-                        <h6 class="tex">- CSS Screening test 2013 in October, 2022</h6>
-                        <h6 class="tex">- Written CSS-2013 Exam in Feb, 2023</p>
-                      </div>
-                    </div>
-                    <hr class="horizontal dark my-3">
-                    <div class="card col-xl-12 col-lg-12 col-md-12 col-sm-12 card-carousel overflow-hidden bg-primary">
-                        <div id="carouselExampleCaptions" class="carousel slide bg-primary" data-bs-ride="carousel">
-                            <div class="carousel-inner border-radius-lg bg-primary">
-                              <div class="carousel-item active h-100">
-                                <div class="row">
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="carousel-item h-100">
-                                <div class="row">
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                  <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-xs-4">
-                                    <img src="{{ asset('public/assets/img/dashboard_slider/3.jpg') }}" alt="" class="img-fluid rounded">
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                         </div>
                     </div>
-                    <div class="position-relative h-75 border-radius-lg d-flex flex-column justify-content-center overflow-hidden">
-                      <span class="mask"></span>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 h-100">
+                        <div class="card card-plain bg-white h-100">
+                            <div class="card-header mb-0 pb-0">
+                                <h4 class="font-weight-bolder">Sign In</h4>
+                                <p class="mb-0">Enter your email and password to sign in</p>
+                            </div>
+                            <div class="card-body mt-1 pt-1 h-100">
+                                <form role="form" method="POST" action="{{ route('login') }}">
+                                  @csrf
+                                    <div class="mb-3">
+                                        <input type="email" name="email" class="form-control form-control-lg" placeholder="Email"
+                                            aria-label="Email">
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="password" name="password" class="form-control form-control-lg"
+                                            placeholder="Password" aria-label="Password">
+                                    </div>
+                                    <div class="form-check form-switch mb-2 pb-0">
+                                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                                    </div>
+                                    <div class="text-center mt-3 pt-0">
+                                        <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mb-0">Sign
+                                            in</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center pt-0 mt-0 pb-0">
+                                <p class="text-sm mx-auto">
+                                    Don't have an account?
+                                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign
+                                        up</a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                </div>
+                <hr class="horizontal dark">
+                <div class="row justify-content-center">
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://www.csps.com.pk" class="text-white"><i class="fa fa-globe"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://www.facebook.com/CSPsAcademy" class="text-white"><i class="fa fa-facebook"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://www.instagram.com/cspsacademy" class="text-white"><i class="fa fa-instagram"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://twitter.com/CSPSAcademy" class="text-white"><i class="fa fa-twitter"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i class="fa fa-youtube"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="https://t.me/cspsacademy" class="text-white"><i class="fa fa-telegram"></i></a>
+                  </div>
+                  <div class="col-2 text-center" style="width: 7% !important">
+                    <a href="#" class="text-white"><i class="fa fa-whatsapp"></i></a>
                   </div>
                 </div>
             </div>
-            <hr class="horizontal dark my-4">
         </div>
-    </div>
-    <div class="container">
-      
-      <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-            <ul class="d-inline-flex text-white login-social-icons">
-                <li>
-                    <a href="#" class="text-white"><i class="fa fa-whatsapp"></i></a>
-                </li>
-                <li>
-                    <a href="https://www.facebook.com/CSPsAcademy" class="text-white"><i class="fa fa-facebook"></i></a>
-                </li>
-                <li>
-                    <a href="https://www.instagram.com/cspsacademy" class="text-white"><i class="fa fa-instagram"></i></a>
-                </li>
-                <li>
-                    <a href="https://twitter.com/CSPSAcademy" class="text-white"><i class="fa fa-twitter"></i></a>
-                </li>
-                <li>
-                    <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i class="fa fa-youtube"></i></a>
-                </li>
-                <li>
-                    <a href="https://t.me/cspsacademy" class="text-white"><i class="fa fa-telegram"></i></a>
-                </li>
-            </ul>
         </div>
-    </div>
-    </div>
-  </section>
+    </section>
 </main>
 @endsection
 @section('page_js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+    integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+    crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+    crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.css">
+<script src="{{asset('public/carousel-12/js/owl.carousel.min.js')}}"></script>
+<script src="{{asset('public/carousel-12/js/main.js')}}"></script>
 @endsection

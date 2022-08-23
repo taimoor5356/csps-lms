@@ -5,19 +5,22 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Enrollment;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
-use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {
+    use ImageUpload;
     /**
      * Display a listing of the resource.
      *
@@ -185,23 +188,26 @@ class StudentController extends Controller
         //
         try {
             DB::beginTransaction();
-            if ($request->hasFile('photo')) {
-                if ($request->file('photo')->getSize() > 500000) {
-                    return redirect()->back()->with('error', 'Max 500KB photo size allowed');
-                }
-                $file = time().'.'.$request->photo->extension();
-                $request->photo->move(public_path('assets/img/students/'), $file);
-            } else {
-                return redirect()->with('error', 'Profile Photo Required');
-            }
+            // if ($request->hasFile('photo')) {
+            //     $file = time().'.'.$request->photo->extension();
+            //     $directory = public_path('assets/img/students/');
+            //     $imageUpload = $this->uploadImage($request->photo, $file, $directory);
+            //     if ($imageUpload->status == false) {
+            //         return response()->json(['status' => false, 'msg' => 'Max 500kb file size']);
+            //     }
+            // } else {
+            //     return response()->json(['status' => false, 'msg' => 'Picture required']);
+            // }
+            $defaultPassword = '12345678';
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'gender' => $request->gender,
+                'password' => Hash::make($defaultPassword),
                 'role_id' => $request->role,
-                'registration_date' => Carbon::now()->format('d-m-Y'),
+                'registration_date' => Carbon::now(),
                 'approved_status' => 0,
-                'photo' => $file
+                // 'photo' => $file
             ]);
             $student = Student::create([
                 'user_id' => $user->id,
@@ -221,14 +227,31 @@ class StudentController extends Controller
                 'distinction' => $request->disctinction,
                 'address' => $request->address,
                 'contact_res' => $request->contact_res,
-                'cell_no' => $request->cell_no
+                'cell_no' => $request->cell_no,
+                'year' => $request->year,
+                'class_type' => $request->class_type,
+                'fee_type' => $request->fee_type,
+                'mock_exam_evaluation' => $request->mock_exam_evaluation,
+                'installment' => $request->installment,
+                'discount' => $request->discount,
+                'total_fee' => $request->total_fee,
+                'due_date' => $request->due_date,
+                'freeze' => $request->freeze,
+                'leave' => $request->leave,
+                'fee_refund' => $request->fee_refund ? '1' : '0',
+                'notification_sent' => $request->notification_sent ? '1' : '0',
+                'challan_generated' => $request->challan_generated ? '1' : '0',
             ]);
             $user->assignRole(3);
+            $subject = 'Login Details';
+            if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
+                $student->notification = $request->notification ? $request->notification : '0';
+            }
             DB::commit();
-            return redirect()->back()->with('success', 'Successfully Saved');
+            return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Something went wrong');
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
         }
     }
 

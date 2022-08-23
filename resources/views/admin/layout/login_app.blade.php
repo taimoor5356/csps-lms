@@ -39,55 +39,16 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <style>
-    ::-webkit-scrollbar {
-        width: 5px;
-    }
-    .custom-scrollbar::-webkit-scrollbar {
-        width: 8px !important;
-        height: 8px !important;
-        background-color: #fff !important;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 0px !important;
-        -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,.3);
-        background-color: #596CFF;
-    }
-    .data-table>tbody>tr {
-        border: 1px solid rgb(226, 226, 226);
-    }
-    #notification {
-        position: absolute;
-        top: 5px;
-        left: 35%;
-    }
-    .ps .ps__rail-y {
-      width: 5px !important;
-    }
-    .ps .ps__rail-y:hover {
-      width: 5px !important;
-    }
-    .ps__rail-y.ps--clicking.ps__thumb-y {
-      background-color: #596CFF !important;
-      width: 5px !important;
-    }
-    .ps__thumb-y {
-      background-color: #596CFF !important;
-      width: 5px !important;
-    }
-    .ps__rail-y:hover>.ps__thumb-y {
-      background-color: #596CFF !important;
-      width: 5px !important;
+    body {
+      background-color: #1e73be !important;
+      vertical-align: middle;
+      height: 100%;
     }
   </style>
   @yield('style')
 </head>
-<body class="g-sidenav-show bg-gray-100">
-  <div class="min-height-300 position-absolute w-100"></div>
-  <main class="main-content position-relative border-radius-lg ">
+<body class="g-sidenav-show">
     @yield('content')
-    @include('admin.layout.footer')
-  </main>
-  @yield('modal')
   <!--   Core JS Files   -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
@@ -106,21 +67,6 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
-    $(document).ready(function () {
-      $(document).on('click', '.close-toast-msg', function () {
-        $('.toast').toast('hide');
-      });
-      $('.js-example-theme-single').select2({
-        placeholder: 'Select Courses',
-        theme: 'classic',
-        maximumSelectionLength: 5,
-        allowClear: true,
-      });
-      $('.js-example-theme-multiple').select2({
-        placeholder: 'Select Student',
-        theme: 'classic',
-      });
-    });
   </script>
   <!-- Github buttons -->
   <script async defer src="https://buttons.github.io/buttons.js"></script>

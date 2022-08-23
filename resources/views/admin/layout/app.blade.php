@@ -17,6 +17,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('public/assets/img/apple-icon.png') }}">
   <link rel="icon" type="image/png" href="{{ asset('public/assets/img/csps-logo.png') }}">
   <title>
@@ -59,9 +60,9 @@
         border: 1px solid rgb(226, 226, 226);
     }
     #notification {
-        position: absolute;
+        position: fixed;
         top: 5px;
-        left: 35%;
+        left: 40%;
     }
     .ps .ps__rail-y {
       width: 5px !important;
@@ -81,13 +82,31 @@
       background-color: #1e73be !important;
       width: 5px !important;
     }
+    .loader {
+        border: 2px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 2px solid transparent;
+        width: 15px;
+        height: 15px;
+        -webkit-animation: spin 1s linear infinite; /* Safari */
+        animation: spin 1s linear infinite;
+    }
+    /* Safari */
+    @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+    }
   </style>
   @yield('style')
 </head>
-<body class="g-sidenav-show bg-gray-100">
-  <div class="min-height-300 position-absolute w-100"></div>
+<body class="g-sidenav-show bg-primary">
+  <div class="min-height-300 position-absolute bg-primary w-100"></div>
   @include('admin.layout.sidebar')
-  <main class="main-content position-relative border-radius-lg ">
+  <main class="main-content position-relative bg-primary border-radius-lg ">
     <!-- Navbar -->
     @include('admin.layout.header')
     <!-- End Navbar -->
