@@ -3,7 +3,7 @@
 @section('style')
     <!-- Styling Here -->
     <style>
-        .student-modal-card {
+        .visitor-modal-card {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -15,7 +15,7 @@
             border-radius: .25rem;
         }
 
-        .student-modal-card-body {
+        .visitor-modal-card-body {
             flex: 1 1 auto;
             min-height: 1px;
             padding: 1rem;
@@ -59,9 +59,9 @@
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Students</span></li>
+                    class="text-light">Visitors</span></li>
         </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Students</h6>
+        <h6 class="font-weight-bolder text-white mb-0">Visitors</h6>
     </nav>
 @endsection
 <div class="container-fluid py-4">
@@ -69,7 +69,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>All Students</h6>
+                    <h6>All Visitors</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,19 +84,19 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @can('student_create')
-                            <a href="{{ route('create.student') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
+                        @can('visitor_create')
+                            <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @endcan
-                        @can('student_delete')
-                            <a href="{{ route('trashed.students') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
+                        @can('visitor_delete')
+                            <a href="{{ route('trashed.visitor') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                         @endcan
-                        @if (Auth::user()->hasRole('student'))
+                        @if (Auth::user()->hasRole('visitor'))
                             <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
                         @endif
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('admin.students._table')
+                    @include('admin.visitors._table')
                 </div>
             </div>
         </div>
@@ -112,7 +112,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">Student Detail</h6>
+                        <h6 class="modal-title" id="modal-title-default">visitor Detail</h6>
                         <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -192,8 +192,8 @@
                                         <hr>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="card mb-3 student-modal-card">
-                                            <div class="card-body student-modal-card-body">
+                                        <div class="card mb-3 visitor-modal-card">
+                                            <div class="card-body visitor-modal-card-body">
                                                 <div class="row">
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Full Name</h6>
@@ -370,7 +370,7 @@
                 '</tr>' +
                 '<tr>' +
                     '<td>Father Name:</td>' +
-                    '<td>'+ user.student.father_name +'</td>' +
+                    '<td>'+ user.visitor.father_name +'</td>' +
                 '</tr>' +
             '</table>'
         );
@@ -399,7 +399,7 @@
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('students') }}"
+                url: "{{ route('visitors') }}"
             },
             columns: [
                 // {
@@ -419,29 +419,21 @@
                     name: 'name_email'
                 },
                 {
-                    data: 'fathername_occupation',
-                    name: 'fathername_occupation'
-                },
-                {
-                    data: 'dob_cnic',
-                    name: 'dob_cnic'
+                    data: 'degree_university',
+                    name: 'degree_university'
                 },
                 {
                     data: 'domicile',
                     name: 'domicile'
                 },
                 {
-                    data: 'degree_university',
-                    name: 'degree_university'
+                    data: 'cell_no',
+                    name: 'cell_no'
                 },
                 {
-                    data: 'subject_cgpa',
-                    name: 'subject_cgpa'
+                    data: 'applied_for',
+                    name: 'applied_for'
                 },
-                // {
-                //     data: 'distinction',
-                //     name: 'distinction'
-                // },
                 {
                     data: 'action',
                     name: 'action',
@@ -478,10 +470,10 @@
         // Child Row ends
 
         // Open Modal to View Information
-        $(document).on('click', '.view-student-detail', function() {
+        $(document).on('click', '.view-visitor-detail', function() {
             var _this = $(this);
-            var studentId = _this.attr('data-student-id');
-            $.get('students/' + studentId + '/show', function(data) {
+            var visitorId = _this.attr('data-visitor-id');
+            $.get('visitors/' + visitorId + '/show', function(data) {
                 $('span.batch-no').html(data.batch_no);
                 $('span.reg-no').html(data.reg_no);
                 $('span.applied-for').html(data.applied_for);
@@ -490,7 +482,7 @@
                 $('span.subject').html(data.major_subjects);
                 $('span.cgpa').html(data.cgpa);
                 $('span.board-university').html(data.board_university);
-                $('span.occupation').html(data.student_occupation);
+                $('span.occupation').html(data.visitor_occupation);
                 $('span.distinction').html(data.distinction);
                 $('div.full-name').html(data.user.name);
                 $('div.email').html(data.user.email);
@@ -501,7 +493,7 @@
                 $('div.contact-res').html(data.contact_res);
                 $('div.cell-no').html(data.cell_no);
                 $('div.address').html(data.address);
-                var url = '{{ asset('public/assets/img/students/:image') }}';
+                var url = '{{ asset('public/assets/img/visitors/:image') }}';
                 url = url.replace(':image', data.user.photo);
                 $('img.profile-img').attr('src', url);
             });
@@ -515,10 +507,10 @@
         });
         // Close Modal
 
-        // Open Delete Student Modal
-        $(document).on('click', '.delete-student', function(e) {
+        // Open Delete visitor Modal
+        $(document).on('click', '.delete-visitor', function(e) {
             e.preventDefault();
-            var studentId = $(this).attr('data-student-id');
+            var visitorId = $(this).attr('data-visitor-id');
             Swal.fire({
                 title: 'Are you sure?',
                 icon: 'warning',
@@ -528,11 +520,11 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post('students/' + studentId + '/delete', {_token: '{{ csrf_token() }}'},function() {
+                    $.post('visitors/' + visitorId + '/delete', {_token: '{{ csrf_token() }}'},function() {
                     });
                     Swal.fire({
                         title: 'Deleted!',
-                        text: 'Student has been deleted.',
+                        text: 'visitor has been deleted.',
                         icon: 'success',
                         timer: 4500,
                         showCancelButton: false,
@@ -542,7 +534,7 @@
                 }
             });
         });
-        // Ends Open Delete Student Modal
+        // Ends Open Delete visitor Modal
     });
 </script>
 <!-- Scripting Here -->

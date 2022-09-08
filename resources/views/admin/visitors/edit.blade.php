@@ -3,6 +3,11 @@
 @section('style')
 <!-- Styling Here -->
 <style>
+    /* #notification {
+        position: absolute;
+        top: 5px;
+        left: 35%;
+    } */
     .fee-font {
         font-size: 11px;
     }
@@ -16,7 +21,7 @@
             <li class="breadcrumb-item text-sm text-white" aria-current="page"><a href="{{ route('students') }}"
                     class="text-white">Students</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Add New</span></li>
+                    class="text-light">Edit</span></li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Students</h6>
     </nav>
@@ -26,22 +31,22 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Add New</h6>
+                    <h6>Edit Student Information</h6>
                     <div class="header-buttons ms-auto text-end">
                         <a href="{{ route('students') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View
                             All</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" id="student-form">
+                    <form method="POST" enctype="multipart/form-data" id="visitor-form">
                         @csrf
-                        @role('admin')
-                            @include('admin.students._form_admin')
-                        @endrole
+                        @include('admin.students._form_student')
+                        <input type="hidden" name="user_id" value="{{ $user_id }}">
+                        <input type="hidden" name="visitor" value="true">
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit" id="save">
-                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
+                                <button class="btn btn-success px-4" type="submit">
+                                    <i class="fa fa-save"></i> Save
                                 </button>
                             </div>
                         </div>
@@ -71,7 +76,8 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        $(document).on('submit', '#student-form', function(e) {
+        
+        $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
             $('.loader').removeClass('d-none');
@@ -117,6 +123,7 @@
                 });
             }, 1000);
         });
+        
         $(document).on('click', '#add-education', function () {
             if ($('.new-education-row').length >= 4) {
                 return false;
@@ -178,9 +185,9 @@
             `);
             }
         });
-        // $(document).on('click', '.remove-education-row', function () {
-        //     $(this).closest('.new-education-row').remove();
-        // });
+        $(document).on('click', '.remove-education-row', function () {
+            $(this).closest('.new-education-row').remove();
+        });
     });
 </script>
 <!-- Scripting Here -->

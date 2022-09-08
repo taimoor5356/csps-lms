@@ -48,9 +48,7 @@
         .shadow-none {
             box-shadow: none !important;
         }
-        .child-table>tr>td {
-            border: 1px solid lightgrey;
-        }
+
     </style>
     <!-- Styling Here -->
 @endsection
@@ -58,8 +56,10 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
+            <li class="breadcrumb-item text-sm text-white" aria-current="page"><a class="text-white" href="{{ route('students') }}">Students</a>
+            </li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Students</span></li>
+                    class="text-light">Trashed</span></li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Students</h6>
     </nav>
@@ -69,7 +69,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>All Students</h6>
+                    <h6>Trashed Students</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,15 +84,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @can('student_create')
-                            <a href="{{ route('create.student') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endcan
-                        @can('student_delete')
-                            <a href="{{ route('trashed.students') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
-                        @endcan
-                        @if (Auth::user()->hasRole('student'))
-                            <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
-                        @endif
+                        <a href="{{ route('students') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -126,8 +118,8 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="d-flex flex-column align-items-center text-center">
-                                                    <img src="" alt="Profile Pic" class="rounded-circle profile-img"
-                                                        width="200">
+                                                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                                        alt="Admin" class="rounded-circle" width="200">
                                                 </div>
                                             </div>
                                         </div>
@@ -139,53 +131,52 @@
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Batch No:</h6>
-                                                    <span class="text-secondary batch-no"></span>
+                                                    <span class="text-secondary">80</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Registration No:</h6>
-                                                    <span class="text-secondary reg-no">reg-001</span>
+                                                    <span class="text-secondary">reg-001</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Applied For:</h6>
-                                                    <span class="text-secondary applied-for">CSS</span>
+                                                    <span class="text-secondary">CSS</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Domicile:</h6>
-                                                    <span class="text-secondary domicile">Punjab</span>
+                                                    <span class="text-secondary">Punjab</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Degree:</h6>
-                                                    <span class="text-secondary degree">BA</span>
+                                                    <span class="text-secondary">BA</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Subjects:</h6>
-                                                    <span class="text-secondary subject">Arts</span>
+                                                    <span class="text-secondary">Arts</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">CGPA:</h6>
-                                                    <span class="text-secondary cgpa">2.78</span>
+                                                    <span class="text-secondary">2.78</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Board/University:</h6>
-                                                    <span class="text-secondary board-university">The Univeristy of
-                                                        Lahore, Lahore</span>
+                                                    <span class="text-secondary">The Univeristy of Lahore, Lahore</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Occupation:</h6>
-                                                    <span class="text-secondary occupation">Engineer</span>
+                                                    <span class="text-secondary">Engineer</span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Distinction:</h6>
-                                                    <span class="text-secondary distinction">NIL</span>
+                                                    <span class="text-secondary">NIL</span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -198,7 +189,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Full Name</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary full-name">
+                                                    <div class="col-sm-9 text-secondary">
                                                         Kenneth Valdez
                                                     </div>
                                                 </div>
@@ -207,7 +198,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Email</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary email">
+                                                    <div class="col-sm-9 text-secondary">
                                                         fip@jukmuh.al
                                                     </div>
                                                 </div>
@@ -216,7 +207,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Father Name</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary father-name">
+                                                    <div class="col-sm-9 text-secondary">
                                                         asfij nasfi
                                                     </div>
                                                 </div>
@@ -225,7 +216,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Father Occupation</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary father-occupation">
+                                                    <div class="col-sm-9 text-secondary">
                                                         PAF
                                                     </div>
                                                 </div>
@@ -234,7 +225,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Date of Birth</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary dob">
+                                                    <div class="col-sm-9 text-secondary">
                                                         Jan 01, 1996
                                                     </div>
                                                 </div>
@@ -243,7 +234,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">CNIC</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary cnic">
+                                                    <div class="col-sm-9 text-secondary">
                                                         374051234567892
                                                     </div>
                                                 </div>
@@ -252,7 +243,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Phone</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary contact-res">
+                                                    <div class="col-sm-9 text-secondary">
                                                         (239) 816-9029
                                                     </div>
                                                 </div>
@@ -261,7 +252,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Mobile</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary cell-no">
+                                                    <div class="col-sm-9 text-secondary">
                                                         (320) 380-4539
                                                     </div>
                                                 </div>
@@ -270,7 +261,7 @@
                                                     <div class="col-sm-3">
                                                         <h6 class="mb-0">Address</h6>
                                                     </div>
-                                                    <div class="col-sm-9 text-secondary address">
+                                                    <div class="col-sm-9 text-secondary">
                                                         Bay Area, San Francisco, CA
                                                     </div>
                                                 </div>
@@ -352,29 +343,8 @@
 @endsection
 <!-- Section Modal -->
 @section('page_js')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Scripting Here -->
 <script>
-    /* Formatting function for row details - modify as you need */
-    function format(user) {
-        // `d` is the original data object for the row
-        return (
-            '<table class="child-table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                '<tr>' +
-                    '<td>Full name:</td>' +
-                    '<td>' + user.name + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td>Email:</td>' +
-                    '<td>' + user.email + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td>Father Name:</td>' +
-                    '<td>'+ user.student.father_name +'</td>' +
-                '</tr>' +
-            '</table>'
-        );
-    }
     $(document).ready(function() {
         @if (session('success'))
             $('.toast .success-header').html('Success');
@@ -389,26 +359,16 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        // Data Table Starts
         var table = $('.data-table').DataTable({
-            responsive: true,
             processing: true,
-            stateSave: true,
-            // serverSide: true,
+            serverSide: true,
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('students') }}"
+                url: "{{ route('trashed.students') }}"
             },
-            columns: [
-                // {
-                //     className: 'dt-control',
-                //     orderable: false,
-                //     data: null,
-                //     defaultContent: '',
-                // },
-                {
+            columns: [{
                     data: 'image',
                     name: 'image',
                     orderable: false,
@@ -448,101 +408,14 @@
                     orderable: false,
                     searchable: false
                 },
-            ],
-            initComplete: function(settings, json) {
-                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
-                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
-                    "custom-pagination");
-                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
-                    "text-color");
-            }
+            ]
         });
-        // Data Table Ends
-
-        // Child Row starts
-        // Add event listener for opening and closing details
-        $(document).on('click', 'td.dt-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-    
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
-        // Child Row ends
-
-        // Open Modal to View Information
         $(document).on('click', '.view-student-detail', function() {
-            var _this = $(this);
-            var studentId = _this.attr('data-student-id');
-            $.get('students/' + studentId + '/show', function(data) {
-                $('span.batch-no').html(data.batch_no);
-                $('span.reg-no').html(data.reg_no);
-                $('span.applied-for').html(data.applied_for);
-                $('span.domicile').html(data.domicile);
-                $('span.degree').html(data.degree);
-                $('span.subject').html(data.major_subjects);
-                $('span.cgpa').html(data.cgpa);
-                $('span.board-university').html(data.board_university);
-                $('span.occupation').html(data.student_occupation);
-                $('span.distinction').html(data.distinction);
-                $('div.full-name').html(data.user.name);
-                $('div.email').html(data.user.email);
-                $('div.father-name').html(data.father_name);
-                $('div.father-occupation').html(data.father_occupation);
-                $('div.dob').html(data.dob);
-                $('div.cnic').html(data.cnic);
-                $('div.contact-res').html(data.contact_res);
-                $('div.cell-no').html(data.cell_no);
-                $('div.address').html(data.address);
-                var url = '{{ asset('public/assets/img/students/:image') }}';
-                url = url.replace(':image', data.user.photo);
-                $('img.profile-img').attr('src', url);
-            });
             $('#modal-default').modal('show');
         });
-        // Ends Open Modal to View Information
-
-        // Close Modal
         $(document).on('click', '.close-modal', function() {
             $('#modal-default').modal('hide');
         });
-        // Close Modal
-
-        // Open Delete Student Modal
-        $(document).on('click', '.delete-student', function(e) {
-            e.preventDefault();
-            var studentId = $(this).attr('data-student-id');
-            Swal.fire({
-                title: 'Are you sure?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.post('students/' + studentId + '/delete', {_token: '{{ csrf_token() }}'},function() {
-                    });
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: 'Student has been deleted.',
-                        icon: 'success',
-                        timer: 4500,
-                        showCancelButton: false,
-                        showConfirmButton: false,
-                    });
-                    table.draw(false);
-                }
-            });
-        });
-        // Ends Open Delete Student Modal
     });
 </script>
 <!-- Scripting Here -->

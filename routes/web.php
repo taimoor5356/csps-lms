@@ -9,7 +9,10 @@ use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\InterviewController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\VisitorController;
+use App\Models\Interview;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,19 @@ Auth::routes();
 Route::get('/logout', function() {
     Auth::logout();
     return redirect('login');
+});
+// visitor Routes
+Route::prefix('visitor')->group(function () {
+    Route::get('', [VisitorController::class, 'index'])->name('visitors');
+    Route::get('/{id}/show', [VisitorController::class, 'show'])->name('show.visitor');
+    Route::get('/create', [VisitorController::class, 'create'])->name('create.visitor');
+    Route::post('/store', [VisitorController::class, 'store'])->name('store.visitor');
+    Route::get('/{id}/edit', [VisitorController::class, 'edit'])->name('edit.visitor');
+    Route::post('/{id}/update', [VisitorController::class, 'update'])->name('update.visitor');
+    Route::post('/{id}/delete', [VisitorController::class, 'destroy'])->name('delete.visitor');
+    Route::get('/trashed', [VisitorController::class, 'trashed'])->name('trashed.visitor');
+    Route::get('/{id}/restore', [VisitorController::class, 'restore'])->name('restore.visitor');
+    Route::post('/{id}/permanent-delete', [VisitorController::class, 'permanentDelete'])->name('permanent_delete.visitor');
 });
 // Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => ['auth']], function() {
@@ -118,5 +134,12 @@ Route::group(['middleware' => ['auth']], function() {
     });
     // setting Routes
     Route::prefix('settings')->group(function () {
+    });
+    // interview details
+    Route::prefix('/interview')->group(function() {
+        Route::get('/students', [InterviewController::class, 'index'])->name('interview.students');
+        Route::get('/student/{id}/show', [InterviewController::class, 'show'])->name('show.interview');
+        Route::get('/student/create', [InterviewController::class, 'create'])->name('create.interview');
+        Route::post('/student/store', [InterviewController::class, 'store'])->name('store.interview');
     });
 });

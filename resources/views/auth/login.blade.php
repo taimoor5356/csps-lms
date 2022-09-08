@@ -149,9 +149,8 @@
                             </div>
                             <div class="card-footer text-center pt-0 mt-0 pb-0">
                                 <p class="text-sm mx-auto">
-                                    Don't have an account?
-                                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Sign
-                                        up</a>
+                                    New User?
+                                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Click Here</a>
                                 </p>
                             </div>
                         </div>

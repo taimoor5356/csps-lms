@@ -3,10 +3,13 @@
 @section('style')
 <!-- Styling Here -->
 <style>
-    #notification {
+    /* #notification {
         position: absolute;
         top: 5px;
         left: 35%;
+    } */
+    .fee-font {
+        font-size: 11px;
     }
 </style>
 <!-- Styling Here -->
@@ -35,17 +38,33 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('update.student', $id) }}" method="POST" enctype="multipart/form-data">
+                    @role('admin')
+                    <form action="{{ route('update.student', $id) }}" id="admin-form" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @include('admin.students._form')
+                        @include('admin.students._form_admin')
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4" type="submit">
-                                    <i class="fa fa-save"></i> Update
+                                    <i class="fa fa-save"></i> Save
                                 </button>
                             </div>
                         </div>
                     </form>
+                    @endrole
+                    @role('student')
+                    <form id="student-form" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @include('admin.students._form_student')
+                        <input type="hidden" name="student_id" id="student-id" value="{{ $id }}">
+                        <div class="row">
+                            <div class="col-12 sm-auto text-center">
+                                <button class="btn btn-success px-4" type="submit">
+                                    <i class="fa fa-save"></i> Save
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    @endrole
                 </div>
             </div>
         </div>
@@ -71,6 +90,121 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
+        
+        $(document).on('submit', '#student-form', function(e) {
+            e.preventDefault();
+            $('#save').prop('disabled', true);
+            $('.loader').removeClass('d-none');
+            var formData = new FormData(this);
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            setTimeout(() => {
+                var id = $('#student-id').val();
+                var url = '{{ route("update.student", ":id") }}';
+                url = url.replace(':id', id);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        $('#save').prop('disabled', false);
+                        $('.loader').addClass('d-none');
+                        if (response.status == true) {
+                            $('.toast .toast-header').removeClass('bg-danger');
+                            $('.toast .toast-header').removeClass('bg-success');
+                            $('.toast .toast-body').removeClass('bg-danger');
+                            $('.toast .success-header').html('Success');
+                            $('.toast .toast-header').addClass('bg-success');
+                            $('.toast .toast-body').addClass('bg-success');
+                            $('.toast .toast-body').html(response.msg);
+                            $('.toast').toast('show');
+                        } else if (response.status == false) {
+                            $('.toast .toast-header').removeClass('bg-success');
+                            $('.toast .toast-header').removeClass('bg-danger');
+                            $('.toast .toast-body').removeClass('bg-success');
+                            $('.toast .success-header').html('Error');
+                            $('.toast .toast-header').addClass('bg-danger');
+                            $('.toast .toast-body').addClass('bg-danger');
+                            $('.toast .toast-body').html(response.msg);
+                            $('.toast').toast('show');
+                        } else {
+                            $('#save').prop('disabled', false);
+                            $('.loader').addClass('d-none');
+                        }
+                    }
+                });
+            }, 1000);
+        });
+        
+        $(document).on('click', '#add-education', function () {
+            if ($('.new-education-row').length >= 4) {
+                return false;
+            } else {
+                $('.education-information').append(`
+                    <div class="row new-education-row border border-light m-1">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="degree" class="form-control-label">Degree *</label>
+                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control degree" id="degree"
+                                    name="degree" type="text"
+                                    value="@isset($student->user) {{ $student->degree }} @endisset"
+                                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Degree Name">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="major_subjects" class="form-control-label">Major Subjects *</label>
+                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control major_subjects"
+                                    id="major_subjects" name="major_subjects" type="text"
+                                    value="@isset($student->user) {{ $student->major_subjects }} @endisset"
+                                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Major Subject">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="cgpa" class="form-control-label">CGPA/%age *</label>
+                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control cgpa" id="cgpa"
+                                    name="cgpa" min="0.1" max="100.00" step="0.1" type="number"
+                                    value="@isset($student->user) {{ $student->cgpa }} @endisset" onfocus="focused(this)"
+                                    onfocusout="defocused(this)" placeholder="Enter CGPA/%age">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="board_university" class="form-control-label">Board/University *</label>
+                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control board_university"
+                                    id="board_university" name="board_university" type="text"
+                                    value="@isset($student->user) {{ $student->board_university }} @endisset"
+                                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Board/University">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="distinction" class="form-control-label">Profession *</label>
+                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control distinction"
+                                    id="distinction" name="distinction" type="text"
+                                    value="@isset($student->user) {{ $student->distinction }} @endisset"
+                                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Profesion">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label for="distinction" class="form-control-label">Remove</label>
+                                <button type="button" class="btn btn-danger form-control remove-education-row">-</button>
+                            </div>
+                        </div>
+                    </div>
+            `);
+            }
+        });
+        $(document).on('click', '.remove-education-row', function () {
+            $(this).closest('.new-education-row').remove();
+        });
     });
 </script>
 <!-- Scripting Here -->

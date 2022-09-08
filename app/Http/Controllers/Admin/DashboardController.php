@@ -7,6 +7,7 @@ use App\Models\Student;
 use App\Models\Enrollment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
@@ -23,13 +24,21 @@ class DashboardController extends Controller
     public function index()
     {
         //
-        $data['totalStudents'] = Student::count();
-        $data['totalStudentEnrolled'] = Enrollment::groupBy('user_id')->count();
-        $data['totalCourses'] = Course::count();
-        if (Auth::user()->hasRole('student')) {
-            $data['totalStudentEnrolled'] = Enrollment::where('user_id', Auth::user()->id)->count();
+        $authUserId = Auth::user()->id;
+        $user = User::where('id', $authUserId)->first();
+        if (isset($user)) {
+            if ($user->approved_status == 1) {
+                $data['totalStudents'] = Student::count();
+                $data['totalStudentEnrolled'] = Enrollment::groupBy('user_id')->count();
+                $data['totalCourses'] = Course::count();
+                if (Auth::user()->hasRole('student')) {
+                    $data['totalStudentEnrolled'] = Enrollment::where('user_id', Auth::user()->id)->count();
+                }
+                return view('admin.dashboard.index')->with($data);
+            } else {
+                return redirect()->route('logout');
+            }
         }
-        return view('admin.dashboard.index')->with($data);
     }
 
     /**

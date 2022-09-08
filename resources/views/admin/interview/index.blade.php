@@ -85,7 +85,7 @@
                     </div>
                     <div class="header-buttons ms-auto text-end">
                         @can('student_create')
-                            <a href="{{ route('create.student') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
+                            <a href="{{ route('create.interview') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @endcan
                         @can('student_delete')
                             <a href="{{ route('trashed.students') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
@@ -399,7 +399,7 @@
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('students') }}"
+                url: "{{ route('interview.students') }}"
             },
             columns: [
                 // {

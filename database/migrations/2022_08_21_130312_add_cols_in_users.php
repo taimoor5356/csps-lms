@@ -16,6 +16,8 @@ class AddColsInUsers extends Migration
         Schema::table('users', function (Blueprint $table) {
             //
             $table->enum('gender', ['M', 'F'])->nullable()->after('password');
+            // $table->bigInteger('contact_no')->nullable();
+            // $table->bigInteger('emergency_contact')->nullable();
         });
     }
 

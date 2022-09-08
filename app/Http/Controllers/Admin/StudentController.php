@@ -132,12 +132,14 @@ class StudentController extends Controller
                 if ($trashed == null) {
                     $btn .= '
                         <a href="#" class="btn btn-success bg-success p-1 view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
-                        <a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                        <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
+                    if (Auth::user()->can('student_delete')) {
+                        $btn .='<a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
+                    }
                 } else {
                     $btn .= '
-                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
+                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>';
+                    $btn .='
                         <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
                     ';
                 }
@@ -199,16 +201,32 @@ class StudentController extends Controller
             //     return response()->json(['status' => false, 'msg' => 'Picture required']);
             // }
             $defaultPassword = '12345678';
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'gender' => $request->gender,
-                'password' => Hash::make($defaultPassword),
-                'role_id' => $request->role,
-                'registration_date' => Carbon::now(),
-                'approved_status' => 0,
-                // 'photo' => $file
-            ]);
+            if ($request->visitor == 'true') {
+                $user = User::where('id', $request->user_id)->first();
+                if (isset($user)) {
+                    $user->name = $request->name;
+                    if ($user->email != $request->email) {
+                        $user->email = $request->email;
+                    }
+                    $user->gender = $request->gender;
+                    $user->password = Hash::make($defaultPassword);
+                    $user->role_id = 3;
+                    // $user->registration_date = Carbon::now();
+                    $user->approved_status = 1;
+                    $user->save();
+                }
+            } else {
+                $user = User::create([
+                    'name' => $request->name,
+                    'email' => $request->email,
+                    'gender' => $request->gender,
+                    'password' => Hash::make($defaultPassword),
+                    'role_id' => 3,
+                    'registration_date' => Carbon::now(),
+                    'approved_status' => 0,
+                    // 'photo' => $file
+                ]);
+            }
             $student = Student::create([
                 'user_id' => $user->id,
                 'batch_no' => $request->batch_no,
@@ -251,7 +269,7 @@ class StudentController extends Controller
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+            return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }
     }
 
@@ -338,13 +356,15 @@ class StudentController extends Controller
                 $student->user->save();
                 $student->user->assignRole($request->role);
                 DB::commit();
-                return redirect()->back()->with('success', 'Updated Successfully');
+                return response()->json(['status' => true, 'msg' => 'Data Updated Successfully']);
             } else {
-                return redirect()->back()->with('error', 'User doesnot exists');
+                DB::rollback();
+                return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
             }
         } catch (\Exception $e) {
             // dd($e);
-            return redirect()->back()->with('error', 'Something went wrong');
+            DB::rollback();
+            return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }
     }
 

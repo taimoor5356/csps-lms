@@ -3,7 +3,7 @@
 namespace App\Traits;
 use Illuminate\Http\Request;
 
-trait ImageUpload{
+trait ImageUpload {
     public function uploadImage($image, $file, $directory)
     {
         if (isset($image)) {
@@ -11,7 +11,6 @@ trait ImageUpload{
                 if ($image->getSize() > 500000) {
                     return response()->json(['status' => false]);
                 } else {
-                    dd('uplod');
                     $image->move($directory, $file);
                 }
             }

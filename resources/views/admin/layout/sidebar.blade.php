@@ -281,6 +281,14 @@
                                 href="{{ route('students') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Students
                             </a>
+                            <a class="nav-link {{ (request()->is('visitor') ? 'active' : request()->is('visitor/create')) ? 'active' : '' }}"
+                                href="{{ route('visitors') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Visitors
+                            </a>
+                            <a class="nav-link {{ (request()->is('interview') ? 'active' : request()->is('interview/create')) ? 'active' : '' }}"
+                                href="{{ route('interview.students') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Interviews
+                            </a>
                         </li>
                     </ul>
                 </div>

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Admin;
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\Visitor;
 use App\Models\Instructor;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
@@ -66,5 +67,11 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->hasMany(Course::class, 'user_id', 'id');
+    }
+
+    // relation with students
+    public function visitor()
+    {
+        return $this->hasOne(Visitor::class, 'user_id', 'id');
     }
 }

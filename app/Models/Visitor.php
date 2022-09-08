@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Student extends Model
+class Visitor extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $guarded = ['id'];
+    protected $guarded = [];
 
-    // relation with user
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
