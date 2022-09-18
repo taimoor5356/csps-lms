@@ -80,47 +80,7 @@
         <div class="page-header">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <div class="card card-plain bg-white mb-4">
-                            <div class="card-header pb-0">
-                                <h4 class="font-weight-bolder">Notification</h4>
-                            </div>
-                            <div class="card-body pt-0">
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS-2023 Seminar on
-                                    17th August, 2022 at 05:30PM</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS Screening test 2013 in October,
-                                    2022</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS-2013 Exam in Feb, 2023
-                                </p>
-                            </div>
-                        </div>
-                        <div class="d-none d-md-block w-100 p-0" style="border-radius: 50px">
-                            <div class="container-fluid p-0">
-                                <div class="content p-0">
-                                    <div class="site-section bg-left-half p-0">
-                                        <div class="container lowl-2-style p-0 card card-plain">
-                                            <div class="owl-carousel owl-2 w-100 p-0" style="padding: 0px !important; margin: 0px !important;">
-                                                <div class="media-29101 p-0">
-                                                    <a href="#">
-                                                      <img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
-                                                </div>
-                                                <div class="media-29101 p-0">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
-                                                </div>
-                                                <div class="media-29101 p-0">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 h-100">
+                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12 h-100 mt-4">
                         <div class="card card-plain bg-white h-100">
                             <div class="card-header mb-0 pb-0">
                                 <h4 class="font-weight-bolder">Sign In</h4>
@@ -150,8 +110,48 @@
                             <div class="card-footer text-center pt-0 mt-0 pb-0">
                                 <p class="text-sm mx-auto">
                                     New User?
-                                    <a href="javascript:;" class="text-primary text-gradient font-weight-bold">Click Here</a>
+                                    <a href="{{ route('create.visitor') }}" class="text-primary text-gradient font-weight-bold">Click Here</a>
                                 </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 col-xs-12 mt-4" style="position: relative;">
+                        <div class="card card-plain bg-white mb-4">
+                            <div class="card-header pb-0">
+                                <h4 class="font-weight-bolder">Notification</h4>
+                            </div>
+                            <div class="card-body pt-0">
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS-2023 Seminar on
+                                    17th August, 2022 at 05:30PM</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS Screening test 2013 in October,
+                                    2022</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS-2013 Exam in Feb, 2023
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-none d-md-block" style="border-radius: 50px">
+                            <div class="container-fluid" style="position: absolute; bottom: 0px; width: 100%">
+                                <div class="content">
+                                    <div class="site-section bg-left-half">
+                                        <div class="container-fluid lowl-2-style card card-plain">
+                                            <div class="owl-carousel owl-2">
+                                                <div class="media-29101">
+                                                    <a href="#">
+                                                      <img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                                <div class="media-29101">
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                                <div class="media-29101">
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
+                                                            class="img-fluid"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

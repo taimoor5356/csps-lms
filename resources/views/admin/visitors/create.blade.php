@@ -168,6 +168,9 @@
                             $('.toast .toast-body').addClass('bg-success');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            setTimeout(function () {
+                                window.location.href = "{{ route('login') }}";
+                            }, 3000);
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
                             $('.toast .toast-header').removeClass('bg-success');

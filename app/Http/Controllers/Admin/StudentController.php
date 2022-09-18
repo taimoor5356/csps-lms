@@ -189,6 +189,7 @@ class StudentController extends Controller
     {
         //
         try {
+            dd($request->roll_no);
             DB::beginTransaction();
             // if ($request->hasFile('photo')) {
             //     $file = time().'.'.$request->photo->extension();
@@ -231,6 +232,7 @@ class StudentController extends Controller
                 'user_id' => $user->id,
                 'batch_no' => $request->batch_no,
                 'reg_no' => $request->reg_no,
+                'roll_no' => $request->roll_no,
                 'applied_for' => $request->applied_for,
                 'father_name' => $request->father_name,
                 'father_occupation' => $request->father_occupation,
@@ -259,6 +261,7 @@ class StudentController extends Controller
                 'fee_refund' => $request->fee_refund ? '1' : '0',
                 'notification_sent' => $request->notification_sent ? '1' : '0',
                 'challan_generated' => $request->challan_generated ? '1' : '0',
+                'fee_submit_date' => $request->fee_submit_date
             ]);
             $user->assignRole(3);
             $subject = 'Login Details';
@@ -347,6 +350,7 @@ class StudentController extends Controller
                 $student->address = $request->address;
                 $student->contact_res = $request->contact_res;
                 $student->cell_no = $request->cell_no;
+                $student->roll_no = $request->roll_no;
                 $student->degree = $request->degree;
                 $student->major_subjects = $request->major_subjects;
                 $student->cgpa = $request->cgpa;

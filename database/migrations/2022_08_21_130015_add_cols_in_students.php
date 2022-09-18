@@ -15,10 +15,11 @@ class AddColsInStudents extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             //
-            $table->string('year')->comment('CSS,PMS year')->nullable()->after('cell_no');
+            $table->string('roll_no')->nullable()->after('cell_no');
+            $table->string('year')->comment('CSS,PMS year')->nullable()->after('roll_no');
             $table->enum('class_type', ['campus', 'online'])->comment('Campus, Online')->nullable()->after('year');
             $table->enum('applied_for', ['written', 'interview'])->comment('Written, Interview')->nullable()->after('class_type');
-            $table->enum('fee_type', ['all', 'compulsory', 'custom'])->nullable()->after('applied_for');
+            $table->enum('fee_type', ['all', 'compulsory', 'custom', 'mock', 'evaluation', 'interview'])->nullable()->after('applied_for');
             $table->enum('mock_exam_evaluation', ['mock', 'evaluation'])->nullable()->after('fee_type');
             $table->enum('installment', ['first', 'second', 'third', 'fourth'])->nullable()->after('mock_exam_evaluation');
             $table->enum('discount', ['2.5', '5.0', '7.5', '10', '100'])->nullable()->after('installment');
@@ -29,6 +30,7 @@ class AddColsInStudents extends Migration
             $table->enum('fee_refund', ['0', '1'])->nullable()->after('leave');
             $table->enum('notification_sent', ['0', '1'])->nullable()->after('fee_refund');
             $table->enum('challan_generated', ['0', '1'])->nullable()->after('notification_sent');
+            $table->string('fee_submit_date')->nullable()->after('challan_generated');
         });
     }
 
@@ -41,6 +43,7 @@ class AddColsInStudents extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             //
+            $table->dropColumn('roll_no');
             $table->dropColumn('year');
             $table->dropColumn('class_type');
             $table->dropColumn('applied_for');
@@ -55,6 +58,7 @@ class AddColsInStudents extends Migration
             $table->dropColumn('fee_refund');
             $table->dropColumn('notification_sent');
             $table->dropColumn('challan_generated');
+            $table->dropColumn('fee_submit_date');
         });
     }
 }

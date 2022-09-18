@@ -11,6 +11,15 @@
     .fee-font {
         font-size: 11px;
     }
+    .loader {
+        border: 2px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 2px solid transparent;
+        width: 15px;
+        height: 15px;
+        -webkit-animation: spin 1s linear infinite; /* Safari */
+        animation: spin 1s linear infinite;
+    }
 </style>
 <!-- Styling Here -->
 @endsection
@@ -76,7 +85,43 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        
+        $(document).on('keyup', '#reg-no', function () {
+            $('#roll-no1').val($(this).val());
+        });
+        $(document).on('change', '#css-pms-yr', function () {
+            $('#reg-no2').val($(this).val());
+        });
+        $(document).on('change', '#batch-no', function () {
+            $('#reg-no3').val($(this).val());
+        });
+        $(document).on('keyup change click', function () {
+            var regNo = $('#reg-no').val();
+            var cssPmsYr = $('#css-pms-yr').val();
+            var batchNo = $('#batch-no').val();
+
+            if (regNo == null) {
+                regNo = '';
+            }
+            if (cssPmsYr == null) {
+                cssPmsYr = '';
+            } else {
+                cssPmsYr = cssPmsYr.replaceAll('_', '-');
+            }
+            if (batchNo == null) {
+                batchNo = '';
+            }
+           $('#roll-no').val(regNo+'-'+cssPmsYr+'-'+batchNo);
+        });
+        $(document).on('click', '.fee_type', function () {
+            $('#total-fee').val($(this).attr('data-fee'));
+        });
+        $(document).on('change', '.discount', function () {
+            var feeType = $('.fee_type:checked').attr('data-fee');
+            var discount = $(this).val();
+            var percentage = (discount/100)*feeType;
+            var result = feeType - percentage;
+            $('#total-fee').val(result);
+        });
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);

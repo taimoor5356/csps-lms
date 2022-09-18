@@ -44,6 +44,11 @@
       vertical-align: middle;
       height: 100%;
     }
+    #notification {
+        position: fixed;
+        top: 5px;
+        left: 40%;
+    }
   </style>
   @yield('style')
 </head>
