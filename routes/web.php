@@ -1,18 +1,28 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Interview;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CourseController;
-use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EnrollmentController;
-use App\Http\Controllers\Admin\InterviewController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AlumniController;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\LectureController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\VisitorController;
-use App\Models\Interview;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DownloadCenterController;
+use App\Http\Controllers\Admin\InterviewController;
+use App\Http\Controllers\Admin\EnrollmentController;
+use App\Http\Controllers\Admin\ExaminationsController;
+use App\Http\Controllers\Admin\FacultyController;
+use App\Http\Controllers\Admin\NoticeBoardController;
+use App\Http\Controllers\Admin\StudentServicesController;
+use App\Http\Controllers\Admin\SuggestionsController;
+use App\Http\Controllers\Admin\TeacherReviewController;
+use App\Http\Controllers\Admin\ZoomClassesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +109,137 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/restore', [StudentController::class, 'restore'])->name('restore.student');
         Route::post('/{id}/permanent-delete', [StudentController::class, 'permanentDelete'])->name('permanent_delete.student');
         // Route::get('/{id}/enrolled-courses', [StudentController::class, 'enrolledCourses'])->name('student.enrolled.courses');
+    });
+    // lectures Routes
+    Route::prefix('lectures')->group(function () {
+        Route::get('', [LectureController::class, 'index'])->name('lectures');
+        Route::get('/{id}/show', [LectureController::class, 'show'])->name('show.lecture');
+        Route::get('/create', [LectureController::class, 'create'])->name('create.lecture');
+        Route::post('/store', [LectureController::class, 'store'])->name('store.lecture');
+        Route::get('/{id}/edit', [LectureController::class, 'edit'])->name('edit.lecture');
+        Route::post('/{id}/update', [LectureController::class, 'update'])->name('update.lecture');
+        Route::post('/{id}/delete', [LectureController::class, 'destroy'])->name('delete.lecture');
+        Route::get('/trashed', [LectureController::class, 'trashed'])->name('trashed.lectures');
+        Route::get('/{id}/restore', [LectureController::class, 'restore'])->name('restore.lecture');
+        Route::post('/{id}/permanent-delete', [LectureController::class, 'permanentDelete'])->name('permanent_delete.lecture');
+        // Route::get('/{id}/enrolled-courses', [LectureController::class, 'enrolledCourses'])->name('lecture.enrolled.courses');
+    });
+    // notice board Routes
+    Route::prefix('notice-board')->group(function () {
+        Route::get('', [NoticeBoardController::class, 'index'])->name('notice_board');
+        Route::get('/{id}/show', [NoticeBoardController::class, 'show'])->name('show.notice_board');
+        Route::get('/create', [NoticeBoardController::class, 'create'])->name('create.notice_board');
+        Route::post('/store', [NoticeBoardController::class, 'store'])->name('store.notice_board');
+        Route::get('/{id}/edit', [NoticeBoardController::class, 'edit'])->name('edit.notice_board');
+        Route::post('/{id}/update', [NoticeBoardController::class, 'update'])->name('update.notice_board');
+        Route::post('/{id}/delete', [NoticeBoardController::class, 'destroy'])->name('delete.notice_board');
+        Route::get('/trashed', [NoticeBoardController::class, 'trashed'])->name('trashed.notice_board');
+        Route::get('/{id}/restore', [NoticeBoardController::class, 'restore'])->name('restore.notice_board');
+        Route::post('/{id}/permanent-delete', [NoticeBoardController::class, 'permanentDelete'])->name('permanent_delete.notice_board');
+    });
+    // student services Routes
+    Route::prefix('student-services')->group(function () {
+        Route::get('', [StudentServicesController::class, 'index'])->name('student_services');
+        Route::get('/{id}/show', [StudentServicesController::class, 'show'])->name('show.student_services');
+        Route::get('/create', [StudentServicesController::class, 'create'])->name('create.student_services');
+        Route::post('/store', [StudentServicesController::class, 'store'])->name('store.student_services');
+        Route::get('/{id}/edit', [StudentServicesController::class, 'edit'])->name('edit.student_services');
+        Route::post('/{id}/update', [StudentServicesController::class, 'update'])->name('update.student_services');
+        Route::post('/{id}/delete', [StudentServicesController::class, 'destroy'])->name('delete.student_services');
+        Route::get('/trashed', [StudentServicesController::class, 'trashed'])->name('trashed.student_services');
+        Route::get('/{id}/restore', [StudentServicesController::class, 'restore'])->name('restore.student_services');
+        Route::post('/{id}/permanent-delete', [StudentServicesController::class, 'permanentDelete'])->name('permanent_delete.student_services');
+    });
+    // examination Routes
+    Route::prefix('examinations')->group(function () {
+        Route::get('', [ExaminationsController::class, 'index'])->name('examinations');
+        Route::get('/{id}/show', [ExaminationsController::class, 'show'])->name('show.examinations');
+        Route::get('/create', [ExaminationsController::class, 'create'])->name('create.examinations');
+        Route::post('/store', [ExaminationsController::class, 'store'])->name('store.examinations');
+        Route::get('/{id}/edit', [ExaminationsController::class, 'edit'])->name('edit.examinations');
+        Route::post('/{id}/update', [ExaminationsController::class, 'update'])->name('update.examinations');
+        Route::post('/{id}/delete', [ExaminationsController::class, 'destroy'])->name('delete.examinations');
+        Route::get('/trashed', [ExaminationsController::class, 'trashed'])->name('trashed.examinations');
+        Route::get('/{id}/restore', [ExaminationsController::class, 'restore'])->name('restore.examinations');
+        Route::post('/{id}/permanent-delete', [ExaminationsController::class, 'permanentDelete'])->name('permanent_delete.examinations');
+    });
+    // zoom classes Routes
+    Route::prefix('zoom-classes')->group(function () {
+        Route::get('', [ZoomClassesController::class, 'index'])->name('zoom_classes');
+        Route::get('/{id}/show', [ZoomClassesController::class, 'show'])->name('show.zoom_classes');
+        Route::get('/create', [ZoomClassesController::class, 'create'])->name('create.zoom_classes');
+        Route::post('/store', [ZoomClassesController::class, 'store'])->name('store.zoom_classes');
+        Route::get('/{id}/edit', [ZoomClassesController::class, 'edit'])->name('edit.zoom_classes');
+        Route::post('/{id}/update', [ZoomClassesController::class, 'update'])->name('update.zoom_classes');
+        Route::post('/{id}/delete', [ZoomClassesController::class, 'destroy'])->name('delete.zoom_classes');
+        Route::get('/trashed', [ZoomClassesController::class, 'trashed'])->name('trashed.zoom_classes');
+        Route::get('/{id}/restore', [ZoomClassesController::class, 'restore'])->name('restore.zoom_classes');
+        Route::post('/{id}/permanent-delete', [ZoomClassesController::class, 'permanentDelete'])->name('permanent_delete.zoom_classes');
+    });
+    // download center Routes
+    Route::prefix('download-center')->group(function () {
+        Route::get('', [DownloadCenterController::class, 'index'])->name('download_center');
+        Route::get('/{id}/show', [DownloadCenterController::class, 'show'])->name('show.download_center');
+        Route::get('/create', [DownloadCenterController::class, 'create'])->name('create.download_center');
+        Route::post('/store', [DownloadCenterController::class, 'store'])->name('store.download_center');
+        Route::get('/{id}/edit', [DownloadCenterController::class, 'edit'])->name('edit.download_center');
+        Route::post('/{id}/update', [DownloadCenterController::class, 'update'])->name('update.download_center');
+        Route::post('/{id}/delete', [DownloadCenterController::class, 'destroy'])->name('delete.download_center');
+        Route::get('/trashed', [DownloadCenterController::class, 'trashed'])->name('trashed.download_center');
+        Route::get('/{id}/restore', [DownloadCenterController::class, 'restore'])->name('restore.download_center');
+        Route::post('/{id}/permanent-delete', [DownloadCenterController::class, 'permanentDelete'])->name('permanent_delete.download_center');
+    });
+    // faculty Routes
+    Route::prefix('faculty')->group(function () {
+        Route::get('', [FacultyController::class, 'index'])->name('faculty');
+        Route::get('/{id}/show', [FacultyController::class, 'show'])->name('show.faculty');
+        Route::get('/create', [FacultyController::class, 'create'])->name('create.faculty');
+        Route::post('/store', [FacultyController::class, 'store'])->name('store.faculty');
+        Route::get('/{id}/edit', [FacultyController::class, 'edit'])->name('edit.faculty');
+        Route::post('/{id}/update', [FacultyController::class, 'update'])->name('update.faculty');
+        Route::post('/{id}/delete', [FacultyController::class, 'destroy'])->name('delete.faculty');
+        Route::get('/trashed', [FacultyController::class, 'trashed'])->name('trashed.faculty');
+        Route::get('/{id}/restore', [FacultyController::class, 'restore'])->name('restore.faculty');
+        Route::post('/{id}/permanent-delete', [FacultyController::class, 'permanentDelete'])->name('permanent_delete.faculty');
+    });
+    // alumni Routes
+    Route::prefix('alumni')->group(function () {
+        Route::get('', [AlumniController::class, 'index'])->name('alumni');
+        Route::get('/{id}/show', [AlumniController::class, 'show'])->name('show.alumni');
+        Route::get('/create', [AlumniController::class, 'create'])->name('create.alumni');
+        Route::post('/store', [AlumniController::class, 'store'])->name('store.alumni');
+        Route::get('/{id}/edit', [AlumniController::class, 'edit'])->name('edit.alumni');
+        Route::post('/{id}/update', [AlumniController::class, 'update'])->name('update.alumni');
+        Route::post('/{id}/delete', [AlumniController::class, 'destroy'])->name('delete.alumni');
+        Route::get('/trashed', [AlumniController::class, 'trashed'])->name('trashed.alumni');
+        Route::get('/{id}/restore', [AlumniController::class, 'restore'])->name('restore.alumni');
+        Route::post('/{id}/permanent-delete', [AlumniController::class, 'permanentDelete'])->name('permanent_delete.alumni');
+    });
+    // teacher review Routes
+    Route::prefix('teacher-review')->group(function () {
+        Route::get('', [TeacherReviewController::class, 'index'])->name('teacher_review');
+        Route::get('/{id}/show', [TeacherReviewController::class, 'show'])->name('show.teacher_review');
+        Route::get('/create', [TeacherReviewController::class, 'create'])->name('create.teacher_review');
+        Route::post('/store', [TeacherReviewController::class, 'store'])->name('store.teacher_review');
+        Route::get('/{id}/edit', [TeacherReviewController::class, 'edit'])->name('edit.teacher_review');
+        Route::post('/{id}/update', [TeacherReviewController::class, 'update'])->name('update.teacher_review');
+        Route::post('/{id}/delete', [TeacherReviewController::class, 'destroy'])->name('delete.teacher_review');
+        Route::get('/trashed', [TeacherReviewController::class, 'trashed'])->name('trashed.teacher_review');
+        Route::get('/{id}/restore', [TeacherReviewController::class, 'restore'])->name('restore.teacher_review');
+        Route::post('/{id}/permanent-delete', [TeacherReviewController::class, 'permanentDelete'])->name('permanent_delete.teacher_review');
+    });
+    // suggestions Routes
+    Route::prefix('suggestions')->group(function () {
+        Route::get('', [SuggestionsController::class, 'index'])->name('suggestions');
+        Route::get('/{id}/show', [SuggestionsController::class, 'show'])->name('show.suggestions');
+        Route::get('/create', [SuggestionsController::class, 'create'])->name('create.suggestions');
+        Route::post('/store', [SuggestionsController::class, 'store'])->name('store.suggestions');
+        Route::get('/{id}/edit', [SuggestionsController::class, 'edit'])->name('edit.suggestions');
+        Route::post('/{id}/update', [SuggestionsController::class, 'update'])->name('update.suggestions');
+        Route::post('/{id}/delete', [SuggestionsController::class, 'destroy'])->name('delete.suggestions');
+        Route::get('/trashed', [SuggestionsController::class, 'trashed'])->name('trashed.suggestions');
+        Route::get('/{id}/restore', [SuggestionsController::class, 'restore'])->name('restore.suggestions');
+        Route::post('/{id}/permanent-delete', [SuggestionsController::class, 'permanentDelete'])->name('permanent_delete.suggestions');
     });
     // courses Routes
     Route::prefix('courses')->group(function () {

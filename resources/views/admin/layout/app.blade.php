@@ -134,6 +134,19 @@
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
     $(document).ready(function () {
+        @if (session('success'))
+            $('.toast .success-header').html('Success');
+            $('.toast .toast-header').addClass('bg-success');
+            $('.toast .toast-body').addClass('bg-success');
+            $('.toast .toast-body').html("{{session('success')}}");
+            $('.toast').toast('show');
+        @elseif(session('error'))
+            $('.toast .success-header').html('Error');
+            $('.toast .toast-header').addClass('bg-danger');
+            $('.toast .toast-body').addClass('bg-danger');
+            $('.toast .toast-body').html("{{session('error')}}");
+            $('.toast').toast('show');
+        @endif
       $(document).on('click', '.close-toast-msg', function () {
         $('.toast').toast('hide');
       });

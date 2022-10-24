@@ -3,11 +3,6 @@
 @section('style')
 <!-- Styling Here -->
 <style>
-    /* #notification {
-        position: absolute;
-        top: 5px;
-        left: 35%;
-    } */
     .fee-font {
         font-size: 11px;
     }
@@ -39,13 +34,14 @@
                 </div>
                 <div class="card-body">
                     @role('admin')
-                    <form action="{{ route('update.student', $id) }}" id="admin-form" method="POST" enctype="multipart/form-data">
+                    <form id="admin-form" method="POST" enctype="multipart/form-data">
                         @csrf
                         @include('admin.students._form_admin')
+                        <input type="hidden" name="student_id" id="student-id" value="{{ $id }}">
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4" type="submit">
-                                    <i class="fa fa-save"></i> Save
+                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
                         </div>
@@ -59,7 +55,7 @@
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4" type="submit">
-                                    <i class="fa fa-save"></i> Save
+                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
                         </div>
@@ -91,7 +87,7 @@
             $('.toast').toast('show');
         @endif
         
-        $(document).on('submit', '#student-form', function(e) {
+        $(document).on('submit', '#admin-form, #student-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
             $('.loader').removeClass('d-none');
@@ -112,8 +108,6 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        $('#save').prop('disabled', false);
-                        $('.loader').addClass('d-none');
                         if (response.status == true) {
                             $('.toast .toast-header').removeClass('bg-danger');
                             $('.toast .toast-header').removeClass('bg-success');
@@ -123,6 +117,8 @@
                             $('.toast .toast-body').addClass('bg-success');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('.loader').addClass('d-none');
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
                             $('.toast .toast-header').removeClass('bg-danger');
@@ -132,6 +128,8 @@
                             $('.toast .toast-body').addClass('bg-danger');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
                             $('.loader').addClass('d-none');

@@ -20,6 +20,19 @@
     <div class="row">
         <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
             <div class="card">
+                <div class="alert-messages w-50 ms-auto text-center">
+                    <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
+                            <span class="success-header"></span>
+                            <div class="close-toast-msg ms-auto text-end cursor-pointer">
+                                X
+                            </div>
+                        </div>
+                        <div class="toast-body text-white text-bold">
+                            
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="col-8">

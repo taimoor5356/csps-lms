@@ -2,31 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Enrollment;
+use App\Http\Controllers\Controller;
+use App\Interfaces\NoticeBoardRepositoryInterface;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\Controller;
-use App\Interfaces\StudentRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use PHPUnit\Framework\MockObject\Builder\Stub;
 
-class StudentController extends Controller
+class NoticeBoardController extends Controller
 {
     use ImageUpload;
-    private StudentRepositoryInterface $studentRepository;
+    private NoticeBoardRepositoryInterface $noticeBoardRepository;
 
-    public function __construct(StudentRepositoryInterface $studentRepository)
+    public function __construct(NoticeBoardRepositoryInterface $noticeBoardRepository)
     {
-        $this->studentRepository = $studentRepository;
+        $this->noticeBoardRepository = $noticeBoardRepository;
     }
     /**
      * Display a listing of the resource.
@@ -37,9 +25,9 @@ class StudentController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->studentRepository->index($request);
+            return $this->noticeBoardRepository->index($request);
         }
-        return view('admin.students.index');
+        return view('admin.notice_board.index');
     }
 
     /**
@@ -50,7 +38,7 @@ class StudentController extends Controller
     public function create()
     {
         //
-        return view('admin.students.create');
+        return view('admin.notice_board.create');
     }
 
     /**
@@ -62,7 +50,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //
-        return $this->studentRepository->store($request->all());
+        return $this->noticeBoardRepository->store($request->all());
     }
 
     /**
@@ -74,8 +62,8 @@ class StudentController extends Controller
     public function show($id)
     {
         //
-        $student = $this->studentRepository->show($id);
-        return view('admin.students.show', compact('student'));
+        $student = $this->noticeBoardRepository->show($id);
+        return view('admin.notice_board.show', compact('student'));
     }
 
     /**
@@ -91,7 +79,7 @@ class StudentController extends Controller
             $roles = Role::get();
             $student = Student::with('user')->where('id', $id)->first();
             if (isset($student)) {
-                return view('admin.students.edit', compact('student', 'id', 'roles'));
+                return view('admin.notice_board.edit', compact('student', 'id', 'roles'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
@@ -110,7 +98,7 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         //
-        return $this->studentRepository->update($request, $id);
+        return $this->noticeBoardRepository->update($request, $id);
     }
 
     /**
@@ -122,7 +110,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         //
-        return $this->studentRepository->destroy($id);
+        return $this->noticeBoardRepository->destroy($id);
     }
 
     /**
@@ -133,14 +121,14 @@ class StudentController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->studentRepository->trashed($request);
+            return $this->noticeBoardRepository->trashed($request);
         }
-        return view('admin.students.trashed');
+        return view('admin.notice_board.trashed');
     }
 
     public function restore($id)
     {
-        return $this->studentRepository->restore($id);
+        return $this->noticeBoardRepository->restore($id);
     }
 
     /**

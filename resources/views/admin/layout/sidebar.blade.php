@@ -381,17 +381,38 @@
                             <a class="nav-link " href="{{ route('enrollments') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Subjects
                             </a>
-                            <a class="nav-link " href="#">
-                                <i class="fa fa-minus text-dark opacity-10"></i>My Lecture
+                            <a class="nav-link " href="{{ route('lectures') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Lecture Scedule
                             </a>
-                            <a class="nav-link " href="#">
-                                <i class="fa fa-minus text-dark opacity-10"></i>E-Library
+                            <a class="nav-link " href="{{ route('notice_board') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Notice Board
                             </a>
-                            <a class="nav-link " href="#">
+                            <a class="nav-link " href="{{ route('student_services') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Student Services
+                            </a>
+                            <a class="nav-link " href="{{ route('examinations') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Examinations
+                            </a>
+                            <a class="nav-link " href="{{ route('zoom_classes') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Zoom Classes
+                            </a>
+                            <a class="nav-link " href="{{ route('download_center') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Download Center
+                            </a>
+                            <a class="nav-link " href="{{ route('faculty') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Faculty
                             </a>
+                            <a class="nav-link " href="{{ route('alumni') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Alumni
+                            </a>
+                            <a class="nav-link " href="{{ route('teacher_review') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Teacher Review
+                            </a>
+                            <a class="nav-link " href="{{ route('suggestions') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Suggestions
+                            </a>
                             <a class="nav-link " href="#">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Batch
+                                <i class="fa fa-minus text-dark opacity-10"></i>Contact Us
                             </a>
                         </li>
                     </ul>

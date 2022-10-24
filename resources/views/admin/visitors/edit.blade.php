@@ -168,7 +168,6 @@
                 });
             }, 1000);
         });
-        
         $(document).on('click', '#add-education', function () {
             if ($('.new-education-row').length >= 4) {
                 return false;

@@ -2,31 +2,19 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Enrollment;
+use App\Http\Controllers\Controller;
+use App\Repositories\StudentServicesRepository;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\Controller;
-use App\Interfaces\StudentRepositoryInterface;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use PHPUnit\Framework\MockObject\Builder\Stub;
 
-class StudentController extends Controller
+class StudentServicesController extends Controller
 {
     use ImageUpload;
-    private StudentRepositoryInterface $studentRepository;
+    private StudentServicesRepository $studentServicesRepository;
 
-    public function __construct(StudentRepositoryInterface $studentRepository)
+    public function __construct(StudentServicesRepository $studentServicesRepository)
     {
-        $this->studentRepository = $studentRepository;
+        $this->studentServicesRepository = $studentServicesRepository;
     }
     /**
      * Display a listing of the resource.
@@ -37,9 +25,9 @@ class StudentController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->studentRepository->index($request);
+            return $this->studentServicesRepository->index($request);
         }
-        return view('admin.students.index');
+        return view('admin.student_services.index');
     }
 
     /**
@@ -62,7 +50,7 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //
-        return $this->studentRepository->store($request->all());
+        return $this->studentServicesRepository->store($request->all());
     }
 
     /**
@@ -74,7 +62,7 @@ class StudentController extends Controller
     public function show($id)
     {
         //
-        $student = $this->studentRepository->show($id);
+        $student = $this->studentServicesRepository->show($id);
         return view('admin.students.show', compact('student'));
     }
 
@@ -110,7 +98,7 @@ class StudentController extends Controller
     public function update(Request $request, $id)
     {
         //
-        return $this->studentRepository->update($request, $id);
+        return $this->studentServicesRepository->update($request, $id);
     }
 
     /**
@@ -122,7 +110,7 @@ class StudentController extends Controller
     public function destroy($id)
     {
         //
-        return $this->studentRepository->destroy($id);
+        return $this->studentServicesRepository->destroy($id);
     }
 
     /**
@@ -133,14 +121,14 @@ class StudentController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->studentRepository->trashed($request);
+            return $this->studentServicesRepository->trashed($request);
         }
         return view('admin.students.trashed');
     }
 
     public function restore($id)
     {
-        return $this->studentRepository->restore($id);
+        return $this->studentServicesRepository->restore($id);
     }
 
     /**
