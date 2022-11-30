@@ -37,11 +37,11 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="contact_no" class="form-control-label">Contact No *</label>
-                <input class="form-control contact_no" id="contact_no"
-                    name="contact_no" type="number"
-                    value="@isset($student->user) {{ $student->cell_no }} @endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
+                <label for="email" class="form-control-label">Email *</label>
+                <input class="form-control email" id="email"
+                    name="email" type="email"
+                    value="@isset($student->user) {{ $student->user->email }} @endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
             </div>
         </div>
         <div class="col-md-3">
@@ -57,11 +57,11 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="email" class="form-control-label">Email *</label>
-                <input class="form-control email" id="email"
-                    name="email" type="email"
-                    value="@isset($student->user) {{ $student->user->email }} @endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
+                <label for="contact_no" class="form-control-label">Contact No *</label>
+                <input class="form-control contact_no" id="contact_no"
+                    name="contact_no" type="number"
+                    value="@isset($student->user) {{ $student->cell_no }} @endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
         {{-- <div class="col-md-3">
@@ -118,7 +118,7 @@
                 <input type="hidden" id="reg-no1" value="">
                 <input type="hidden" id="reg-no2" value="">
                 <input type="hidden" id="reg-no3" value="">
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control roll_no" readonly disabled id="roll-no"
+                <input @if (Auth::user()->hasRole('student')) @endif class="form-control roll_no" id="roll-no"
                     name="roll_no" type="text"
                     value=""
                     onfocus="focused(this)" onfocusout="defocused(this)">

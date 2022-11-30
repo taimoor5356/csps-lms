@@ -31,6 +31,7 @@
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <!-- Bootstrap -->
+  
   <!-- Font Awesome Icons -->
   <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
   <link href="{{ asset('public/assets/css/nucleo-svg.css') }}" rel="stylesheet" />
@@ -100,6 +101,69 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
     }
+    
+    /* Toggle Slider Button Starts */
+    .switch {
+            position: relative;
+            display: inline-block;
+            width: 28px;
+            height: 8px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0px;
+            right: 0;
+            bottom: 0;
+            background-color: rgb(208, 208, 208);
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 12px;
+            width: 12px;
+            left: 2px;
+            bottom: -2px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked+.slider {
+            background-color: #1e73be;
+        }
+
+        input:focus+.slider {
+            box-shadow: 0 0 1px #1e73be;
+        }
+
+        input:checked+.slider:before {
+            -webkit-transform: translateX(13px);
+            -ms-transform: translateX(13px);
+            transform: translateX(13px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 17px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+            border: 1px solid #1e73be;
+        }
+        /* Toggle Slider Button Ends */
   </style>
   @yield('style')
 </head>

@@ -31,10 +31,16 @@ class DashboardController extends Controller
                 $data['totalStudents'] = Student::count();
                 $data['totalStudentEnrolled'] = Enrollment::groupBy('user_id')->count();
                 $data['totalCourses'] = Course::count();
-                if (Auth::user()->hasRole('student')) {
+                if (Auth::user()->hasRole('admin')) {
+                    return redirect()->route('admin_dashboard');
+                }
+                if (Auth::user()->hasRole('teacher')) {
+                    return redirect()->route('teacher_dashboard');
+                }
+                if (Auth::user()->hasRole('student_dashboard')) {
                     $data['totalStudentEnrolled'] = Enrollment::where('user_id', Auth::user()->id)->count();
                 }
-                return view('admin.dashboard.index')->with($data);
+                // return view('admin.dashboard.index')->with($data);
             } else {
                 return redirect()->route('logout');
             }

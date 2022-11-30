@@ -46,6 +46,14 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
+                <label for="email" class="form-control-label">Email *</label>
+                <input class="form-control email" id="email"
+                    name="email" type="email"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
                 <label for="gender" class="form-control-label">Gender *</label>
                 <select class="form-control gender" name="gender"
                     id="gender">
@@ -61,14 +69,6 @@
                 <input class="form-control cell_no" id="cell_no"
                     name="cell_no" type="number"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group mb-3">
-                <label for="email" class="form-control-label">Email *</label>
-                <input class="form-control email" id="email"
-                    name="email" type="email"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
             </div>
         </div>
         <div class="col-md-3">

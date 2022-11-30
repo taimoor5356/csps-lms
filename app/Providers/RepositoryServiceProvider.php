@@ -2,16 +2,20 @@
 
 namespace App\Providers;
 
+use App\Interfaces\AttendanceRepositoryInterface;
 use App\Interfaces\DownloadCenterRepositoryInterface;
 use App\Interfaces\ExaminationRepositoryInterface;
+use App\Interfaces\TeacherRepositoryInterface;
 use App\Interfaces\LectureRepositoryInterface;
 use App\Interfaces\NoticeBoardRepositoryInterface;
 use App\Interfaces\StudentRepositoryInterface;
 use App\Interfaces\SuggestionsRepositoryInterface;
 use App\Interfaces\TeacherReviewRepositoryInterface;
 use App\Interfaces\ZoomClassesRepositoryInterface;
+use App\Repositories\AttendanceRepository;
 use App\Repositories\DownloadCenterRepository;
 use App\Repositories\ExaminationRepository;
+use App\Repositories\TeacherRepository;
 use App\Repositories\LectureRepository;
 use App\Repositories\NoticeBoardRepository;
 use App\Repositories\StudentRepository;
@@ -37,6 +41,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DownloadCenterRepositoryInterface::class, DownloadCenterRepository::class);
         $this->app->bind(TeacherReviewRepositoryInterface::class, TeacherReviewRepository::class);
         $this->app->bind(SuggestionsRepositoryInterface::class, SuggestionsRepository::class);
+        $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class); 
+        $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class); 
     }
 
     /**

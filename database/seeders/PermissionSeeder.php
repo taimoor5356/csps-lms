@@ -52,6 +52,24 @@ class PermissionSeeder extends Seeder
                     'guard_name' => 'web'
                 ]
             ],
+            'teacher' => [
+                [
+                    'name' => 'teacher_view',
+                    'guard_name' => 'web'
+                ],
+                [
+                    'name' => 'teacher_create',
+                    'guard_name' => 'web'
+                ],
+                [
+                    'name' => 'teacher_update',
+                    'guard_name' => 'web'
+                ],
+                [
+                    'name' => 'teacher_delete',
+                    'guard_name' => 'web'
+                ]
+            ],
             'courses' => [
                 [
                     'name' => 'courses_view',

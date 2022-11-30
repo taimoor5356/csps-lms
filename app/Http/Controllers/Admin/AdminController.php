@@ -21,6 +21,11 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function dashboard(Request $request)
+    {
+        return view('admin.dashboard.index');
+    }
+
     // showTableData for index() and trashed()
     public function showTableData($data, $trashed)
     {

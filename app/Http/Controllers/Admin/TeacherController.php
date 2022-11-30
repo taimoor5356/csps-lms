@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\ZoomClassesRepositoryInterface;
+use App\Models\Teacher;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Interfaces\TeacherRepositoryInterface;
 
-class ZoomClassesController extends Controller
+class TeacherController extends Controller
 {
     use ImageUpload;
-    private ZoomClassesRepositoryInterface $zoomClassesRepository;
+    private TeacherRepositoryInterface $teacherRepository;
 
-    public function __construct(ZoomClassesRepositoryInterface $zoomClassesRepository)
+    public function __construct(TeacherRepositoryInterface $teacherRepository)
     {
-        $this->zoomClassesRepository = $zoomClassesRepository;
+        $this->teacherRepository = $teacherRepository;
+    }
+
+    public function dashboard(Request $request)
+    {
+        return view('admin.dashboard.teacher');
     }
     /**
      * Display a listing of the resource.
@@ -25,9 +32,9 @@ class ZoomClassesController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->zoomClassesRepository->index($request);
+            return $this->teacherRepository->index($request);
         }
-        return view('admin.zoom_classes.index');
+        return view('admin.teachers.index');
     }
 
     /**
@@ -38,6 +45,7 @@ class ZoomClassesController extends Controller
     public function create()
     {
         //
+        return view('admin.teachers.create');
     }
 
     /**
@@ -49,6 +57,7 @@ class ZoomClassesController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->teacherRepository->store($request->all());
     }
 
     /**
@@ -71,6 +80,17 @@ class ZoomClassesController extends Controller
     public function edit($id)
     {
         //
+        try {
+            $roles = Role::get();
+            $teacher = Teacher::with('user')->where('id', $id)->first();
+            if (isset($teacher)) {
+                return view('admin.teachers.edit', compact('teacher', 'id', 'roles'));
+            } else {
+                return redirect()->back()->with('error', 'User doesnot exists');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**
@@ -94,10 +114,5 @@ class ZoomClassesController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function teacherZoomClass(Request $request)
-    {
-        return view('admin.zoom_classes.teacher');
     }
 }

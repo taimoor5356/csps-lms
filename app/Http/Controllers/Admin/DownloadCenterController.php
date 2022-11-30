@@ -95,4 +95,9 @@ class DownloadCenterController extends Controller
     {
         //
     }
+
+    public function teacherDownloadCenter(Request $request)
+    {
+        return view('admin.download_center.teacher');
+    }
 }

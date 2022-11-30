@@ -13,12 +13,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white" aria-current="page"><a href="{{ route('students') }}"
-                    class="text-white">Students</a></li>
+            <li class="breadcrumb-item text-sm text-white" aria-current="page"><a href="{{ route('teachers') }}"
+                    class="text-white">Teachers</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
                     class="text-light">Add New</span></li>
         </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Students</h6>
+        <h6 class="font-weight-bolder text-white mb-0">Teachers</h6>
     </nav>
 @endsection
 <div class="container-fluid py-4">
@@ -28,15 +28,15 @@
                 <div class="card-header pb-0 d-flex">
                     <h6>Add New</h6>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('students') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View
+                        <a href="{{ route('teachers') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View
                             All</a>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form method="POST" enctype="multipart/form-data" id="student-form">
+                    <form method="POST" enctype="multipart/form-data" id="teacher-form">
                         @csrf
                         @role('admin')
-                            @include('admin.students._form_admin')
+                            @include('admin.teachers._form')
                             <input type="hidden" name="visitor" value="false">
                         @endrole
                         <div class="row">
@@ -73,7 +73,7 @@
             $('.toast').toast('show');
         @endif
         $(document).on('keyup', '#reg-no', function () {
-            $('#reg-no1').val($(this).val());
+            $('#roll-no1').val($(this).val());
         });
         $(document).on('change', '#css-pms-yr', function () {
             $('#reg-no2').val($(this).val());
@@ -109,7 +109,7 @@
             var result = feeType - percentage;
             $('#total-fee').val(result);
         });
-        $(document).on('submit', '#student-form', function(e) {
+        $(document).on('submit', '#teacher-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
             $('.loader').removeClass('d-none');
@@ -120,11 +120,9 @@
                 }
             });
             setTimeout(() => {
-                $('#save').prop('disabled', false);
-                $('.loader').addClass('d-none');
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('store.student') }}",
+                    url: "{{ route('store.teacher') }}",
                     data: formData,
                     contentType: false,
                     processData: false,
@@ -168,45 +166,45 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="degree" class="form-control-label">Degree *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control degree" id="degree"
+                                <input @if (Auth::user()->hasRole('teacher')) @endif class="form-control degree" id="degree"
                                     name="degree" type="text"
-                                    value="@isset($student->user) {{ $student->degree }} @endisset"
+                                    value="@isset($teacher->user) {{ $teacher->degree }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Degree Name">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="major_subjects" class="form-control-label">Major Subjects *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control major_subjects"
+                                <input @if (Auth::user()->hasRole('teacher')) @endif class="form-control major_subjects"
                                     id="major_subjects" name="major_subjects" type="text"
-                                    value="@isset($student->user) {{ $student->major_subjects }} @endisset"
+                                    value="@isset($teacher->user) {{ $teacher->major_subjects }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Major Subject">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="cgpa" class="form-control-label">CGPA/%age *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control cgpa" id="cgpa"
+                                <input @if (Auth::user()->hasRole('teacher')) @endif class="form-control cgpa" id="cgpa"
                                     name="cgpa" min="0.1" max="100.00" step="0.1" type="number"
-                                    value="@isset($student->user) {{ $student->cgpa }} @endisset" onfocus="focused(this)"
+                                    value="@isset($teacher->user) {{ $teacher->cgpa }} @endisset" onfocus="focused(this)"
                                     onfocusout="defocused(this)" placeholder="Enter CGPA/%age">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="board_university" class="form-control-label">Board/University *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control board_university"
+                                <input @if (Auth::user()->hasRole('teacher')) @endif class="form-control board_university"
                                     id="board_university" name="board_university" type="text"
-                                    value="@isset($student->user) {{ $student->board_university }} @endisset"
+                                    value="@isset($teacher->user) {{ $teacher->board_university }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Board/University">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="distinction" class="form-control-label">Profession *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control distinction"
+                                <input @if (Auth::user()->hasRole('teacher')) @endif class="form-control distinction"
                                     id="distinction" name="distinction" type="text"
-                                    value="@isset($student->user) {{ $student->distinction }} @endisset"
+                                    value="@isset($teacher->user) {{ $teacher->distinction }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Profesion">
                             </div>
                         </div>

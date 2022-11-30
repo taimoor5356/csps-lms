@@ -2,22 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
 use App\Models\Student;
 use App\Models\Enrollment;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use App\Interfaces\StudentRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use PHPUnit\Framework\MockObject\Builder\Stub;
 
 class StudentController extends Controller
 {

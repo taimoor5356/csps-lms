@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStudentsTable extends Migration
+class CreateTeachersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,17 @@ class CreateStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('students', function (Blueprint $table) {
+        Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->increments()->unique()->nullable();
+            $table->integer('user_id')->unique()->nullable();
             $table->string('batch_no')->nullable();
             $table->string('reg_no')->unique()->nullable();
-            // $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');
+            $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');
             $table->string('father_name')->nullable();
             $table->string('father_occupation')->nullable();
             $table->date('dob')->nullable();
             $table->unsignedBigInteger('cnic')->unique()->nullable();
             $table->string('domicile')->nullable();
-            $table->string('student_occupation')->nullable();
             $table->string('degree')->nullable();
             $table->string('major_subjects')->nullable();
             $table->double('cgpa', 8,2)->nullable();
@@ -45,6 +44,6 @@ class CreateStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('students');
+        Schema::dropIfExists('teachers');
     }
 }

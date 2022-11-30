@@ -3,31 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Interfaces\ZoomClassesRepositoryInterface;
-use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 
-class ZoomClassesController extends Controller
+class AttendanceController extends Controller
 {
-    use ImageUpload;
-    private ZoomClassesRepositoryInterface $zoomClassesRepository;
-
-    public function __construct(ZoomClassesRepositoryInterface $zoomClassesRepository)
-    {
-        $this->zoomClassesRepository = $zoomClassesRepository;
-    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         //
-        if ($request->ajax()) {
-            return $this->zoomClassesRepository->index($request);
-        }
-        return view('admin.zoom_classes.index');
     }
 
     /**
@@ -96,8 +83,8 @@ class ZoomClassesController extends Controller
         //
     }
 
-    public function teacherZoomClass(Request $request)
+    public function teacherStudentAttendance(Request $request)
     {
-        return view('admin.zoom_classes.teacher');
+        return view('admin.attendance.teachers_student');
     }
 }

@@ -95,4 +95,9 @@ class ExaminationsController extends Controller
     {
         //
     }
+
+    public function teacherExaminations(Request $request)
+    {
+        return view('admin.examination.teacher');
+    }
 }

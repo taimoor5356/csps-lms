@@ -28,7 +28,7 @@
             <!-- Dashboard -->
             {{-- @can('dashboard_view') --}}
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                <a class="nav-link {{ request()->is('admins/dashboard') ? 'active' : '' }}" href="{{ url('admins/dashboard') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -37,13 +37,52 @@
                 </a>
             </li>
             {{-- @endcan --}}
+            <!-- Users -->
+            @can('users_view')
+            <li class="nav-item">
+                <a data-bs-toggle="collapse" href="#users"
+                    class="nav-link collapsed {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
+                    aria-controls="users" role="button" aria-expanded="false">
+                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
+                        <i class="fa fa-users text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Users</span>
+                </a>
+                <div class="collapse {{ (request()->is('students') ? 'show' : request()->is('students/create')) ? 'show' : '' }}"
+                    id="users" style="">
+                    <ul class="nav ms-4">
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{{ route('admins') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Admins
+                            </a>
+                            <a class="nav-link {{ (request()->is('teachers') ? 'active' : request()->is('teacher/create')) ? 'active' : '' }}"
+                                href="{{ route('teachers') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Teacher
+                            </a>
+                            <a class="nav-link {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
+                                href="{{ route('students') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Students
+                            </a>
+                            <a class="nav-link {{ (request()->is('visitor') ? 'active' : request()->is('visitor/create')) ? 'active' : '' }}"
+                                href="{{ route('visitors') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Visitors
+                            </a>
+                            <a class="nav-link {{ (request()->is('interview') ? 'active' : request()->is('interview/create')) ? 'active' : '' }}"
+                                href="{{ route('interview.students') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Interviews
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            @endcan
             <!-- Front Office -->
             @can('admission_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#front_office" class="nav-link collapsed" aria-controls="front_office"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-building-o text-success text-sm opacity-10"></i>
+                        <i class="fa fa-building-o text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Front Office</span>
                 </a>
@@ -67,7 +106,7 @@
                 <a data-bs-toggle="collapse" href="#enrollment" class="nav-link collapsed" aria-controls="enrollment"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
+                        <i class="ni ni-credit-card text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Enrollment</span>
                 </a>
@@ -91,7 +130,7 @@
                 <a data-bs-toggle="collapse" href="#courses" class="nav-link collapsed" aria-controls="courses"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-book text-danger text-sm opacity-10"></i>
+                        <i class="fa fa-book text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Courses</span>
                 </a>
@@ -121,7 +160,7 @@
                 <a data-bs-toggle="collapse" href="#revenue" class="nav-link collapsed" aria-controls="revenue"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-money text-success text-sm opacity-10"></i>
+                        <i class="fa fa-money text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Revenue</span>
                 </a>
@@ -151,7 +190,7 @@
                 <a data-bs-toggle="collapse" href="#reports" class="nav-link collapsed" aria-controls="reports"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-file-text text-secondary text-sm opacity-10"></i>
+                        <i class="fa fa-file-text text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Reports</span>
                 </a>
@@ -175,7 +214,7 @@
                 <a data-bs-toggle="collapse" href="#expenses" class="nav-link collapsed" aria-controls="expenses"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-money text-danger text-sm opacity-10"></i>
+                        <i class="fa fa-money text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Expenses</span>
                 </a>
@@ -226,7 +265,7 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-clock-o text-warning text-sm opacity-10"></i>
+                        <i class="fa fa-clock-o text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Weekly Class Schedule</span>
                 </a>
@@ -238,7 +277,7 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-database text-danger text-sm opacity-10"></i>
+                        <i class="fa fa-database text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Inventory</span>
                 </a>
@@ -250,48 +289,10 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-broadcast-tower text-danger text-sm opacity-10"></i>
+                        <i class="fas fa-broadcast-tower text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Communication</span>
                 </a>
-            </li>
-            @endcan
-            <!-- Users -->
-            @can('users_view')
-            <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#users"
-                    class="nav-link collapsed {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
-                    aria-controls="users" role="button" aria-expanded="false">
-                    <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-users text-info text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Users</span>
-                </a>
-                <div class="collapse {{ (request()->is('students') ? 'show' : request()->is('students/create')) ? 'show' : '' }}"
-                    id="users" style="">
-                    <ul class="nav ms-4">
-                        <li class="nav-item ">
-                            <a class="nav-link " href="{{ route('admins') }}">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Admins
-                            </a>
-                            <a class="nav-link " href="#">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Instructors
-                            </a>
-                            <a class="nav-link {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
-                                href="{{ route('students') }}">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Students
-                            </a>
-                            <a class="nav-link {{ (request()->is('visitor') ? 'active' : request()->is('visitor/create')) ? 'active' : '' }}"
-                                href="{{ route('visitors') }}">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Visitors
-                            </a>
-                            <a class="nav-link {{ (request()->is('interview') ? 'active' : request()->is('interview/create')) ? 'active' : '' }}"
-                                href="{{ route('interview.students') }}">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Interviews
-                            </a>
-                        </li>
-                    </ul>
-                </div>
             </li>
             @endcan
             <!-- Roles and Permissions -->
@@ -300,7 +301,7 @@
                 <a class="nav-link " href="{{ route('roles') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-lock text-success text-sm opacity-10"></i>
+                        <i class="fa fa-lock text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Roles/Permissions</span>
                 </a>
@@ -312,7 +313,7 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-comments text-warning text-sm opacity-10"></i>
+                        <i class="fas fa-comments text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Feedback</span>
                 </a>
@@ -324,7 +325,7 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-picture-o text-success text-sm opacity-10"></i>
+                        <i class="fa fa-picture-o text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Gallery</span>
                 </a>
@@ -336,12 +337,96 @@
                 <a class="nav-link " href="/profile.html">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-cog text-dark text-sm opacity-10"></i>
+                        <i class="fa fa-cog text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Manage CSPs</span>
                 </a>
             </li>
             @endcan
+        </ul>
+        @endrole
+        @role('teacher')
+        <ul class="navbar-nav">
+            <!-- Home -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/dashboard') ? 'active' : '' }}" href="{{ url('teachers/dashboard') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Home</span>
+                </a>
+            </li>
+            <!-- My Attendance -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/students/attendance') ? 'active' : '' }}" href="{{ url('teachers/students/attendance') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-time-alarm text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Attendance</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/examination') ? 'active' : '' }}" href="{{ url('teachers/examination') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-paper-diploma text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Examination</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/lesson-plan') ? 'active' : '' }}" href="{{ url('teachers/lesson-plan') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-ruler-pencil text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Lesson Plan</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/academics') ? 'active' : '' }}" href="{{ url('teachers/academics') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-hat-3 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Academics</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/download-center') ? 'active' : '' }}" href="{{ url('teachers/download-center') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-cloud-download-95 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Download Center</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/assignments') ? 'active' : '' }}" href="{{ url('teachers/assignments') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-single-copy-04 text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Assignment</span>
+                </a>
+            </li>
+            <!-- Examination -->
+            <li class="nav-item">
+                <a class="nav-link {{ request()->is('teachers/zoom-class') ? 'active' : '' }}" href="{{ url('teachers/zoom-class') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-camera-compact text-primary text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Zoom Class</span>
+                </a>
+            </li>
         </ul>
         @endrole
         @role('student')
@@ -399,8 +484,8 @@
                             <a class="nav-link " href="{{ route('download_center') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Download Center
                             </a>
-                            <a class="nav-link " href="{{ route('faculty') }}">
-                                <i class="fa fa-minus text-dark opacity-10"></i>Faculty
+                            <a class="nav-link " href="{{ route('teachers') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Teacher
                             </a>
                             <a class="nav-link " href="{{ route('alumni') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Alumni

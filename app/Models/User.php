@@ -6,7 +6,7 @@ use App\Models\Admin;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Visitor;
-use App\Models\Instructor;
+use App\Models\Teacher;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -45,16 +45,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // relation with instructors
+    // relation with admins
     public function admin()
     {
         return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
-    // relation with instructors
-    public function instructor()
+    // relation with teachers
+    public function teacher()
     {
-        return $this->hasOne(Instructor::class, 'user_id', 'id');
+        return $this->hasOne(Teacher::class, 'user_id', 'id');
     }
 
     // relation with students
@@ -73,5 +73,11 @@ class User extends Authenticatable
     public function visitor()
     {
         return $this->hasOne(Visitor::class, 'user_id', 'id');
+    }
+
+    // relation with attendance
+    public function attendance()
+    {
+        return $this->hasOne(Attendance::class, 'user_id', 'id');
     }
 }

@@ -17,21 +17,21 @@ class AddSingleRolePermissionSeeder extends Seeder
         //
         //
         $permissions = [
-            'visitor' => [
+            'teacher' => [
                 [
-                    'name' => 'visitor_view',
+                    'name' => 'teacher_view',
                     'guard_name' => 'web'
                 ],
                 [
-                    'name' => 'visitor_create',
+                    'name' => 'teacher_create',
                     'guard_name' => 'web'
                 ],
                 [
-                    'name' => 'visitor_update',
+                    'name' => 'teacher_update',
                     'guard_name' => 'web'
                 ],
                 [
-                    'name' => 'visitor_delete',
+                    'name' => 'teacher_delete',
                     'guard_name' => 'web'
                 ]
             ]

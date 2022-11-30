@@ -1,28 +1,33 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicController;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Interview;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AlumniController;
+use App\Http\Controllers\Admin\AssignmentController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\LectureController;
 use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Admin\VisitorController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DownloadCenterController;
 use App\Http\Controllers\Admin\InterviewController;
 use App\Http\Controllers\Admin\EnrollmentController;
-use App\Http\Controllers\Admin\ExaminationsController;
-use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\NoticeBoardController;
-use App\Http\Controllers\Admin\StudentServicesController;
 use App\Http\Controllers\Admin\SuggestionsController;
-use App\Http\Controllers\Admin\TeacherReviewController;
 use App\Http\Controllers\Admin\ZoomClassesController;
+use App\Http\Controllers\Admin\ExaminationsController;
+use App\Http\Controllers\Admin\TeacherReviewController;
+use App\Http\Controllers\Admin\DownloadCenterController;
+use App\Http\Controllers\Admin\LessonPlanController;
+use App\Http\Controllers\Admin\StudentServicesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,7 +79,7 @@ Route::group(['middleware' => ['auth']], function() {
     });
     // roles and permissions
     Route::prefix('roles')->group(function() {
-        Route::get('', [RoleController::class, 'index'])->name('roles');
+        Route::get('', [RoleController::class, 'index'])->name('roles')->middleware('can:roles_view');
         Route::get('/{id}/show', [RoleController::class, 'show'])->name('show.role');
         Route::get('/create', [RoleController::class, 'create'])->name('create.role');
         Route::post('/store', [RoleController::class, 'store'])->name('store.role');
@@ -84,8 +89,9 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/assign-permission-to-role', [RoleController::class, 'assignPermissionToRole'])->name('assign_permission_to_role');
     });
     // admins Routes
-    Route::prefix('admins')->group(function () {
-        Route::get('', [AdminController::class, 'index'])->name('admins');
+    Route::group(['prefix' =>'admins', 'middleware' => ['role:admin']], function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_dashboard');
+        Route::get('/all', [AdminController::class, 'index'])->name('admins');
         Route::get('/{id}/show', [AdminController::class, 'show'])->name('show.admin');
         Route::get('/create', [AdminController::class, 'create'])->name('create.admin');
         Route::post('/store', [AdminController::class, 'store'])->name('store.admin');
@@ -96,8 +102,29 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/restore', [AdminController::class, 'restore'])->name('restore.admin');
         Route::post('/{id}/permanent-delete', [AdminController::class, 'permanentDelete'])->name('permanent_delete.admin');
     });
+    // teacher Routes
+    Route::group(['prefix' =>'teachers', 'middleware' => ['role:teacher']], function () {
+        Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('teacher_dashboard');
+        Route::get('/teacher', [TeacherController::class, 'index'])->name('teachers');
+        Route::get('/{id}/show', [TeacherController::class, 'show'])->name('show.teacher');
+        Route::get('/create', [TeacherController::class, 'create'])->name('create.teacher');
+        Route::post('/store', [TeacherController::class, 'store'])->name('store.teacher');
+        Route::get('/{id}/edit', [TeacherController::class, 'edit'])->name('edit.teacher');
+        Route::post('/{id}/update', [TeacherController::class, 'update'])->name('update.teacher');
+        Route::post('/{id}/delete', [TeacherController::class, 'destroy'])->name('delete.teacher');
+        Route::get('/trashed', [TeacherController::class, 'trashed'])->name('trashed.teachers');
+        Route::get('/{id}/restore', [TeacherController::class, 'restore'])->name('restore.teacher');
+        Route::post('/{id}/permanent-delete', [TeacherController::class, 'permanentDelete'])->name('permanent_delete.teacher');
+        Route::get('/students/attendance', [AttendanceController::class, 'teacherStudentAttendance'])->name('teachers_student_attendance');
+        Route::get('/examination', [ExaminationsController::class, 'teacherExaminations'])->name('teacher_examinations');
+        Route::get('/lesson-plan', [LessonPlanController::class, 'teachersLessonPlan'])->name('teachers_lesson_plan');
+        Route::get('/academics', [AcademicController::class, 'teachersAcademics'])->name('teachers_academics');
+        Route::get('/download-center', [DownloadCenterController::class, 'teacherDownloadCenter'])->name('teachers_download_center');
+        Route::get('/assignments', [AssignmentController::class, 'teacherAssignment'])->name('teachers_assignment');
+        Route::get('/zoom-class', [ZoomClassesController::class, 'teacherZoomClass'])->name('teachers_zoom_class');
+    });
     // student Routes
-    Route::prefix('students')->group(function () {
+    Route::group(['prefix' =>'students', 'middleware' => ['role:student']], function () {
         Route::get('', [StudentController::class, 'index'])->name('students');
         Route::get('/{id}/show', [StudentController::class, 'show'])->name('show.student');
         Route::get('/create', [StudentController::class, 'create'])->name('create.student');
@@ -189,18 +216,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/restore', [DownloadCenterController::class, 'restore'])->name('restore.download_center');
         Route::post('/{id}/permanent-delete', [DownloadCenterController::class, 'permanentDelete'])->name('permanent_delete.download_center');
     });
-    // faculty Routes
-    Route::prefix('faculty')->group(function () {
-        Route::get('', [FacultyController::class, 'index'])->name('faculty');
-        Route::get('/{id}/show', [FacultyController::class, 'show'])->name('show.faculty');
-        Route::get('/create', [FacultyController::class, 'create'])->name('create.faculty');
-        Route::post('/store', [FacultyController::class, 'store'])->name('store.faculty');
-        Route::get('/{id}/edit', [FacultyController::class, 'edit'])->name('edit.faculty');
-        Route::post('/{id}/update', [FacultyController::class, 'update'])->name('update.faculty');
-        Route::post('/{id}/delete', [FacultyController::class, 'destroy'])->name('delete.faculty');
-        Route::get('/trashed', [FacultyController::class, 'trashed'])->name('trashed.faculty');
-        Route::get('/{id}/restore', [FacultyController::class, 'restore'])->name('restore.faculty');
-        Route::post('/{id}/permanent-delete', [FacultyController::class, 'permanentDelete'])->name('permanent_delete.faculty');
+    // attendance
+    Route::prefix('attendance')->group(function() {
     });
     // alumni Routes
     Route::prefix('alumni')->group(function () {
@@ -277,7 +294,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::prefix('settings')->group(function () {
     });
     // interview details
-    Route::prefix('/interview')->group(function() {
+    Route::prefix('interview')->group(function() {
         Route::get('/students', [InterviewController::class, 'index'])->name('interview.students');
         Route::get('/student/{id}/show', [InterviewController::class, 'show'])->name('show.interview');
         Route::get('/student/create', [InterviewController::class, 'create'])->name('create.interview');
