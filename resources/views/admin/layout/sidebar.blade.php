@@ -456,7 +456,7 @@
                 <a data-bs-toggle="collapse" href="#academic" class="nav-link collapsed" aria-controls="academic"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-graduation-cap text-success text-sm opacity-10"></i>
+                        <i class="fa fa-graduation-cap text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Academic</span>
                 </a>
@@ -508,7 +508,7 @@
                 <a data-bs-toggle="collapse" href="#evaluation" class="nav-link collapsed" aria-controls="evaluation"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-check text-danger text-sm opacity-10"></i>
+                        <i class="fa fa-check text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Evaluation</span>
                 </a>
@@ -536,7 +536,7 @@
                 <a class="nav-link {{ request()->is('feedback') ? 'active' : '' }}" href="{{ url('feedback') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fas fa-comments text-warning text-sm opacity-10"></i>
+                        <i class="fas fa-comments text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Feedback</span>
                 </a>
@@ -556,7 +556,7 @@
                 <a class="nav-link {{ request()->is('publication') ? 'active' : '' }}" href="{{ url('publication') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-newspaper-o text-dark text-sm opacity-10"></i>
+                        <i class="fa fa-newspaper-o text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Publication</span>
                 </a>
@@ -566,7 +566,7 @@
                 <a class="nav-link {{ request()->is('complaint') ? 'active' : '' }}" href="{{ url('complaint') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-comment-o text-danger text-sm opacity-10"></i>
+                        <i class="fa fa-comment-o text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Complaint</span>
                 </a>

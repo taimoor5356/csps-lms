@@ -10,10 +10,18 @@
         </div>
         <ul class="navbar-nav  justify-content-end">
           <li class="nav-item d-flex align-items-center">
-            <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
+            <div class="btn-group">
+              <button type="button" class="btn btn-danger dropdown-toggle m-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-user me-sm-1" aria-hidden="true"></i> {{ Auth::user()->name }}
+              </button>
+              <div class="dropdown-menu dropdown-menu-end border border-secondary auth-drop-down-menu my-1">
+                <a href="{{ route('logout') }}" class="dropdown-item" type="button"><i class="fa fa-sign-out" aria-bs-hidden="true"></i> Logout</a>
+              </div>
+            </div>
+            {{-- <a href="{{ route('logout') }}" class="nav-link text-white font-weight-bold px-0">
               <i class="fa fa-user me-sm-1" aria-hidden="true"></i>
-              <span class="d-sm-inline d-none">@if(Auth::user()) Sign Out @else Sign In @endif</span>
-            </a>
+              <span class="d-sm-inline d-none">@if(Auth::user()) {{Auth::user()->name}} @else Sign In @endif</span>
+            </a> --}}
           </li>
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">

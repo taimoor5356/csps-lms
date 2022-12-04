@@ -20,6 +20,11 @@ class StudentController extends Controller
     {
         $this->studentRepository = $studentRepository;
     }
+
+    public function dashboard(Request $request)
+    {
+        return view('admin.dashboard.student');
+    }
     /**
      * Display a listing of the resource.
      *

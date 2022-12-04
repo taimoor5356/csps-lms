@@ -37,8 +37,8 @@ class DashboardController extends Controller
                 if (Auth::user()->hasRole('teacher')) {
                     return redirect()->route('teacher_dashboard');
                 }
-                if (Auth::user()->hasRole('student_dashboard')) {
-                    $data['totalStudentEnrolled'] = Enrollment::where('user_id', Auth::user()->id)->count();
+                if (Auth::user()->hasRole('student')) {
+                    return redirect()->route('student_dashboard');
                 }
                 // return view('admin.dashboard.index')->with($data);
             } else {

@@ -190,7 +190,7 @@ class StudentRepository implements StudentRepositoryInterface
                     $user->gender = $request->gender;
                     $user->password = Hash::make($defaultPassword);
                     $user->role_id = 3;
-                    // $user->registration_date = Carbon::now();
+                    $user->approval_date = Carbon::now();
                     $user->approved_status = 1;
                     $user->save();
                 }
@@ -202,7 +202,8 @@ class StudentRepository implements StudentRepositoryInterface
                     'password' => Hash::make($defaultPassword),
                     'role_id' => 3,
                     'registration_date' => Carbon::now(),
-                    'approved_status' => 0,
+                    'approval_date' => Carbon::now(),
+                    'approved_status' => 1,
                     // 'photo' => $file
                 ]);
             }
@@ -229,50 +230,52 @@ class StudentRepository implements StudentRepositoryInterface
                     'fee_submit_date' => $request->fee_submit_date,
                 ]);
             } else if (Auth::user()->hasRole('student')) {
-                // $student = Student::create([
-                //     'user_id' => $user->id,
-                //     'batch_no' => $request->batch_no,
-                //     'reg_no' => $request->reg_no,
-                //     'roll_no' => $request->roll_no,
-                //     'applied_for' => $request->applied_for,
-                //     'father_name' => $request->father_name,
-                //     'father_occupation' => $request->father_occupation,
-                //     'dob' => $request->dob,
-                //     'cnic' => $request->cnic,
-                //     'domicile' => $request->domicile,
-                //     'student_occupation' => $request->student_occupation,
-                //     'degree' => $request->degree,
-                //     'major_subjects' => $request->major_subjects,
-                //     'cgpa' => $request->cgpa,
-                //     'board_university' => $request->board_university,
-                //     'distinction' => $request->disctinction,
-                //     'address' => $request->address,
-                //     'contact_res' => $request->contact_res,
-                //     'cell_no' => $request->cell_no,
-                //     'year' => $request->year,
-                //     'class_type' => $request->class_type,
-                //     'fee_type' => $request->fee_type,
-                //     'mock_exam_evaluation' => $request->mock_exam_evaluation,
-                //     'installment' => $request->installment,
-                //     'discount' => $request->discount,
-                //     'total_fee' => $request->total_fee,
-                //     'due_date' => $request->due_date,
-                //     'freeze' => $request->freeze,
-                //     'leave' => $request->leave,
-                //     'fee_refund' => $request->fee_refund ? '1' : '0',
-                //     'notification_sent' => $request->notification_sent ? '1' : '0',
-                //     'challan_generated' => $request->challan_generated ? '1' : '0',
-                //     'fee_submit_date' => $request->fee_submit_date
-                // ]);
+                $student = Student::create([
+                    'user_id' => $user->id,
+                    'batch_no' => $request->batch_no,
+                    'reg_no' => $request->reg_no,
+                    'roll_no' => $request->roll_no,
+                    'applied_for' => $request->applied_for,
+                    'father_name' => $request->father_name,
+                    'father_occupation' => $request->father_occupation,
+                    'dob' => $request->dob,
+                    'cnic' => $request->cnic,
+                    'domicile' => $request->domicile,
+                    'student_occupation' => $request->student_occupation,
+                    'degree' => $request->degree,
+                    'major_subjects' => $request->major_subjects,
+                    'cgpa' => $request->cgpa,
+                    'board_university' => $request->board_university,
+                    'distinction' => $request->disctinction,
+                    'address' => $request->address,
+                    'contact_res' => $request->contact_res,
+                    'cell_no' => $request->cell_no,
+                    'year' => $request->year,
+                    'class_type' => $request->class_type,
+                    // 'fee_type' => $request->fee_type,
+                    'mock_exam_evaluation' => $request->mock_exam_evaluation,
+                    // 'installment' => $request->installment,
+                    // 'discount' => $request->discount,
+                    // 'total_fee' => $request->total_fee,
+                    // 'due_date' => $request->due_date,
+                    // 'freeze' => $request->freeze,
+                    // 'leave' => $request->leave,
+                    // 'fee_refund' => $request->fee_refund ? '1' : '0',
+                    // 'notification_sent' => $request->notification_sent ? '1' : '0',
+                    // 'challan_generated' => $request->challan_generated ? '1' : '0',
+                    // 'fee_submit_date' => $request->fee_submit_date
+                ]);
             }
             $user->assignRole(3);
             $subject = 'Login Details';
             if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                $student->notification = $request->notification ? $request->notification : '0';
+                $student->email_notification_sent = 1;
+                $student->save();
             }
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }

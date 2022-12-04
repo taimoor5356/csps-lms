@@ -55,7 +55,7 @@
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4" type="submit">
-                                    <i class="fa fa-save"></i> Save
+                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
                         </div>

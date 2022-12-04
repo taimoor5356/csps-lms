@@ -164,6 +164,11 @@
             border: 1px solid #1e73be;
         }
         /* Toggle Slider Button Ends */
+
+        .dropdown-menu {
+          min-width: 6rem !important;
+        }
+
   </style>
   @yield('style')
 </head>

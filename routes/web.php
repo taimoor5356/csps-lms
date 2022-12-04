@@ -103,7 +103,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/{id}/permanent-delete', [AdminController::class, 'permanentDelete'])->name('permanent_delete.admin');
     });
     // teacher Routes
-    Route::group(['prefix' =>'teachers', 'middleware' => ['role:teacher']], function () {
+    Route::group(['prefix' =>'teachers', 'middleware' => ['role:admin|teacher']], function () {
         Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('teacher_dashboard');
         Route::get('/teacher', [TeacherController::class, 'index'])->name('teachers');
         Route::get('/{id}/show', [TeacherController::class, 'show'])->name('show.teacher');
@@ -124,7 +124,8 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/zoom-class', [ZoomClassesController::class, 'teacherZoomClass'])->name('teachers_zoom_class');
     });
     // student Routes
-    Route::group(['prefix' =>'students', 'middleware' => ['role:student']], function () {
+    Route::group(['prefix' =>'students', 'middleware' => ['role:admin|student']], function () {
+        Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student_dashboard');
         Route::get('', [StudentController::class, 'index'])->name('students');
         Route::get('/{id}/show', [StudentController::class, 'show'])->name('show.student');
         Route::get('/create', [StudentController::class, 'create'])->name('create.student');

@@ -49,7 +49,7 @@
                 <label for="gender" class="form-control-label">Gender *</label>
                 <select class="form-control gender" name="gender"
                     id="gender">
-                    <option value="" disabled selected>Select Gender</option>
+                    <option value="" selected>Select Gender</option>
                     <option value="M" @isset($student->user) @if($student->user->gender == 'M') selected @endisset @endisset>Male</option>
                     <option value="F" @isset($student->user) @if($student->user->gender == 'F') selected @endisset @endisset>Female</option>
                 </select>
@@ -87,7 +87,7 @@
                 <label for="css_pms_yr" class="form-control-label">CSS/PMS Year *</label>
                 <select @if (Auth::user()->hasRole('student')) readonly @endif class="form-control css_pms_yr" name="year"
                     id="css-pms-yr">
-                    <option value="" disabled selected>Select CSS/PMS Year</option>
+                    <option value="" selected>Select CSS/PMS Year</option>
                     <option value="css_2024">CSS 2024</option>
                     <option value="pms_2024">PMS 2024</option>
                     <option value="css_2025" disabled>CSS 2025</option>
@@ -102,7 +102,7 @@
                 <label for="batch_no" class="form-control-label">Batch No *</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control batch_no" name="batch_no"
                     id="batch-no">
-                    <option value="" disabled selected>Select Batch No</option>
+                    <option value="" selected>Select Batch No</option>
                     <option value="80" @isset($student) @if($student->batch_no == '80') selected @endisset @endisset>80</option>
                     <option value="81" @isset($student) @if($student->batch_no == '81') selected @endisset @endisset>81</option>
                     <option value="82" @isset($student) @if($student->batch_no == '82') selected @endisset @endisset>82</option>
@@ -118,7 +118,7 @@
                 <input type="hidden" id="reg-no1" value="">
                 <input type="hidden" id="reg-no2" value="">
                 <input type="hidden" id="reg-no3" value="">
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control roll_no" readonly disabled id="roll-no"
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control roll_no" readonly id="roll-no"
                     name="roll_no" type="text"
                     value=""
                     onfocus="focused(this)" onfocusout="defocused(this)">
@@ -129,7 +129,7 @@
                 <label for="class-type" class="form-control-label">Campus/Online *</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control class-type" name="class_type"
                     id="class-type">
-                    <option value="" disabled selected>Select Campus/Online</option>
+                    <option value="" selected>Select Campus/Online</option>
                     <option value="campus" @isset($student) @if($student->class_type == 'campus') selected @endisset @endisset>On Campus</option>
                     <option value="online" @isset($student) @if($student->class_type == 'online') selected @endisset @endisset>Online</option>
                 </select>
@@ -140,7 +140,7 @@
                 <label for="applied_for" class="form-control-label">Applying For *</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control applied_for"
                     name="applied_for" id="applied_for">
-                    <option value="" disabled selected>Applying For</option>
+                    <option value="" selected>Applying For</option>
                     <option value="written" @isset($student) @if($student->applied_for == 'written') selected @endisset @endisset>Written Exam</option>
                     <option value="interview" @isset($student) @if($student->applied_for == 'interview') selected @endisset @endisset>Interview</option>
                 </select>
@@ -210,7 +210,7 @@
                 <label for="installment" class="form-control-label">Installment *</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control installment"
                     name="installment" id="installment">
-                    <option value="" disabled selected>Installment</option>
+                    <option value="" selected>Installment</option>
                     <option value="first" @isset($student) @if($student->installment == 'first') selected @endisset @endisset>1st</option>
                     <option value="second" @isset($student) @if($student->installment == 'second') selected @endisset @endisset>2nd</option>
                     <option value="third" @isset($student) @if($student->installment == 'third') selected @endisset @endisset>3rd</option>
@@ -295,7 +295,7 @@
                 <label for="fee_submit_date" class="form-control-label">Date *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control fee_submit_date" id="fee_submit_date"
                     name="fee_submit_date" type="date"
-                    value="@isset($student->user) {{ $student->user->fee_submit_date }} @endisset"
+                    value="@isset($student) {{ $student->fee_submit_date }} @endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -323,7 +323,7 @@
                 <label for="gender" class="form-control-label">Gender *</label>
                 <select class="form-control gender" name="gender"
                     id="gender">
-                    <option value="" disabled selected>Select Gender</option>
+                    <option value="" selected>Select Gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                 </select>
@@ -500,7 +500,7 @@
                 <label for="optional_subjects" class="form-control-label">Optional Subject *</label>
                 <select class="form-control optional_subjects" name="optional_subjects"
                     id="optional_subjects">
-                    <option value="" disabled selected>Select Subject</option>
+                    <option value="" selected>Select Subject</option>
                     <option value="1">Sub 1</option>
                     <option value="2">Sub 2</option>
                 </select>

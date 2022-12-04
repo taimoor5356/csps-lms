@@ -28,7 +28,7 @@ class RoleController extends Controller
                 return '
                 <div class="">
                     <div class="">
-                        <h6 class="mb-0 text-sm">' . $row->name . '</h6>
+                        <h6 class="mb-0 text-sm">' . ucwords($row->name) . '</h6>
                     </div>
                 </div>
             ';
@@ -93,7 +93,7 @@ class RoleController extends Controller
         try {
             DB::beginTransaction();
             $roles = Role::create([
-                'name' => $request->name,
+                'name' => strtolower($request->name),
                 'guard_name' => 'web',
             ]);
             DB::commit();
