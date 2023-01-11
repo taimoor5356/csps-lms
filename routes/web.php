@@ -62,17 +62,7 @@ Route::group(['middleware' => ['auth']], function() {
     // dashboard Route
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    // Route::get('/set-user-id', function() {
-    //     $users = User::get();
-    //     foreach ($users as $key => $user) {
-    //         $student = Student::where('id', $user->id)->first();
-    //         if (isset($student)) {
-    //             $student->user_id = $user->id;
-    //             $student->save();
-    //         }
-    //     }
-    //     return 'Done';
-    // });
+    
     // roles and permissions
     Route::prefix('roles')->group(function() {
         Route::get('', [RoleController::class, 'index'])->name('roles')->middleware('can:roles_view');
