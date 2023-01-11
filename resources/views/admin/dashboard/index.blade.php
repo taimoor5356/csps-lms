@@ -18,7 +18,7 @@
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+        <div class="col-xl-3 col-sm-3">
             <div class="card">
                 <div class="alert-messages w-50 ms-auto text-center">
                     <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
@@ -39,6 +39,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Students</p>
                                 <h5 class="font-weight-bolder">
+                                    1500
                                 </h5>
                                 <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+55%</span>
@@ -55,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+        <div class="col-xl-3 col-sm-3">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
@@ -63,6 +64,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Enrollments</p>
                                 <h5 class="font-weight-bolder">
+                                    1500
                                 </h5>
                                 <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+50%</span>
@@ -79,8 +81,7 @@
                 </div>
             </div>
         </div>
-        <div class="mb-4"></div>
-        <div class="col-xl-6 col-sm-6 mb-xl-0 mb-4">
+        <div class="col-xl-3 col-sm-3">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
@@ -105,7 +106,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-6 col-sm-6">
+        <div class="col-xl-3 col-sm-3">
             <div class="card">
                 <div class="card-body p-3">
                     <div class="row">
@@ -113,6 +114,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Courses</p>
                                 <h5 class="font-weight-bolder">
+                                    1500
                                 </h5>
                                 <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+5%</span>
@@ -131,8 +133,8 @@
         </div>
     </div>
     <div class="row mt-4">
-        <div class="col-lg-7 mb-lg-0 mb-4">
-            <div class="card z-index-2 h-100">
+        <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="card h-100">
                 <div class="card-header pb-0 pt-3 bg-transparent">
                     <h6 class="text-capitalize">Sales overview</h6>
                     <p class="text-sm mb-0">
@@ -147,8 +149,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5">
-            <div class="card card-carousel overflow-hidden h-100 p-0">
+        <div class="col-lg-6">
+            <div class="card card-carousel h-100 p-0">
                 <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
                     <div class="carousel-inner border-radius-lg h-100">
                         <div class="carousel-item h-100 active"

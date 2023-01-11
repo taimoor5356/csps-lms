@@ -1,12 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicController;
-use App\Models\User;
-use App\Models\Student;
-use App\Models\Interview;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\AdminController;
@@ -40,16 +36,16 @@ use App\Http\Controllers\Admin\StudentServicesController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 Auth::routes();
+Route::get('/', function () {
+    return redirect('login');
+});
 Route::get('/logout', function() {
     Auth::logout();
     return redirect('login');
 });
 // visitor Routes
-Route::prefix('visitor')->group(function () {
+Route::prefix('visitors')->group(function () {
     Route::get('', [VisitorController::class, 'index'])->name('visitors');
     Route::get('/{id}/show', [VisitorController::class, 'show'])->name('show.visitor');
     Route::get('/create', [VisitorController::class, 'create'])->name('create.visitor');
@@ -91,7 +87,7 @@ Route::group(['middleware' => ['auth']], function() {
     // admins Routes
     Route::group(['prefix' =>'admins', 'middleware' => ['role:admin']], function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_dashboard');
-        Route::get('/all', [AdminController::class, 'index'])->name('admins');
+        Route::get('', [AdminController::class, 'index'])->name('admins');
         Route::get('/{id}/show', [AdminController::class, 'show'])->name('show.admin');
         Route::get('/create', [AdminController::class, 'create'])->name('create.admin');
         Route::post('/store', [AdminController::class, 'store'])->name('store.admin');
@@ -105,7 +101,7 @@ Route::group(['middleware' => ['auth']], function() {
     // teacher Routes
     Route::group(['prefix' =>'teachers', 'middleware' => ['role:admin|teacher']], function () {
         Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('teacher_dashboard');
-        Route::get('/teacher', [TeacherController::class, 'index'])->name('teachers');
+        Route::get('', [TeacherController::class, 'index'])->name('teachers');
         Route::get('/{id}/show', [TeacherController::class, 'show'])->name('show.teacher');
         Route::get('/create', [TeacherController::class, 'create'])->name('create.teacher');
         Route::post('/store', [TeacherController::class, 'store'])->name('store.teacher');
@@ -128,7 +124,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/dashboard', [StudentController::class, 'dashboard'])->name('student_dashboard');
         Route::get('', [StudentController::class, 'index'])->name('students');
         Route::get('/{id}/show', [StudentController::class, 'show'])->name('show.student');
-        Route::get('/create', [StudentController::class, 'create'])->name('create.student');
+        Route::get('/create', [StudentController::class, 'create'])->name('create.student')->middleware('role:admin');
         Route::post('/store', [StudentController::class, 'store'])->name('store.student');
         Route::get('/{id}/edit', [StudentController::class, 'edit'])->name('edit.student');
         Route::post('/{id}/update', [StudentController::class, 'update'])->name('update.student');
@@ -137,6 +133,13 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('/{id}/restore', [StudentController::class, 'restore'])->name('restore.student');
         Route::post('/{id}/permanent-delete', [StudentController::class, 'permanentDelete'])->name('permanent_delete.student');
         // Route::get('/{id}/enrolled-courses', [StudentController::class, 'enrolledCourses'])->name('student.enrolled.courses');
+    });
+    // interview details
+    Route::prefix('interviews')->group(function() {
+        Route::get('/students', [InterviewController::class, 'index'])->name('interview.students');
+        Route::get('/student/{id}/show', [InterviewController::class, 'show'])->name('show.interview');
+        Route::get('/student/create', [InterviewController::class, 'create'])->name('create.interview');
+        Route::post('/student/store', [InterviewController::class, 'store'])->name('store.interview');
     });
     // lectures Routes
     Route::prefix('lectures')->group(function () {
@@ -293,12 +296,5 @@ Route::group(['middleware' => ['auth']], function() {
     });
     // setting Routes
     Route::prefix('settings')->group(function () {
-    });
-    // interview details
-    Route::prefix('interview')->group(function() {
-        Route::get('/students', [InterviewController::class, 'index'])->name('interview.students');
-        Route::get('/student/{id}/show', [InterviewController::class, 'show'])->name('show.interview');
-        Route::get('/student/create', [InterviewController::class, 'create'])->name('create.interview');
-        Route::post('/student/store', [InterviewController::class, 'store'])->name('store.interview');
     });
 });

@@ -11,6 +11,42 @@
     </div>
     <hr class="horizontal dark mt-2">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+        <!-- URL Variables Starts-->
+        <!-- Admin -->
+        @php 
+            // Dashboard
+            $dashboard = request()->is('admins/dashboard');
+            // Users
+            $admins = request()->is('admins') || request()->is('admins/create');
+            $teachers = request()->is('teachers') || request()->is('teachers/create');
+            $students = request()->is('students') || request()->is('students/create');
+            $visitors = request()->is('visitors') || request()->is('visitors/create');
+            $interviews = request()->is('interviews/students') || request()->is('interviews/create');
+            // Front Office
+            $frontOffice = '';
+            // Enrollment
+            $enrollment = '';
+            // Courses
+            $courses = '';
+            // Revenue
+            $revenue = '';
+            // Reports
+            $reports = '';
+            // Expenses
+            $expenses = '';
+            // Attendance
+            $attendance = '';
+            // Weekly Class Schedule
+            $weeklyClassSchedule = '';
+            // Inventory
+            $inventory = '';
+            // Roles and Permissions
+            $rolesAndPermissions = request()->is('roles');
+        @endphp
+        <!-- Admin -->
+        <!-- URL Variables Ends-->
+
+        <!-- URLs Starts-->
         @role('admin')
         <ul class="navbar-nav">
             <!-- Menu -->
@@ -28,7 +64,7 @@
             <!-- Dashboard -->
             {{-- @can('dashboard_view') --}}
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('admins/dashboard') ? 'active' : '' }}" href="{{ url('admins/dashboard') }}">
+                <a class="nav-link {{ $dashboard ? 'active' : '' }}" href="{{ url('admins/dashboard') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -41,18 +77,59 @@
             @can('users_view')
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#users"
-                    class="nav-link collapsed {{ (request()->is('students') ? 'active' : request()->is('students/create')) ? 'active' : '' }}"
+                    class="nav-link collapsed {{ (
+                        $admins
+                        || 
+                        $teachers
+                        || 
+                        $students
+                        || 
+                        $visitors
+                        || 
+                        $interviews
+                        ? 
+                        'active' 
+                        : 
+                        ''
+                        ) }}"
                     aria-controls="users" role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
-                        <i class="fa fa-users text-primary text-sm opacity-10"></i>
+                        <i class="fa fa-users {{ (
+                            $admins
+                            || 
+                            $teachers
+                            || 
+                            $students
+                            || 
+                            $visitors
+                            || 
+                            $interviews
+                            ? 
+                            'text-white' 
+                            : 
+                            'text-primary'
+                        ) }} text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Users</span>
                 </a>
-                <div class="collapse {{ (request()->is('students') ? 'show' : request()->is('students/create')) ? 'show' : '' }}"
+                <div class="collapse {{ (
+                    $admins
+                    || 
+                    $teachers
+                    || 
+                    $students
+                    || 
+                    $visitors
+                    || 
+                    $interviews
+                    ?
+                    'show'
+                    :
+                    '') }}"
                     id="users" style="">
                     <ul class="nav ms-4">
                         <li class="nav-item ">
-                            <a class="nav-link " href="{{ route('admins') }}">
+                            <a class="nav-link {{ (request()->is('admins') ? 'active' : request()->is('admins/create') ? 'active' : '') }}" href="{{ route('admins') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Admins
                             </a>
                             <a class="nav-link {{ (request()->is('teachers') ? 'active' : request()->is('teacher/create')) ? 'active' : '' }}"
@@ -63,11 +140,11 @@
                                 href="{{ route('students') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Students
                             </a>
-                            <a class="nav-link {{ (request()->is('visitor') ? 'active' : request()->is('visitor/create')) ? 'active' : '' }}"
+                            <a class="nav-link {{ (request()->is('visitors') ? 'active' : request()->is('visitor/create')) ? 'active' : '' }}"
                                 href="{{ route('visitors') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Visitors
                             </a>
-                            <a class="nav-link {{ (request()->is('interview') ? 'active' : request()->is('interview/create')) ? 'active' : '' }}"
+                            <a class="nav-link {{ (request()->is('interviews/students') ? 'active' : request()->is('interview/create')) ? 'active' : '' }}"
                                 href="{{ route('interview.students') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Interviews
                             </a>
@@ -297,11 +374,18 @@
             @endcan
             <!-- Roles and Permissions -->
             @can('roles_view')
-            <li class="nav-item">
-                <a class="nav-link " href="{{ route('roles') }}">
+            <li class="nav-item mb-4">
+                <a class="nav-link 
+                {{ 
+                    $rolesAndPermissions ? 'active' : ''
+                }}
+                " href="{{ route('roles') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="fa fa-lock text-primary text-sm opacity-10"></i>
+                        <i class="fa fa-key
+                        {{ 
+                            $rolesAndPermissions ? 'text-white' : 'text-primary'
+                        }} text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Roles/Permissions</span>
                 </a>
@@ -429,11 +513,32 @@
             </li>
         </ul>
         @endrole
+        <!-- URL Variables Starts-->
+        <!-- Admin -->
+        @php 
+            // Dashboard
+            $studentDashboard = request()->is('students/dashboard');
+            // Users
+            $studentProfile = request()->is('students') || request()->is('students/'.Request::route()->id.'/edit') || request()->is('students/'.Request::route()->id.'/show');
+            $studentSubjects = request()->is('enrollments') || request()->is('enrollments/enroll-student');
+            $studentLectureSchedule = request()->is('lectures');
+            $studentNoticeBoard = request()->is('notice-board') || request()->is('visitors/create');
+            $studentServices = request()->is('student-services') || request()->is('interviews/create');
+            $studentExamination = request()->is('examinations') || request()->is('interviews/create');
+            $studentZoomClasses = request()->is('zoom-classes') || request()->is('interviews/create');
+            $studentDownloadCenter = request()->is('download-center') || request()->is('interviews/create');
+            $studentTeacher = request()->is('teachers') || request()->is('interviews/create');
+            $studentAlumni = request()->is('alumni') || request()->is('interviews/create');
+            $studentTeacherReview = request()->is('teacher-review') || request()->is('interviews/create');
+            $studentSuggestions = request()->is('suggestions') || request()->is('interviews/create');
+        @endphp
+        <!-- Admin -->
+        <!-- URL Variables Ends-->
         @role('student')
         <ul class="navbar-nav">
             <!-- Home -->
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
+                <a class="nav-link {{ $studentDashboard ? 'active' : '' }}" href="{{ url('dashboard') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
@@ -443,7 +548,7 @@
             </li>
             <!-- My Profile -->
             <li class="nav-item">
-                <a class="nav-link {{ request()->is('students') ? 'active' : '' }}" href="{{ url('students') }}">
+                <a class="nav-link {{ $studentProfile ? 'active' : '' }}" href="{{ url('students') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-circle-08 text-primary text-sm opacity-10"></i>
@@ -453,14 +558,23 @@
             </li>
             <!-- Academic -->
             <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#academic" class="nav-link collapsed" aria-controls="academic"
+                <a data-bs-toggle="collapse" href="#academic" class="nav-link 
+                {{ 
+                    $studentSubjects || $studentLectureSchedule || $studentNoticeBoard || $studentServices || $studentExamination
+                    ||
+                    $studentZoomClasses || $studentDownloadCenter || $studentTeacher || $studentAlumni || $studentTeacherReview ||
+                    $studentSuggestions
+                    ? 'active' : '' 
+                }}" aria-controls="academic"
                     role="button" aria-expanded="false">
                     <div class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center">
                         <i class="fa fa-graduation-cap text-primary text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Academic</span>
                 </a>
-                <div class="collapse" id="academic" style="">
+                <div class="collapse
+                
+                " id="academic" style="">
                     <ul class="nav ms-4">
                         <li class="nav-item ">
                             <a class="nav-link " href="{{ route('enrollments') }}">
@@ -573,5 +687,6 @@
             </li>
         </ul>
         @endrole
+        <!-- URLs Ends-->
     </div>
 </aside>
