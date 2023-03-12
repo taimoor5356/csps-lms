@@ -64,9 +64,9 @@ class User extends Authenticatable
     }
 
     // relation with courses
-    public function courses()
+    public function enrolled_courses()
     {
-        return $this->hasMany(Course::class, 'user_id', 'id');
+        return $this->hasMany(Enrollment::class, 'user_id', 'id');
     }
 
     // relation with students

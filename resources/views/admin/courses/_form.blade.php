@@ -29,12 +29,31 @@
                 onfocusout="defocused(this)" placeholder="Course Name">
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label for="name" class="form-control-label">Course Category *</label>
+            <select class="form-control category" name="category"
+                    id="category">
+                    <option value="" selected disabled>Select Course Category</option>
+                    <option value="compulsory" @isset($course) @if($course->category == 'compulsory') selected @endif @endisset>Compulsory</option>
+                    <option value="optional" @isset($course) @if($course->category == 'optional') selected @endif @endisset>Optional</option>
+                </select>
+        </div>
+    </div>
     <div class=" col-md-4">
         <div class="form-group">
             <label for="fee" class="form-control-label">Fee *</label>
             <input class="form-control fee" id="fee" name="fee" type="number"
-                value="@isset($course) {{ $course->fee }} @endisset" onfocus="focused(this)"
+                value="@isset($course){{$course->fee}}@endisset" onfocus="focused(this)"
                 onfocusout="defocused(this)" placeholder="Enter Fee">
+        </div>
+    </div>
+    <div class=" col-md-4">
+        <div class="form-group">
+            <label for="marks" class="form-control-label">Marks *</label>
+            <input class="form-control marks" id="marks" name="marks" type="number"
+                value="@isset($course){{$course->marks}}@endisset" onfocus="focused(this)"
+                onfocusout="defocused(this)" placeholder="Enter Marks">
         </div>
     </div>
     <div class="col-sm-4">

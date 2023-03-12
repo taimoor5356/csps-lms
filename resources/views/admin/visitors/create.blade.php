@@ -108,9 +108,12 @@
                         @include('admin.visitors._form')
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit" id="save">
+                                <button class="btn btn-success px-4 text-white" type="submit" id="save">
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
+                                <p>
+                                    <a href="/lms/login">Login Here</a>
+                                </p>                                
                             </div>
                         </div>
                     </form>
@@ -142,6 +145,8 @@
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
+            $('#save').removeClass('btn-success');
+            $('#save').addClass('btn-danger');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -157,8 +162,6 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        $('#save').prop('disabled', false);
-                        $('.loader').addClass('d-none');
                         if (response.status == true) {
                             $('.toast .toast-header').removeClass('bg-danger');
                             $('.toast .toast-header').removeClass('bg-danger');
@@ -168,6 +171,10 @@
                             $('.toast .toast-body').addClass('bg-success');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
+                            $('.loader').addClass('d-none');
                             setTimeout(function () {
                                 window.location.href = "{{ route('login') }}";
                             }, 3000);
@@ -180,8 +187,14 @@
                             $('.toast .toast-body').addClass('bg-danger');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
+                            $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
                         }
                     }

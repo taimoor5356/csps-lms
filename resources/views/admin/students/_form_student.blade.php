@@ -31,7 +31,7 @@
                 <label for="name" class="form-control-label">Name *</label>
                 <input class="form-control name" id="name"
                     name="name" type="text"
-                    value="@isset($student->user) {{ $student->user->name }} @endisset" onfocus="focused(this)"
+                    value="@isset($student->user){{$student->user->name}}@endisset" onfocus="focused(this)"
                     onfocusout="defocused(this)" placeholder="Student Name">
             </div>
         </div>
@@ -40,7 +40,7 @@
                 <label for="contact_no" class="form-control-label">Contact No *</label>
                 <input class="form-control contact_no" id="contact_no"
                     name="contact_no" type="number"
-                    value="@isset($student->user) {{ $student->cell_no }} @endisset"
+                    value="@isset($student->user)0{{$student->cell_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
@@ -60,7 +60,7 @@
                 <label for="email" class="form-control-label">Email *</label>
                 <input class="form-control email" id="email"
                     name="email" type="email"
-                    value="@isset($student->user) {{ $student->user->email }} @endisset"
+                    value="@isset($student->user){{$student->user->email}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
             </div>
         </div>
@@ -69,7 +69,7 @@
                 <label for="batch" class="form-control-label">Batch *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch" id="batch"
                     name="batch" type="text"
-                    value="@isset($student->user) {{ $student->batch }} @endisset"
+                    value="@isset($student->user){{$student->batch}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Batch">
             </div>
         </div> --}}
@@ -78,7 +78,7 @@
                 <label for="reg_no" class="form-control-label">Reg No *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control reg_no" id="reg-no"
                     name="reg_no" type="text"
-                    value="@isset($student->user) {{ $student->reg_no }} @endisset"
+                    value="@isset($student->user){{$student->reg_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Registration No">
             </div>
         </div>
@@ -183,7 +183,7 @@
                 <label class="custom-control-label m-0 p-0" for="mock-exam">Mock Exams</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input exam-mock fee_type" value="mock" data-fee="0" id="mock-exam" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'mock') checked @endisset @endisset>
+                    class="custom-control-input exam-mock fee_type" value="mock" data-fee="0" id="mock-exam" type="radio" @isset($student) @if($student->fee_type == 'mock') checked @endisset @endisset>
             </div>
         </div>
         <div class="col-md-2">
@@ -191,7 +191,7 @@
                 <label class="custom-control-label m-0 p-0" for="evaluation">Evaluation</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input evaluation fee_type" value="evaluation" data-fee="0" id="evaluation" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'evaluation') checked @endisset @endisset>
+                    class="custom-control-input evaluation fee_type" value="evaluation" data-fee="0" id="evaluation" type="radio" @isset($student) @if($student->fee_type == 'evaluation') checked @endisset @endisset>
             </div>
         </div>
         <div class="col-md-2">
@@ -199,7 +199,7 @@
                 <label class="custom-control-label m-0 p-0" for="interview">Interview</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input interview fee_type" value="interview" data-fee="0" id="interview" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'interview') checked @endisset @endisset>
+                    class="custom-control-input interview fee_type" value="interview" data-fee="0" id="interview" type="radio" @isset($student) @if($student->fee_type == 'interview') checked @endisset @endisset>
             </div>
         </div>
 
@@ -237,7 +237,7 @@
                 <label for="total-fee" class="form-control-label">Total Fee *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control total-fee" id="total-fee"
                     name="total_fee" type="number"
-                    value="@isset($student) {{ $student->total_fee }} @endisset"
+                    value="@isset($student){{$student->total_fee}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Total Fee">
             </div>
         </div>
@@ -246,7 +246,7 @@
                 <label for="due_date" class="form-control-label">Due Date *</label>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif class="form-control date" id="due_date"
                     name="due_date" type="date"
-                    value="@isset($student) {{ $student->due_date }} @endisset"
+                    value="@isset($student){{$student->due_date}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -255,7 +255,7 @@
                 <label for="freeze" class="form-control-label">Freeze *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control freeze" id="freeze"
                     name="freeze" type="date"
-                    value="@isset($student->user) {{ $student->user->freeze }} @endisset"
+                    value="@isset($student->user){{$student->user->freeze}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -264,7 +264,7 @@
                 <label for="leave" class="form-control-label">Leave *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control leave" id="leave"
                     name="leave" type="date"
-                    value="@isset($student->user) {{ $student->user->leave }} @endisset"
+                    value="@isset($student->user){{$student->user->leave}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -287,7 +287,9 @@
         <div class="col-md-3">
             <div class="custom-control custom-radio mb-3">
                 <label for="generate-challan" class="form-control-label">Generate Challan *</label>
-                <button type="button" class="btn btn-primary generate-challan w-100" value="1" id="generate-challan" name="challan_generated">Generate Challan</button>
+                {{-- <button type="button" class="btn btn-primary generate-challan w-100" value="1" id="generate-challan" name="challan_generated">Generate Challan</button> --}}
+                <br />
+                <input type="checkbox" name="challan_generated" id="generate-challan" class="generate-challan mx-2" value="1">
             </div>
         </div>
         <div class="col-md-3">
@@ -295,7 +297,7 @@
                 <label for="fee_submit_date" class="form-control-label">Date *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control fee_submit_date" id="fee_submit_date"
                     name="fee_submit_date" type="date"
-                    value="@isset($student) {{ $student->fee_submit_date }} @endisset"
+                    value="@isset($student){{$student->fee_submit_date}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -314,7 +316,7 @@
                 <label for="name" class="form-control-label">Name *</label>
                 <input class="form-control name" id="name"
                     name="name" type="text"
-                    value="@isset($student->user) {{ $student->user->name }} @endisset" onfocus="focused(this)"
+                    value="@isset($student->user){{$student->user->name}}@endisset" onfocus="focused(this)"
                     onfocusout="defocused(this)" placeholder="Student Name">
             </div>
         </div>
@@ -323,9 +325,9 @@
                 <label for="gender" class="form-control-label">Gender *</label>
                 <select class="form-control gender" name="gender"
                     id="gender">
-                    <option value="" selected>Select Gender</option>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
+                    <option value="" selected disabled>Select Gender</option>
+                    <option value="M" @isset($student->user)@if($student->user->gender == 'M') selected @endif @endisset>Male</option>
+                    <option value="F" @isset($student->user)@if($student->user->gender == 'F') selected @endif @endisset>Female</option>
                 </select>
             </div>
         </div>
@@ -369,16 +371,16 @@
         <div class="col-md-3">
             <div class="form-group mb-3">
                 <label for="roll_no" class="form-control-label">Roll No *</label>
-                <input @if (Auth::user()->hasRole('student')) @endif class="form-control roll_no" id="roll_no"
+                <input readonly class="form-control roll_no" id="roll_no"
                     name="roll_no" type="text"
-                    value="@isset($student->user) {{ $student->roll_no }} @endisset"
+                    value="@isset($student->user){{$student->roll_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Registration No">
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group">
                 <label for="cnic" class="form-control-label">CNIC *</label>
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control cnic" id="cnic" name="cnic" step="0.01" type="number"
+                <input @if (!Auth::user()->hasRole('student')) readonly @endif class="form-control cnic" id="cnic" name="cnic" step="1" type="number"
                     value="@isset($student->user){{ $student->cnic }}@endisset" onfocus="focused(this)"
                     onfocusout="defocused(this)" placeholder="CNIC Number" >
             </div>
@@ -409,7 +411,7 @@
                         <label for="degree" class="form-control-label">Degree *</label>
                         <input @if (Auth::user()->hasRole('student')) @endif class="form-control degree" id="degree"
                             name="degree" type="text"
-                            value="@isset($student->user) {{ $student->degree }} @endisset"
+                            value="@isset($student->user){{$student->degree}}@endisset"
                             onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Degree Name">
                     </div>
                 </div>
@@ -418,7 +420,7 @@
                         <label for="major_subjects" class="form-control-label">Major Subjects *</label>
                         <input @if (Auth::user()->hasRole('student')) @endif class="form-control major_subjects"
                             id="major_subjects" name="major_subjects" type="text"
-                            value="@isset($student->user) {{ $student->major_subjects }} @endisset"
+                            value="@isset($student->user){{$student->major_subjects}}@endisset"
                             onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Major Subject">
                     </div>
                 </div>
@@ -427,7 +429,7 @@
                         <label for="cgpa" class="form-control-label">CGPA/%age *</label>
                         <input @if (Auth::user()->hasRole('student')) @endif class="form-control cgpa" id="cgpa"
                             name="cgpa" min="0.1" max="100.00" step="0.1" type="number"
-                            value="@isset($student->user) {{ $student->cgpa }} @endisset" onfocus="focused(this)"
+                            value="@isset($student->user){{$student->cgpa}}@endisset" onfocus="focused(this)"
                             onfocusout="defocused(this)" placeholder="CGPA/%age">
                     </div>
                 </div>
@@ -436,7 +438,7 @@
                         <label for="board_university" class="form-control-label">Board/University *</label>
                         <input @if (Auth::user()->hasRole('student')) @endif class="form-control board_university"
                             id="board_university" name="board_university" type="text"
-                            value="@isset($student->user) {{ $student->board_university }} @endisset"
+                            value="@isset($student->user){{$student->board_university}}@endisset"
                             onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Board/University">
                     </div>
                 </div>
@@ -445,7 +447,7 @@
                         <label for="distinction" class="form-control-label">Profession *</label>
                         <input @if (Auth::user()->hasRole('student')) @endif class="form-control distinction"
                             id="distinction" name="distinction" type="text"
-                            value="@isset($student->user) {{ $student->distinction }} @endisset"
+                            value="@isset($student->user){{$student->distinction}}@endisset"
                             onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Profesion">
                     </div>
                 </div>
@@ -473,7 +475,7 @@
                 <label for="email" class="form-control-label">Email *</label>
                 <input class="form-control email" id="email"
                     name="email" type="email"
-                    value="@isset($student->user) {{ $student->user->email }} @endisset"
+                    value="@isset($student->user){{$student->user->email}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Email Address">
             </div>
         </div>
@@ -481,8 +483,8 @@
             <div class="form-group mb-3">
                 <label for="contact_no" class="form-control-label">Contact No *</label>
                 <input class="form-control contact_no" id="contact_no"
-                    name="contact_no" type="number"
-                    value="@isset($student->user) {{ $student->user->contact_no }} @endisset"
+                    name="cell_no" type="number"
+                    value="@isset($student){{$student->cell_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
@@ -491,7 +493,7 @@
                 <label for="em_contact_no" class="form-control-label">Emergency Contact No *</label>
                 <input class="form-control em_contact_no" id="em_contact_no"
                     name="em_contact_no" type="number"
-                    value="@isset($student->user) {{ $student->user->em_contact_no }} @endisset"
+                    value="@isset($student->user){{$student->user->em_contact_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Emergency Contact No">
             </div>
         </div>

@@ -112,7 +112,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">visitor Detail</h6>
+                        <h6 class="modal-title" id="modal-title-default">Visitor Detail</h6>
                         <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true">×</span>
@@ -144,48 +144,47 @@
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Registration No:</h6>
-                                                    <span class="text-secondary reg-no">reg-001</span>
+                                                    <span class="text-secondary reg-no"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Applied For:</h6>
-                                                    <span class="text-secondary applied-for">CSS</span>
+                                                    <span class="text-secondary applied-for"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Domicile:</h6>
-                                                    <span class="text-secondary domicile">Punjab</span>
+                                                    <span class="text-secondary domicile"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Degree:</h6>
-                                                    <span class="text-secondary degree">BA</span>
+                                                    <span class="text-secondary degree"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Subjects:</h6>
-                                                    <span class="text-secondary subject">Arts</span>
+                                                    <span class="text-secondary subject"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">CGPA:</h6>
-                                                    <span class="text-secondary cgpa">2.78</span>
+                                                    <span class="text-secondary cgpa"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Board/University:</h6>
-                                                    <span class="text-secondary board-university">The Univeristy of
-                                                        Lahore, Lahore</span>
+                                                    <span class="text-secondary board-university"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Occupation:</h6>
-                                                    <span class="text-secondary occupation">Engineer</span>
+                                                    <span class="text-secondary occupation"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Distinction:</h6>
-                                                    <span class="text-secondary distinction">NIL</span>
+                                                    <span class="text-secondary distinction"></span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -199,7 +198,7 @@
                                                         <h6 class="mb-0">Full Name</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary full-name">
-                                                        Kenneth Valdez
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -208,7 +207,7 @@
                                                         <h6 class="mb-0">Email</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary email">
-                                                        fip@jukmuh.al
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -217,7 +216,7 @@
                                                         <h6 class="mb-0">Father Name</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary father-name">
-                                                        asfij nasfi
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -226,7 +225,7 @@
                                                         <h6 class="mb-0">Father Occupation</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary father-occupation">
-                                                        PAF
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -235,7 +234,7 @@
                                                         <h6 class="mb-0">Date of Birth</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary dob">
-                                                        Jan 01, 1996
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -244,7 +243,7 @@
                                                         <h6 class="mb-0">CNIC</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary cnic">
-                                                        374051234567892
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -253,7 +252,7 @@
                                                         <h6 class="mb-0">Phone</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary contact-res">
-                                                        (239) 816-9029
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -262,7 +261,7 @@
                                                         <h6 class="mb-0">Mobile</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary cell-no">
-                                                        (320) 380-4539
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -271,7 +270,7 @@
                                                         <h6 class="mb-0">Address</h6>
                                                     </div>
                                                     <div class="col-sm-9 text-secondary address">
-                                                        Bay Area, San Francisco, CA
+                                                        
                                                     </div>
                                                 </div>
                                                 <hr>
@@ -473,29 +472,35 @@
         $(document).on('click', '.view-visitor-detail', function() {
             var _this = $(this);
             var visitorId = _this.attr('data-visitor-id');
-            $.get('visitors/' + visitorId + '/show', function(data) {
-                $('span.batch-no').html(data.batch_no);
-                $('span.reg-no').html(data.reg_no);
-                $('span.applied-for').html(data.applied_for);
-                $('span.domicile').html(data.domicile);
-                $('span.degree').html(data.degree);
-                $('span.subject').html(data.major_subjects);
-                $('span.cgpa').html(data.cgpa);
-                $('span.board-university').html(data.board_university);
-                $('span.occupation').html(data.visitor_occupation);
-                $('span.distinction').html(data.distinction);
-                $('div.full-name').html(data.user.name);
-                $('div.email').html(data.user.email);
-                $('div.father-name').html(data.father_name);
-                $('div.father-occupation').html(data.father_occupation);
-                $('div.dob').html(data.dob);
-                $('div.cnic').html(data.cnic);
-                $('div.contact-res').html(data.contact_res);
-                $('div.cell-no').html(data.cell_no);
-                $('div.address').html(data.address);
-                var url = '{{ asset('public/assets/img/visitors/:image') }}';
-                url = url.replace(':image', data.user.photo);
+            $.get('visitors/' + visitorId + '/show', function(response) {
+                $('div.full-name').html(response.visitor.user.name);
+                $('div.email').html(response.visitor.user.email);
+                if (response.visitor.user.approved_status == 1) {
+                    $('div.cell-no').html(response.visitor.user.student.cell_no);
+                } else {
+                    $('div.cell-no').html(String('0')+(String(response.visitor.cell_no)));
+                }
+                var url = '{{ asset("public/assets/img/students/:image") }}';
+                url = url.replace(':image', response.visitor.user.photo);
                 $('img.profile-img').attr('src', url);
+                if (response.visitor.user.student != null) {
+                    $('div.address').html(response.visitor.user.student.address);
+                    $('div.father-name').html(response.visitor.user.student.father_name);
+                    $('div.father-occupation').html(response.visitor.user.student.father_occupation);
+                    $('div.dob').html(response.visitor.user.student.dob);
+                    $('div.cnic').html(response.visitor.user.student.cnic);
+                    $('div.contact-res').html(response.visitor.user.student.contact_res);
+                    $('span.batch-no').html(response.visitor.user.student.batch_no);
+                    $('span.reg-no').html(response.visitor.user.student.reg_no);
+                    $('span.applied-for').html(response.visitor.user.student.applied_for);
+                    $('span.domicile').html(response.visitor.user.student.domicile);
+                    $('span.degree').html(response.visitor.user.student.degree);
+                    $('span.subject').html(response.visitor.user.student.major_subjects);
+                    $('span.cgpa').html(response.visitor.user.student.cgpa);
+                    $('span.board-university').html(response.visitor.user.student.board_university);
+                    $('span.occupation').html(response.visitor.user.student.visitor_occupation);
+                    $('span.distinction').html(response.visitor.user.student.distinction);
+                }
             });
             $('#modal-default').modal('show');
         });

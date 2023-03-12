@@ -34,7 +34,7 @@ class VisitorController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/visitors/' . $row->user->photo . '" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/students/' . $row->user->photo . '" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -43,7 +43,7 @@ class VisitorController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/visitors/" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/students/" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -109,7 +109,7 @@ class VisitorController extends Controller
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->cell_no . '</h6>
+                            <h6 class="mb-0 text-sm">0' . $row->cell_no . '</h6>
                         </div>
                     </div>
                 ';
@@ -118,7 +118,7 @@ class VisitorController extends Controller
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '<a href="#" class="btn btn-success bg-success p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="visitor/'. $row->id .'/edit" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
+                        <a href="visitors/'. $row->id .'/edit" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                         if (Auth::user()->can('visitor_delete')) {
                             $btn .= '<a href="'. $row->id .'/delete" data-visitor-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-visitor" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>';
                         }
@@ -211,6 +211,14 @@ class VisitorController extends Controller
     public function show($id)
     {
         //
+        try {
+            $student = Visitor::with('user.student')->where('id', $id)->first();
+            if (isset($student)) {
+                return response()->json(['status' => true, 'visitor' => $student, 'msg' => 'Successfull']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'msg' => 'Unexpected Error Occured']);
+        }
     }
 
     /**
@@ -224,6 +232,9 @@ class VisitorController extends Controller
         //
         try {
             $student = Visitor::with('user')->where('id', $id)->first();
+            if ($student->user->approved_status == 1) {
+                return redirect()->back()->with('error', 'User already approved Go check in Student detail page');
+            }
             if (isset($student)) {
                 $user_id = $student->user_id;
                 return view('admin.visitors.edit', compact('student', 'id', 'user_id'));

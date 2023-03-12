@@ -29,7 +29,11 @@
                     <option value="0" disabled selected>Select Student</option>
                     @foreach ($students as $key => $student)
                         @isset($student->user)
-                           <option value="{{ $student->user->id }}">{{ $student->user->name }}</option>
+                            @if (Auth::user()->hasRole('student'))
+                                <option selected value="{{ $student->user->id }}">{{ $student->user->name }}</option>
+                            @else
+                                <option value="{{ $student->user->id }}">{{ $student->user->name }}</option>
+                            @endif
                         @endisset
                     @endforeach
                 </select>
@@ -42,7 +46,9 @@
                     <option value="0" selected disabled>Select Courses</option>
                     @foreach ($courses as $key => $course)
                         @isset($course)
-                           <option value="{{ $course->id }}">{{ $course->name }}</option>
+                            @if (!Auth::user()->enrolled_courses->contains('course_id', $course->id))
+                                <option value="{{ $course->id }}">{{ $course->name }} ({{$course->category}})</option>
+                            @endif
                         @endisset
                     @endforeach
                 </select>

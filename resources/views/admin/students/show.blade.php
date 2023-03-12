@@ -54,12 +54,11 @@
                 <div class="card-body pt-0 pb-2">
                     <hr>
                     <p class="text-center">
-                        
                         @isset($student){{ !is_null($student->user->name) ? $student->user->name : '#name'}}@endisset
                     </p>
                     <hr>
                     <p class="text-center">
-                        @isset($student){{ !is_null($student->reg_no) ? $student->reg_no : '#reg-no'}}@endisset
+                        @isset($student){{ !is_null($student->roll_no) ? $student->roll_no : '#roll-no'}}@endisset
                     </p>
                     <hr>
                     <p class="text-center">
@@ -69,7 +68,7 @@
                     <hr>
                     <p class="text-center">
                         
-                        @isset($student){{ !is_null($student->cell_no) ? $student->cell_no : '#mobile'}}@endisset
+                        @isset($student)0{{ !is_null($student->cell_no) ? $student->cell_no : '#mobile'}}@endisset
                     </p>
                     <hr>
                     <p class="text-center">
@@ -139,20 +138,18 @@
                             <div class="row my-2">
                                 <h6>Compulsory Subjects</h6>
                                 <hr>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
+                                @foreach ($student->user->enrolled_courses as $enrolledCourse)
+                                    @if ($enrolledCourse->course->category == 'compulsory')
+                                        <p><span>{{$enrolledCourse->course->name}}</span><span style="float: right">{{$enrolledCourse->course->marks}} marks</span></p>
+                                    @endif
+                                @endforeach
                                 <h6>Optional Subjects</h6>
                                 <hr>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
-                                <p><span>English Essay</span><span style="float: right">100marks</span></p>
+                                @foreach ($student->user->enrolled_courses as $enrolledCourse)
+                                    @if ($enrolledCourse->course->category == 'optional')
+                                        <p><span>{{$enrolledCourse->course->name}}</span><span style="float: right">{{$enrolledCourse->course->marks}} marks</span></p>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
                         <div class="tab-pane fade" id="fees" role="tabpanel" aria-labelledby="fees-tab">
@@ -168,34 +165,55 @@
                                         <th class="text-center">Payment Mode</th>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                            <td class="text-center">Data here</td>
-                                        </tr>
+                                        @php $paid = 0; @endphp
+                                        @foreach ($student->fee_plan as $student_fee)
+                                            <tr>
+                                                <td class="text-center">{{$student_fee->challan_generated}}</td>
+                                                <td class="text-center">{{$student_fee->installment}}</td>
+                                                <td class="text-center">{{$student_fee->total_fee}}</td>
+                                                <td class="text-center">{{$student_fee->paid}}</td>
+                                                <td class="text-center">{{$student_fee->created_at->format('Y-M-d')}}</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        $paid += $student_fee->paid;
+                                                    @endphp
+                                                    @if ($paid == 0)
+                                                        <span class="text-white bg-danger p-2">UNPAID</span>
+                                                    @endif
+                                                    @if ($paid < $student_fee->total_fee && $paid > 0)
+                                                        <span class="text-white bg-primary p-2">PARTIALLY PAID</span>
+                                                    @endif
+                                                    @if ($paid >= $student_fee->total_fee)
+                                                        <span class="text-white bg-success p-2">FULLY PAID</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-center">{{$student_fee->payment_transfer_mode}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center font-weight-bold" colspan="2">Total Paid</td>
+                                            <td class="text-center font-weight-bold"></td>
+                                            <td class="text-center font-weight-bold">{{$paid}}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center font-weight-bold" colspan="2">Remaining</td>
+                                            <td class="text-center font-weight-bold"></td>
+                                            <td class="text-center font-weight-bold">{{$student->total_fee-$paid}}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

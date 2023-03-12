@@ -217,12 +217,12 @@
                             <a class="nav-link " href="{{ route('courses') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Manage Courses
                             </a>
-                            <a class="nav-link " href="#">
+                            {{-- <a class="nav-link " href="#">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Add New Course
                             </a>
                             <a class="nav-link " href="#">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Course Category
-                            </a>
+                            </a> --}}
                             <a class="nav-link " href="#">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Coupons
                             </a>

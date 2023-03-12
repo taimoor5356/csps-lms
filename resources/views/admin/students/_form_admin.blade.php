@@ -31,7 +31,7 @@
                 <label for="name" class="form-control-label">Name *</label>
                 <input class="form-control name" id="name"
                     name="name" type="text"
-                    value="@isset($student->user) {{ $student->user->name }} @endisset" onfocus="focused(this)"
+                    value="@isset($student->user){{$student->user->name}}@endisset" onfocus="focused(this)"
                     onfocusout="defocused(this)" placeholder="Student Name">
             </div>
         </div>
@@ -60,7 +60,7 @@
                 <label for="contact_no" class="form-control-label">Contact No *</label>
                 <input class="form-control contact_no" id="contact_no"
                     name="contact_no" type="number"
-                    value="@isset($student->user) {{ $student->cell_no }} @endisset"
+                    value="@isset($student->user)0{{$student->contact_res}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
@@ -78,7 +78,7 @@
                 <label for="reg_no" class="form-control-label">Reg No *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control reg_no" id="reg-no"
                     name="reg_no" type="text"
-                    value="@isset($student->user) {{ $student->reg_no }} @endisset"
+                    value="@isset($student->user){{$student->reg_no }}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Registration No">
             </div>
         </div>
@@ -88,12 +88,12 @@
                 <select @if (Auth::user()->hasRole('student')) readonly @endif class="form-control css_pms_yr" name="year"
                     id="css-pms-yr">
                     <option value="" disabled selected>Select CSS/PMS Year</option>
-                    <option value="css_2024">CSS 2024</option>
-                    <option value="pms_2024">PMS 2024</option>
-                    <option value="css_2025" disabled>CSS 2025</option>
-                    <option value="pms_2025" disabled>PMS 2025</option>
-                    <option value="css_2026" disabled>CSS 2026</option>
-                    <option value="pms_2026" disabled>PMS 2026</option>
+                    <option value="css_2024" @isset($student) @if($student->year == 'css_2024') selected @endisset @endisset>CSS 2024</option>
+                    <option value="pms_2024" @isset($student) @if($student->year == 'pms_2024') selected @endisset @endisset>PMS 2024</option>
+                    <option value="css_2025" disabled @isset($student) @if($student->year == 'css_2025') selected @endisset @endisset>CSS 2025</option>
+                    <option value="pms_2025" disabled @isset($student) @if($student->year == 'pms_2025') selected @endisset @endisset>PMS 2025</option>
+                    <option value="css_2026" disabled @isset($student) @if($student->year == 'css_2026') selected @endisset @endisset>CSS 2026</option>
+                    <option value="pms_2026" disabled @isset($student) @if($student->year == 'pms_2026') selected @endisset @endisset>PMS 2026</option>
                 </select>
             </div>
         </div>
@@ -118,9 +118,9 @@
                 <input type="hidden" id="reg-no1" value="">
                 <input type="hidden" id="reg-no2" value="">
                 <input type="hidden" id="reg-no3" value="">
-                <input @if (Auth::user()->hasRole('student')) @endif class="form-control roll_no" id="roll-no"
+                <input readonly class="form-control roll_no" id="roll-no"
                     name="roll_no" type="text"
-                    value=""
+                    value="@isset($student->user){{$student->roll_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -183,7 +183,7 @@
                 <label class="custom-control-label m-0 p-0" for="mock-exam">Mock Exams</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input exam-mock fee_type" value="mock" data-fee="0" id="mock-exam" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'mock') checked @endisset @endisset>
+                    class="custom-control-input exam-mock fee_type" value="mock" data-fee="0" id="mock-exam" type="radio" @isset($student) @if($student->fee_type == 'mock') checked @endisset @endisset>
             </div>
         </div>
         <div class="col-md-2">
@@ -191,7 +191,7 @@
                 <label class="custom-control-label m-0 p-0" for="evaluation">Evaluation</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input evaluation fee_type" value="evaluation" data-fee="0" id="evaluation" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'evaluation') checked @endisset @endisset>
+                    class="custom-control-input evaluation fee_type" value="evaluation" data-fee="0" id="evaluation" type="radio" @isset($student) @if($student->fee_type == 'evaluation') checked @endisset @endisset>
             </div>
         </div>
         <div class="col-md-2">
@@ -199,7 +199,7 @@
                 <label class="custom-control-label m-0 p-0" for="interview">Interview</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="fee_type"
-                    class="custom-control-input interview fee_type" value="interview" data-fee="0" id="interview" type="radio" @isset($student) @if($student->mock_exam_evaluation == 'interview') checked @endisset @endisset>
+                    class="custom-control-input interview fee_type" value="interview" data-fee="0" id="interview" type="radio" @isset($student) @if($student->fee_type == 'interview') checked @endisset @endisset>
             </div>
         </div>
 
@@ -237,8 +237,25 @@
                 <label for="total-fee" class="form-control-label">Total Fee *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control total-fee" id="total-fee"
                     name="total_fee" type="number"
-                    value="@isset($student) {{ $student->total_fee }} @endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Total Fee">
+                    value="@isset($student){{$student->total_fee}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Total Fee" required minlength="4" min="1000">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="paid-fee" class="form-control-label">Total Paid Fee * <small>(Total paid till now)</small></label>
+                <input disabled class="form-control" id="" type="text"
+                    value="@isset($student){{$student->total_paid}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Total paid till now" required minlength="4" min="1000">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="paid-fee" class="form-control-label">Paying Fee * <small>(Enter current paying fee)</small></label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control paid-fee" id="paid-fee"
+                    name="paid" type="number"
+                    value=""
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter current paying fee" required minlength="4" min="1000">
             </div>
         </div>
         <div class="col-md-3">
@@ -246,7 +263,7 @@
                 <label for="due_date" class="form-control-label">Due Date *</label>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif class="form-control date" id="due_date"
                     name="due_date" type="date"
-                    value="@isset($student) {{ $student->due_date }} @endisset"
+                    value="@isset($student){{$student->due_date}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -255,7 +272,7 @@
                 <label for="freeze" class="form-control-label">Freeze *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control freeze" id="freeze"
                     name="freeze" type="date"
-                    value="@isset($student->user) {{ $student->user->freeze }} @endisset"
+                    value="@isset($student->user){{$student->freeze}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -264,7 +281,7 @@
                 <label for="leave" class="form-control-label">Leave *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control leave" id="leave"
                     name="leave" type="date"
-                    value="@isset($student->user) {{ $student->user->leave }} @endisset"
+                    value="@isset($student->user){{$student->leave}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -273,7 +290,7 @@
                 <label class="custom-control-label m-0 p-0" for="fee-refund">Fee Refund (50% only)</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif name="fee_refund"
-                    class="custom-control-input fee-refund" value="refunded" id="fee-refund" type="checkbox" @isset($student) @if($student->fee_refund == '1') checked @endisset @endisset>
+                    class="custom-control-input fee-refund" value="1" id="fee-refund" type="checkbox" @isset($student) @if($student->fee_refund == '1') checked @endisset @endisset>
             </div>
         </div>
         <div class="col-md-3">
@@ -286,8 +303,31 @@
         </div>
         <div class="col-md-3">
             <div class="custom-control custom-radio mb-3">
-                <label for="generate-challan" class="form-control-label">Generate Challan *</label>
-                <button type="button" class="btn btn-primary generate-challan w-100" value="1" id="generate-challan" name="challan_generated">Generate Challan</button>
+                <label for="generate-challan" class="form-control-label">Challan Number *</label>
+                <input type="text" class="generate-challan form-control" id="generate-challan" name="challan_generated" placeholder="Enter Challan Number" value="" required>
+                {{-- <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control generate-challan" name="challan_generated"
+                    id="generate-challan">
+                    <option value="" selected>Select Challan</option>
+                    <option value="2.5" @isset($student) @if($student->challan_generated == '2.5') selected @endisset @endisset>2.5%</option>
+                    <option value="5.0" @isset($student) @if($student->challan_generated == '5.0') selected @endisset @endisset>5.0%</option>
+                    <option value="7.5" @isset($student) @if($student->challan_generated == '7.5') selected @endisset @endisset>7.5%</option>
+                    <option value="10" @isset($student) @if($student->challan_generated == '10') selected @endisset @endisset>10.0%</option>
+                    <option value="100" @isset($student) @if($student->challan_generated == '100') selected @endisset @endisset>100.0%</option>
+                </select> --}}
+                {{-- <button type="button" class="btn btn-primary generate-challan w-100" value="1" id="generate-challan" name="challan_generated">Generate Challan</button> --}}
+                {{-- <br />
+                <input type="checkbox" name="challan_generated" id="generate-challan" class="generate-challan mx-2" value="1"> --}}
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="custom-control custom-radio mb-3">
+                <label for="payment-transfer-mode" class="form-control-label">Payment Transfer Mode *</label>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control payment-transfer-mode" name="payment_transfer_mode"
+                    id="payment-transfer-mode" required>
+                    <option value="" selected>Select Payment Mode</option>
+                    <option value="cash">Cash</option>
+                    <option value="bank">Bank</option>
+                </select>
             </div>
         </div>
         <div class="col-md-3">
@@ -295,7 +335,7 @@
                 <label for="fee_submit_date" class="form-control-label">Date *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control fee_submit_date" id="fee_submit_date"
                     name="fee_submit_date" type="date"
-                    value="@isset($student->user) {{ $student->user->fee_submit_date }} @endisset"
+                    value="@isset($student->user){{$student->fee_submit_date}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>

@@ -40,7 +40,7 @@
                         <input type="hidden" name="student_id" id="student-id" value="{{ $id }}">
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit">
+                                <button class="btn btn-success px-4 text-white" type="submit" id="save">
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
@@ -54,7 +54,7 @@
                         <input type="hidden" name="student_id" id="student-id" value="{{ $id }}">
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit">
+                                <button class="btn btn-success px-4 text-white" type="submit" id="save">
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
@@ -86,10 +86,53 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        
+        $(document).on('keyup', '#reg-no', function () {
+            $('#reg-no1').val($(this).val());
+        });
+        $(document).on('change', '#css-pms-yr', function () {
+            $('#reg-no2').val($(this).val());
+        });
+        $(document).on('change', '#batch-no', function () {
+            $('#reg-no3').val($(this).val());
+        });
+        $(document).on('keyup, change, click', function () {
+            var regNo = $('#reg-no').val();
+            var cssPmsYr = $('#css-pms-yr').val();
+            var batchNo = $('#batch-no').val();
+
+            if (regNo == null) {
+                regNo = '';
+            }
+            if (cssPmsYr == null) {
+                cssPmsYr = '';
+            } else {
+                cssPmsYr = cssPmsYr.replaceAll('_', '-');
+            }
+            if (batchNo == null) {
+                batchNo = '';
+            }
+           $('#roll-no').val(regNo+'-'+cssPmsYr+'-'+batchNo);
+        });
+        $(document).on('click', '.fee_type', function () {
+            $('#total-fee').val($(this).attr('data-fee'));
+            var feeType = $('.fee_type:checked').attr('data-fee');
+            var discount = $('.discount').val();
+            var percentage = (discount/100)*feeType;
+            var result = feeType - percentage;
+            $('#total-fee').val(result);
+        });
+        $(document).on('change', '.discount', function () {
+            var feeType = $('.fee_type:checked').attr('data-fee');
+            var discount = $(this).val();
+            var percentage = (discount/100)*feeType;
+            var result = feeType - percentage;
+            $('#total-fee').val(result);
+        });
         $(document).on('submit', '#admin-form, #student-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
+            $('#save').removeClass('btn-success');
+            $('#save').addClass('btn-danger');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -118,6 +161,8 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
@@ -129,16 +174,19 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
                         }
                     }
                 });
             }, 1000);
         });
-        
         $(document).on('click', '#add-education', function () {
             if ($('.new-education-row').length >= 4) {
                 return false;

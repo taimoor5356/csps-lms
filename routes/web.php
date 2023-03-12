@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth']], function() {
     // dashboard Route
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    // new updated code
+    
     // roles and permissions
     Route::prefix('roles')->group(function() {
         Route::get('', [RoleController::class, 'index'])->name('roles')->middleware('can:roles_view');

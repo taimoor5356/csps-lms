@@ -148,8 +148,16 @@
                     name: 'name'
                 },
                 {
+                    data: 'category',
+                    name: 'category'
+                },
+                {
                     data: 'fee',
                     name: 'fee'
+                },
+                {
+                    data: 'marks',
+                    name: 'marks'
                 },
                 {
                     data: 'date',

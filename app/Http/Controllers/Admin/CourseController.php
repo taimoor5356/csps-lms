@@ -43,11 +43,29 @@ class CourseController extends Controller
                 </div>
             ';
             })
+            ->addColumn('category', function ($row) {
+                return '
+                <div class="">
+                    <div class="">
+                        <h6 class="mb-0 text-sm">' . $row->category . '</h6>
+                    </div>
+                </div>
+            ';
+            })
             ->addColumn('fee', function ($row) {
                 return '
                     <div class="">
                         <div class="">
                             <h6 class="mb-0 text-sm">' . $row->fee . '</h6>
+                        </div>
+                    </div>
+                ';
+            })
+            ->addColumn('marks', function ($row) {
+                return '
+                    <div class="">
+                        <div class="">
+                            <h6 class="mb-0 text-sm">' . $row->marks . ' marks</h6>
                         </div>
                     </div>
                 ';
@@ -68,7 +86,7 @@ class CourseController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'name', 'fee', 'action'])
+            ->rawColumns(['image', 'name', 'category', 'fee', 'marks', 'action'])
             ->make(true);
     }
     
@@ -116,12 +134,14 @@ class CourseController extends Controller
                 $file = time().'.'.$request->image->extension();
                 $request->image->move(public_path('assets/img/courses/'), $file);
             } else {
-                return redirect()->with('error', 'Image Required');
+                return redirect()->back()->with('error', 'Image Required');
             }
             $course = Course::create([
                 'image' => $file,
                 'name' => $request->name,
+                'category' => $request->category,
                 'fee' => $request->fee,
+                'marks' => $request->marks,
             ]);
             DB::commit();
             return redirect()->back()->with('success', 'Successfully Saved');
@@ -191,7 +211,9 @@ class CourseController extends Controller
                     $course->image = $file;
                 }
                 $course->name = $request->name;
+                $course->category = $request->category;
                 $course->fee = $request->fee;
+                $course->marks = $request->marks;
                 $course->save();
                 DB::commit();
                 return redirect()->back()->with('success', 'Updated Successfully');

@@ -140,8 +140,6 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        $('#save').prop('disabled', false);
-                        $('.loader').addClass('d-none');
                         if (response.status == true) {
                             $('.toast .toast-header').removeClass('bg-danger');
                             $('.toast .toast-header').removeClass('bg-danger');
@@ -151,6 +149,8 @@
                             $('.toast .toast-body').addClass('bg-success');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('.loader').addClass('d-none');
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
                             $('.toast .toast-header').removeClass('bg-success');
@@ -160,6 +160,8 @@
                             $('.toast .toast-body').addClass('bg-danger');
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
+                            $('#save').prop('disabled', false);
+                            $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
                             $('.loader').addClass('d-none');

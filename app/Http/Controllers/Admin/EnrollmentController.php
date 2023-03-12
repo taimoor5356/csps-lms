@@ -68,12 +68,38 @@ class EnrollmentController extends Controller
                     return '';
                 }
             })
+            ->addColumn('category', function ($row) {
+                if (isset($row->course)) {
+                    return '
+                    <div class="">
+                        <div class="">
+                            <h6 class="mb-0 text-sm">' . $row->course->category . '</h6>
+                        </div>
+                    </div>
+                    ';
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('fee', function ($row) {
                 if (isset($row->course)) {
                     return '
                     <div class="">
                         <div class="">
                             <h6 class="mb-0 text-sm">' . $row->course->fee . '</h6>
+                        </div>
+                    </div>
+                    ';
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('marks', function ($row) {
+                if (isset($row->course)) {
+                    return '
+                    <div class="">
+                        <div class="">
+                            <h6 class="mb-0 text-sm">' . $row->course->marks . ' marks</h6>
                         </div>
                     </div>
                     ';
@@ -104,7 +130,7 @@ class EnrollmentController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'student_name', 'name', 'fee', 'action'])
+            ->rawColumns(['image', 'student_name', 'name', 'category', 'fee', 'marks', 'action'])
             ->make(true);
     }
 

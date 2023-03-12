@@ -8,8 +8,14 @@
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
                     Name
                 </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
+                    Category
+                </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Fee
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Marks
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Actions

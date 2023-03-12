@@ -41,7 +41,7 @@
                         @endrole
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit" id="save">
+                                <button class="btn btn-success px-4 text-white" type="submit" id="save">
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                                 </button>
                             </div>
@@ -112,6 +112,8 @@
         $(document).on('submit', '#student-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
+            $('#save').removeClass('btn-success');
+            $('#save').addClass('btn-danger');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -120,8 +122,6 @@
                 }
             });
             setTimeout(() => {
-                $('#save').prop('disabled', false);
-                $('.loader').addClass('d-none');
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('store.student') }}",
@@ -139,6 +139,8 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
@@ -150,9 +152,13 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-sucess');
                             $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
+                            $('#save').removeClass('btn-danger');
+                            $('#save').addClass('btn-sucess');
                             $('.loader').addClass('d-none');
                         }
                     }
