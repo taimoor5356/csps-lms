@@ -96,6 +96,7 @@
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
+                    <small class="mx-3 text-danger">* Scroll right if unable to see Actions</small>
                     @include('admin.students._table')
                 </div>
             </div>
