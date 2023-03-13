@@ -37,9 +37,11 @@ use App\Http\Controllers\Admin\StudentServicesController;
 */
 
 Auth::routes();
+
 Route::get('/', function () {
     return redirect('login');
 });
+
 Route::get('/logout', function() {
     Auth::logout();
     return redirect('login');
@@ -62,7 +64,7 @@ Route::group(['middleware' => ['auth']], function() {
     // dashboard Route
     Route::get('/', [DashboardController::class, 'index']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
-    
+
     // roles and permissions
     Route::prefix('roles')->group(function() {
         Route::get('', [RoleController::class, 'index'])->name('roles')->middleware('can:roles_view');
