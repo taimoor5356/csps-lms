@@ -76,7 +76,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('/{id}/delete', [RoleController::class, 'destroy'])->name('delete.role');
         Route::post('/assign-permission-to-role', [RoleController::class, 'assignPermissionToRole'])->name('assign_permission_to_role');
     });
-    // admins Routes
+    // admins Routes test haris
     Route::group(['prefix' =>'admins', 'middleware' => ['role:admin']], function () {
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin_dashboard');
         Route::get('', [AdminController::class, 'index'])->name('admins');
