@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
                             <a class="navbar-brand m-0 text-center" href="#" target="_blank">
-                                <img src="http://localhost/csps-lms/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
+                                <img src="{{URL::to('/')}}/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
                             </a>
                         </div>
                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-xs-12">
@@ -48,7 +48,7 @@
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-center">
                     <a class="navbar-brand m-0 text-center" href="#" target="_blank">
-                        <img src="http://localhost/csps-lms/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
+                        <img src="{{URL::to('/')}}/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
                     </a>
                 </div>
                 <div class="card-body pt-0 pb-2">
