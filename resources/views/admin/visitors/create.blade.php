@@ -100,7 +100,7 @@
     <div class="row my-0 py-0">
         <div class="col-12 my-0 py-0">
             <div class="card my-0 py-0">
-                <div class="card-header my-0">
+                <div class="card-header my-0 py-3">
                     <div class="row my-0 py-0">
                         <div class="col-md-6 col-lg-6 col-xl-6 my-0 py-0">
                             <h5>Register for CSS and PMS free Seminar</h5>
@@ -115,7 +115,7 @@
                     <form method="POST" enctype="multipart/form-data" id="visitor-form">
                         @csrf
                         @include('admin.visitors._form')
-                        <div class="row">
+                        <div class="row mt-2">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4 text-white" type="submit" id="save">
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
@@ -129,6 +129,31 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row mt-4">
+        <div class="row justify-content-center">
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://www.csps.com.pk" class="text-white"><i class="fa fa-globe"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://www.facebook.com/CSPsAcademy" class="text-white"><i class="fa fa-facebook"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://www.instagram.com/cspsacademy" class="text-white"><i class="fa fa-instagram"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://twitter.com/CSPSAcademy" class="text-white"><i class="fa fa-twitter"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i class="fa fa-youtube"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="https://t.me/cspsacademy" class="text-white"><i class="fa fa-telegram"></i></a>
+            </div>
+            <div class="col-2 text-center" style="width: 7% !important">
+              <a href="#" class="text-white"><i class="fa fa-whatsapp"></i></a>
+            </div>
+          </div>
     </div>
 </div>
 @endsection

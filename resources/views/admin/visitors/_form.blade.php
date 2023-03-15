@@ -1,8 +1,5 @@
 <div class="row">
     <div class="col-6">
-        <div class="text-danger text-sm">Mandatory(*)</div>
-    </div>
-    <div class="col-6">
         <div class="alert-messages w-50 ms-auto text-center">
             <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -115,4 +112,3 @@
         </div>
     </div>
 </div>
-<hr class="horizontal dark">
