@@ -17,6 +17,11 @@
     <!-- Style -->
     {{-- <link rel="stylesheet" href="{{asset('public/carousel-12/css/style.css')}}"> --}}
     <style>
+        #notification {
+            position: fixed;
+            top: 145px;
+            left: 40%;
+        }
         .divider:after,
         .divider:before {
             content: "";
@@ -54,6 +59,10 @@
             /* font-size:25px; */
             transform: scale(1.5);
         }
+        .contact-input-group, #cell_no, #cell_no:focus {
+            margin-left: -6px;
+            border-right: 1px solid lightgray;
+        }
     </style>
 @endsection
 {{-- @section('breadcrumbs')
@@ -68,18 +77,18 @@
         <h6 class="font-weight-bolder text-white mb-0">Visitors</h6>
     </nav>
 @endsection --}}
-<div class="container-fluid bg-primary position-sticky z-index-sticky top-0">
-    <div class="row">
-        <div class="col-12">
+<div class="container-fluid bg-primary position-sticky z-index-sticky top-0 my-0 py-0">
+    <div class="row my-0 py-0">
+        <div class="col-12 my-0 py-0">
             <!-- Navbar -->
-            <nav class="navbar bg-primary navbar-expand-lg top-0 z-index-3 mt-2 py-2 start-0 end-0">
+            <nav class="navbar bg-primary navbar-expand-lg top-0 z-index-3 mt-2 start-0 end-0">
                 <div class="container-fluid justify-content-center">
                     <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 p-0 text-white"
                         href="https://www.csps.com.pk">
                         <img src="{{ asset('public/assets/img/csps-logo.png') }}" height="80" width="85"
                             class="navbar-brand-img logo-img bg-white p-1" alt="main_logo">
                     </a>
-                    <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory School<p style="font-size: 14px" class="text-center text-success">Pakistan Renowed CSS and PMS Preparatory Institure</p></h4>
+                    <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory School<p style="font-size: 14px" class="text-center text-danger font-weight-bold bg-white">Pakistan Renowed CSS and PMS Preparatory Institure</p></h4>
                 </div>
             </nav>
             <hr class="horizontal dark">
@@ -87,22 +96,22 @@
         </div>
     </div>
 </div>
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-4">
-                <div class="card-header pb-0">
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6 col-xl-6">
+<div class="container-fluid my-0 py-0">
+    <div class="row my-0 py-0">
+        <div class="col-12 my-0 py-0">
+            <div class="card my-0 py-0">
+                <div class="card-header my-0">
+                    <div class="row my-0 py-0">
+                        <div class="col-md-6 col-lg-6 col-xl-6 my-0 py-0">
                             <h5>Register for CSS and PMS free Seminar</h5>
                             <p>Do you want to Register?</p>
                         </div>
-                        <div class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end">
-                            <button type="button" class="btn btn-primary">Download Prospectus</button>
+                        <div class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end my-0 py-0">
+                            <button type="button" class="btn btn-success" onclick="location.href='{{asset('public/assets/prospectus/csps_lms_prospectus.pdf')}}'" target="_blank" download>Download Prospectus</button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body my-0 py-0">
                     <form method="POST" enctype="multipart/form-data" id="visitor-form">
                         @csrf
                         @include('admin.visitors._form')

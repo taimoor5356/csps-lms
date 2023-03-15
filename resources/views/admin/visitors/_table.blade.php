@@ -1,4 +1,4 @@
-<div class="table-responsive p-3">
+<div class="table-responsive px-3">
     <table class="data-table table align-items-center mb-0">
         <thead>
             <tr>

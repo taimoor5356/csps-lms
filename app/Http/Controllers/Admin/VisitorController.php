@@ -175,10 +175,25 @@ class VisitorController extends Controller
         //
         try {
             DB::beginTransaction();
+            if ( $request->class_type == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
+                return response()->json(['status' => false, 'msg' => 'All fields required']);
+            }
+            if (!preg_match('/^[A-Za-z ]+$/', $request->name)) {
+                return response()->json(['status' => false, 'msg' => 'Name cannot be in number format']);
+            }
+            if (ctype_alpha($request->cell_no)) {
+                return response()->json(['status' => false, 'msg' => 'Contact number cannot be in alphabet format']);
+            }
+            if (!preg_match('/^[A-Za-z ]+$/', $request->degree)) {
+                return response()->json(['status' => false, 'msg' => 'Qualification cannot be in number format']);
+            }
+            if (strlen($request->cell_no) > 9 || strlen($request->cell_no) < 9) {
+                return response()->json(['status' => false, 'msg' => 'Only nine digits contact number is allowed']);
+            }
             $defaultPassword = '876543210';
             $user = User::create([
                 'name' => $request->name,
-                'email' => $request->email,
+                'email' => substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com',
                 'gender' => $request->gender,
                 'password' => Hash::make($defaultPassword),
                 'role_id' => 5,
@@ -192,11 +207,12 @@ class VisitorController extends Controller
                 'applied_for' => $request->applied_for,
                 'domicile' => $request->domicile,
                 'degree' => $request->degree,
-                'cell_no' => $request->cell_no
+                'cell_no' => '03'.$request->cell_no
             ]);
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
+
             DB::rollback();
             return response()->json(['status' => false, 'msg' => $e->getMessage()]);
         }
