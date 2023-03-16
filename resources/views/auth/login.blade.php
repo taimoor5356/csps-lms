@@ -121,11 +121,10 @@
                                 <h4 class="font-weight-bolder">Notification</h4>
                             </div>
                             <div class="card-body pt-0">
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS-2023 Seminar on
-                                    17th August, 2022 at 05:30PM</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS Screening test 2013 in October,
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS/PMS 2024 Seminar on April 2nd, 2023 at 3:00pm</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS/PMS 2022 Screening test in October, 2023,
                                     2022</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS-2013 Exam in Feb, 2023
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS/PMS-2022 Exam in Feb, 2024
                                 </p>
                             </div>
                         </div>
@@ -174,10 +173,10 @@
                     <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i class="fa fa-youtube"></i></a>
                   </div>
                   <div class="col-2 text-center" style="width: 7% !important">
-                    <a href="https://t.me/cspsacademy" class="text-white"><i class="fa fa-telegram"></i></a>
+                    <a href="https://www.tiktok.com/@csps_academy" class="text-white"><i class="fa fa-tiktok"></i></a>
                   </div>
                   <div class="col-2 text-center" style="width: 7% !important">
-                    <a href="#" class="text-white"><i class="fa fa-whatsapp"></i></a>
+                    <a href="https://api.whatsapp.com/send/?phone=923165701593&text&type=phone_number&app_absent=0" class="text-white"><i class="fa fa-whatsapp"></i></a>
                   </div>
                 </div>
             </div>

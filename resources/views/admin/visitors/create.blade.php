@@ -22,6 +22,7 @@
             top: 145px;
             left: 40%;
         }
+
         .divider:after,
         .divider:before {
             content: "";
@@ -53,13 +54,17 @@
         }
 
         .owl-nav {
-          display: none;
+            display: none;
         }
+
         .fa:hover {
             /* font-size:25px; */
             transform: scale(1.5);
         }
-        .contact-input-group, #cell_no, #cell_no:focus {
+
+        .contact-input-group,
+        #cell_no,
+        #cell_no:focus {
             margin-left: -6px;
             border-right: 1px solid lightgray;
         }
@@ -88,7 +93,10 @@
                         <img src="{{ asset('public/assets/img/csps-logo.png') }}" height="80" width="85"
                             class="navbar-brand-img logo-img bg-white p-1" alt="main_logo">
                     </a>
-                    <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory School<p style="font-size: 14px" class="text-center text-danger font-weight-bold bg-white">Pakistan Renowed CSS and PMS Preparatory Institure</p></h4>
+                    <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory
+                        School<p style="font-size: 14px" class="text-center text-danger font-weight-bold bg-white">
+                            Pakistan Renowed CSS and PMS Preparatory Institure</p>
+                    </h4>
                 </div>
             </nav>
             <hr class="horizontal dark">
@@ -104,13 +112,16 @@
                     <div class="row my-0 py-0">
                         <div class="col-md-6 col-lg-6 col-xl-6 my-0 py-0">
                             <h5>Register for CSS and PMS free Seminar</h5>
-                            <p>Do you want to Register?</p>
+                            <p>Do you want to Register On Campus OR Online?</p>
                         </div>
                         <div class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end my-0 py-0">
-                            <button type="button" class="btn btn-success" onclick="location.href='{{asset('public/assets/prospectus/csps_lms_prospectus.pdf')}}'" target="_blank" download>Download Prospectus</button>
+                            <button type="button" class="btn btn-success"
+                                onclick="location.href='{{ asset('public/assets/prospectus/csps_lms_prospectus.pdf') }}'"
+                                target="_blank" download>Download Prospectus</button>
                         </div>
                     </div>
                 </div>
+                <hr class="horizontal-dark">
                 <div class="card-body my-0 py-0">
                     <form method="POST" enctype="multipart/form-data" id="visitor-form">
                         @csrf
@@ -118,11 +129,12 @@
                         <div class="row mt-2">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4 text-white" type="submit" id="save">
-                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
+                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none"
+                                        style="float: right"></div>
                                 </button>
                                 <p>
                                     <a href="/lms/login">Login Here</a>
-                                </p>                                
+                                </p>
                             </div>
                         </div>
                     </form>
@@ -133,27 +145,29 @@
     <div class="row mt-4">
         <div class="row justify-content-center">
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://www.csps.com.pk" class="text-white"><i class="fa fa-globe"></i></a>
+                <a href="https://www.csps.com.pk" class="text-white"><i class="fa fa-globe"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://www.facebook.com/CSPsAcademy" class="text-white"><i class="fa fa-facebook"></i></a>
+                <a href="https://www.facebook.com/CSPsAcademy" class="text-white"><i class="fa fa-facebook"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://www.instagram.com/cspsacademy" class="text-white"><i class="fa fa-instagram"></i></a>
+                <a href="https://www.instagram.com/cspsacademy" class="text-white"><i class="fa fa-instagram"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://twitter.com/CSPSAcademy" class="text-white"><i class="fa fa-twitter"></i></a>
+                <a href="https://twitter.com/CSPSAcademy" class="text-white"><i class="fa fa-twitter"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i class="fa fa-youtube"></i></a>
+                <a href="https://www.youtube.com/c/CivilServicesPreparatorySchoolforCSSPMSAcademy" class="text-white"><i
+                        class="fa fa-youtube"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="https://t.me/cspsacademy" class="text-white"><i class="fa fa-telegram"></i></a>
+                <a href="https://www.tiktok.com/@csps_academy" class="text-white"><i class="fa fa-tiktok"></i></a>
             </div>
             <div class="col-2 text-center" style="width: 7% !important">
-              <a href="#" class="text-white"><i class="fa fa-whatsapp"></i></a>
+                <a href="https://api.whatsapp.com/send/?phone=923165701593&text&type=phone_number&app_absent=0"
+                    class="text-white"><i class="fa fa-whatsapp"></i></a>
             </div>
-          </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -167,17 +181,35 @@
             $('.toast .success-header').html('Success');
             $('.toast .toast-header').addClass('bg-success');
             $('.toast .toast-body').addClass('bg-success');
-            $('.toast .toast-body').html("{{session('success')}}");
+            $('.toast .toast-body').html("{{ session('success') }}");
             $('.toast').toast('show');
-        @elseif(session('error'))
+        @elseif (session('error'))
             $('.toast .success-header').html('Error');
             $('.toast .toast-header').addClass('bg-danger');
             $('.toast .toast-body').addClass('bg-danger');
-            $('.toast .toast-body').html("{{session('error')}}");
+            $('.toast .toast-body').html("{{ session('error') }}");
             $('.toast').toast('show');
         @endif
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
+            if ($('#name').val().length > 50) {
+                $('#name-length-alert').removeClass('d-none');
+                return false;
+            } else {
+                $('#name-length-alert').addClass('d-none');
+            }
+            if ($('#cell_no').val().length < 9 || $('#cell_no').val().length > 9) {
+                $('#contact-length-alert').removeClass('d-none');
+                return false;
+            } else {
+                $('#contact-length-alert').addClass('d-none');
+            }
+            if ($('#degree').val().length > 50) {
+                $('#degree-length-alert').removeClass('d-none');
+                return false;
+            } else {
+                $('#degree-length-alert').addClass('d-none');
+            }
             $('#save').prop('disabled', true);
             $('#save').removeClass('btn-success');
             $('#save').addClass('btn-danger');
@@ -195,7 +227,7 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status == true) {
                             $('.toast .toast-header').removeClass('bg-danger');
                             $('.toast .toast-header').removeClass('bg-danger');
@@ -209,8 +241,9 @@
                             $('#save').removeClass('btn-danger');
                             $('#save').addClass('btn-success');
                             $('.loader').addClass('d-none');
-                            setTimeout(function () {
-                                window.location.href = "{{ route('login') }}";
+                            setTimeout(function() {
+                                window.location.href =
+                                    "{{ route('login') }}";
                             }, 3000);
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');

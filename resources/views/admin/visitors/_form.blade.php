@@ -15,7 +15,6 @@
         </div>
     </div>
 </div>
-<hr class="horizontal dark">
 {{-- <p class="text-uppercase text-sm">visitor Profile</p> --}}
 <div class="row my-0 py-0">
     <div class="admin-form row my-0 py-0">
@@ -48,7 +47,7 @@
         </div>
         <div class="col-md-2">
             <div class="form-group mb-3">
-                <label for="name" class="form-control-label">Name *</label>
+                <label for="name" class="form-control-label">Name * <span class="text-danger d-none" id="name-length-alert">( Only 50 characters )</span></label>
                 <input class="form-control name" id="name"
                     name="name" type="text" onfocus="focused(this)"
                     onfocusout="defocused(this)" placeholder="visitor Name" required minlength="3" pattern="[A-Za-z ]+" oninvalid="this.setCustomValidity('Please enter alphabets only')" oninput="this.setCustomValidity('')">
@@ -75,20 +74,20 @@
         </div>
         <div class="col-md-2">
             <div class="form-group mb-3">
-                <label for="cell_no" class="form-control-label">Contact No *</label>
+                <label for="cell_no" class="form-control-label">Contact No * <span class="text-danger d-none" id="contact-length-alert">( Only 9 digits )</span></label>
                 <div class="input-group mb-2 contact-input-group">
                     <div class="input-group-prepend">
                         <div class="input-group-text">03</div>
                     </div>
                     <input class="form-control cell_no" id="cell_no"
                     name="cell_no" type="number"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No" min="0" minlength="1" maxlength="9" required>
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No" pattern="\d*" minlength="9" maxlength="9" required>
                 </div>
             </div>
         </div>
         <div class="col-md-2">
             <div class="form-group mb-3">
-                <label for="degree" class="form-control-label">Qualification *</label>
+                <label for="degree" class="form-control-label">Qualification * <span class="text-danger d-none" id="degree-length-alert">( Only 50 characters )</span></label>
                 <input class="form-control degree" id="degree"
                     name="degree" type="text"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Degree Name" pattern="[A-Za-z ]+" oninvalid="this.setCustomValidity('Please enter alphabets only')" oninput="this.setCustomValidity('')" required >
