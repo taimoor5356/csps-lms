@@ -95,7 +95,7 @@
                     </a>
                     <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory
                         School<p style="font-size: 14px" class="text-center text-danger font-weight-bold bg-white">
-                            Pakistan Renowed CSS and PMS Preparatory Institure</p>
+                            Pakistan Renowed CSS and PMS Preparatory Institute</p>
                     </h4>
                 </div>
             </nav>
