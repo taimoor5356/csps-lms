@@ -77,7 +77,7 @@
                 <label for="cell_no" class="form-control-label">Contact No * <span class="text-danger d-none" id="contact-length-alert">( Only 9 digits )</span></label>
                 <div class="input-group mb-2 contact-input-group">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">03</div>
+                        <div class="input-group-text" style="padding: 0.5rem 6.5px">03</div>
                     </div>
                     <input class="form-control cell_no" id="cell_no"
                     name="cell_no" type="number"
