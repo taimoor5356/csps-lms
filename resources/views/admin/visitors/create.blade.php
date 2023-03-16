@@ -265,6 +265,19 @@
                             $('.loader').addClass('d-none');
                         }
                     }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    $('.toast .toast-header').removeClass('bg-success');
+                    $('.toast .toast-header').removeClass('bg-success');
+                    $('.toast .toast-body').removeClass('bg-success');
+                    $('.toast .success-header').html('Error');
+                    $('.toast .toast-header').addClass('bg-danger');
+                    $('.toast .toast-body').addClass('bg-danger');
+                    $('.toast .toast-body').html('Session Expired, Login again');
+                    $('.toast').toast('show');
+                    $('#save').prop('disabled', false);
+                    $('#save').removeClass('btn-danger');
+                    $('#save').addClass('btn-success');
+                    $('.loader').addClass('d-none');
                 });
             }, 1000);
         });
