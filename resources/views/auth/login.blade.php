@@ -60,14 +60,17 @@
     <div class="row">
         <div class="col-12">
             <!-- Navbar -->
-            <nav class="navbar bg-primary navbar-expand-lg top-0 z-index-3 mt-2 py-2 start-0 end-0">
+            <nav class="navbar bg-primary navbar-expand-lg top-0 z-index-3 mt-2 start-0 end-0">
                 <div class="container-fluid justify-content-center">
                     <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 p-0 text-white"
                         href="https://www.csps.com.pk">
-                        <img src="{{ asset('public/assets/img/csps-logo.png') }}" height="65" width="70"
-                            class="navbar-brand-img logo-img bg-white p-1" alt="main_logo"> <span
-                            style="font-size: 25px">CSPs - Civil Services Preparatory School</span>
+                        <img src="{{ asset('public/assets/img/csps-logo.png') }}" height="80" width="85"
+                            class="navbar-brand-img logo-img bg-white p-1" alt="main_logo">
                     </a>
+                    <h4 class="text-white" style="font-size: 25px; font-weight: bold">CSPs - Civil Services Preparatory
+                        School<p style="font-size: 14px" class="text-center text-danger font-weight-bold bg-white">
+                            Pakistan Renowed CSS and PMS Preparatory Institure</p>
+                    </h4>
                 </div>
             </nav>
             <hr class="horizontal dark">
@@ -121,10 +124,9 @@
                                 <h4 class="font-weight-bolder">Notification</h4>
                             </div>
                             <div class="card-body pt-0">
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS/PMS 2024 Seminar on April 2nd, 2023 at 3:00pm</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- CSS/PMS 2022 Screening test in October, 2023,
-                                    2022</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS/PMS-2022 Exam in Feb, 2024
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS/PMS Seminar on April 2nd, 2023 at 3:00pm</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Line CSS/PMS Seminar on April 1st, 2023 at 3:00pm</p>
+                                {{-- <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS/PMS-2022 Exam in Feb, 2024 --}}
                                 </p>
                             </div>
                         </div>
@@ -137,15 +139,15 @@
                                                 <div class="media-29101">
                                                     <a href="#">
                                                       <img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
+                                                            class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                                 <div class="media-29101">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/teaching.jpg')}}" alt="Image"
+                                                            class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                                 <div class="media-29101">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Image"
-                                                            class="img-fluid"></a>
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/black_orange.png')}}" alt="Image"
+                                                            class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                             </div>
                                         </div>
