@@ -78,7 +78,7 @@
         </div>
     </div>
 </div>
-<main class="main-content">
+<main class="main-content mb-4">
     <section>
         <div class="page-header">
             <div class="container-fluid">
@@ -182,7 +182,6 @@
                   </div>
                 </div>
             </div>
-        </div>
         </div>
     </section>
 </main>
