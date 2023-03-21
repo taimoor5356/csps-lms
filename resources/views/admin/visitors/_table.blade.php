@@ -24,6 +24,9 @@
                     Program
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Class Type
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Actions
                 </th>
             </tr>

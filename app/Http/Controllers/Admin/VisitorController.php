@@ -55,8 +55,8 @@ class VisitorController extends Controller
                     return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->user->name . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->user->email . '</p>
+                            <h6 class="mb-0 text-sm text-capitalize">' . $row->user->name . '</h6>
+                            <p class="text-sm text-secondary mb-0 text-lowercase">' . $row->user->email . '</p>
                         </div>
                     </div>
                     ';
@@ -69,8 +69,7 @@ class VisitorController extends Controller
                     return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->class_type . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->class_type . '</p>
+                            <h6 class="mb-0 text-sm text-capitalize">' . $row->class_type . '</h6>
                         </div>
                     </div>
                     ';
@@ -82,7 +81,7 @@ class VisitorController extends Controller
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->domicile . '</h6>
+                            <h6 class="mb-0 text-sm text-capitalize">' . $row->domicile . '</h6>
                         </div>
                     </div>
                 ';
@@ -91,7 +90,7 @@ class VisitorController extends Controller
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->applied_for . '</h6>
+                            <h6 class="mb-0 text-sm text-uppercase">' . $row->applied_for . '</h6>
                         </div>
                     </div>
                 ';
@@ -100,7 +99,7 @@ class VisitorController extends Controller
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->degree . '</h6>
+                            <h6 class="mb-0 text-sm text-capitalize">' . $row->degree . '</h6>
                         </div>
                     </div>
                 ';
@@ -109,7 +108,7 @@ class VisitorController extends Controller
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">0' . $row->cell_no . '</h6>
+                            <h6 class="mb-0 text-sm text-capitalize">' . $row->cell_no . '</h6>
                         </div>
                     </div>
                 ';
@@ -130,7 +129,7 @@ class VisitorController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'cell_no', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action', 'applied_for'])
+            ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'cell_no', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action', 'applied_for', 'class_type'])
             ->make(true);
     }
     // showTableData for Index and Trashed
@@ -193,7 +192,7 @@ class VisitorController extends Controller
             $defaultPassword = '876543210';
             $user = User::create([
                 'name' => $request->name,
-                'email' => substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com',
+                'email' => strtolower(substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com'),
                 'gender' => $request->gender,
                 'password' => Hash::make($defaultPassword),
                 'role_id' => 5,

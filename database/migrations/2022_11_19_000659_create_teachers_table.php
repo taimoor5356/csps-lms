@@ -30,8 +30,8 @@ class CreateTeachersTable extends Migration
             $table->longText('board_university')->nullable();
             $table->string('distinction')->nullable();
             $table->longText('address')->nullable();
-            $table->unsignedBigInteger('contact_res')->nullable();
-            $table->unsignedBigInteger('cell_no')->nullable();
+            $table->char('contact_res', 11)->nullable();
+            $table->char('cell_no', 11)->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

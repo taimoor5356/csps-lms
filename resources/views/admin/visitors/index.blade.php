@@ -149,22 +149,27 @@
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Applied For:</h6>
-                                                    <span class="text-secondary applied-for"></span>
+                                                    <span class="text-secondary applied-for text-capitalize"></span>
+                                                </li>
+                                                <li
+                                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                                    <h6 class="mb-0">Class Type:</h6>
+                                                    <span class="text-secondary class-type text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Domicile:</h6>
-                                                    <span class="text-secondary domicile"></span>
+                                                    <span class="text-secondary domicile text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Degree:</h6>
-                                                    <span class="text-secondary degree"></span>
+                                                    <span class="text-secondary degree text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Subjects:</h6>
-                                                    <span class="text-secondary subject"></span>
+                                                    <span class="text-secondary subject text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -174,17 +179,17 @@
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Board/University:</h6>
-                                                    <span class="text-secondary board-university"></span>
+                                                    <span class="text-secondary board-university text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Occupation:</h6>
-                                                    <span class="text-secondary occupation"></span>
+                                                    <span class="text-secondary occupation text-capitalize"></span>
                                                 </li>
                                                 <li
                                                     class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                                     <h6 class="mb-0">Distinction:</h6>
-                                                    <span class="text-secondary distinction"></span>
+                                                    <span class="text-secondary distinction text-capitalize"></span>
                                                 </li>
                                             </ul>
                                         </div>
@@ -434,6 +439,10 @@
                     name: 'applied_for'
                 },
                 {
+                    data: 'class_type',
+                    name: 'class_type'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -476,23 +485,17 @@
                 $('div.full-name').html(response.visitor.user.name);
                 $('div.email').html(response.visitor.user.email);
                 if (response.visitor.user.approved_status == 1) {
-                    $('div.cell-no').html(response.visitor.user.student.cell_no);
-                } else {
-                    $('div.cell-no').html(String('0')+(String(response.visitor.cell_no)));
-                }
-                var url = '{{ asset("public/assets/img/students/:image") }}';
-                url = url.replace(':image', response.visitor.user.photo);
-                $('img.profile-img').attr('src', url);
-                if (response.visitor.user.student != null) {
+                    $('div.cell-no').html(String(response.visitor.user.student.cell_no));
                     $('div.address').html(response.visitor.user.student.address);
                     $('div.father-name').html(response.visitor.user.student.father_name);
                     $('div.father-occupation').html(response.visitor.user.student.father_occupation);
                     $('div.dob').html(response.visitor.user.student.dob);
                     $('div.cnic').html(response.visitor.user.student.cnic);
-                    $('div.contact-res').html(response.visitor.user.student.contact_res);
+                    $('div.contact-res').html(String(response.visitor.user.student.contact_res));
                     $('span.batch-no').html(response.visitor.user.student.batch_no);
                     $('span.reg-no').html(response.visitor.user.student.reg_no);
                     $('span.applied-for').html(response.visitor.user.student.applied_for);
+                    $('span.class-type').html(response.visitor.user.student.class_type);
                     $('span.domicile').html(response.visitor.user.student.domicile);
                     $('span.degree').html(response.visitor.user.student.degree);
                     $('span.subject').html(response.visitor.user.student.major_subjects);
@@ -500,7 +503,42 @@
                     $('span.board-university').html(response.visitor.user.student.board_university);
                     $('span.occupation').html(response.visitor.user.student.visitor_occupation);
                     $('span.distinction').html(response.visitor.user.student.distinction);
+                } else {
+                    $('div.cell-no').html((String(response.visitor.cell_no)));
+                    $('span.applied-for').html(response.visitor.applied_for);
+                    $('div.contact-res').html(String(response.visitor.cell_no));
+                    $('span.class-type').html(response.visitor.class_type);
+                    $('span.domicile').html(response.visitor.domicile);
+                    $('span.degree').html(response.visitor.degree);
                 }
+                var url = '{{ asset("public/assets/img/students/:image") }}';
+                url = url.replace(':image', response.visitor.user.photo);
+                $('img.profile-img').attr('src', url);
+                // if (response.visitor.user.student != null) {
+                //     $('div.address').html(response.visitor.user.student.address);
+                //     $('div.father-name').html(response.visitor.user.student.father_name);
+                //     $('div.father-occupation').html(response.visitor.user.student.father_occupation);
+                //     $('div.dob').html(response.visitor.user.student.dob);
+                //     $('div.cnic').html(response.visitor.user.student.cnic);
+                //     $('div.contact-res').html('0'+response.visitor.user.student.contact_res);
+                //     $('span.batch-no').html(response.visitor.user.student.batch_no);
+                //     $('span.reg-no').html(response.visitor.user.student.reg_no);
+                //     $('span.applied-for').html(response.visitor.user.student.applied_for);
+                //     $('span.class-type').html(response.visitor.user.student.class_type);
+                //     $('span.domicile').html(response.visitor.user.student.domicile);
+                //     $('span.degree').html(response.visitor.user.student.degree);
+                //     $('span.subject').html(response.visitor.user.student.major_subjects);
+                //     $('span.cgpa').html(response.visitor.user.student.cgpa);
+                //     $('span.board-university').html(response.visitor.user.student.board_university);
+                //     $('span.occupation').html(response.visitor.user.student.visitor_occupation);
+                //     $('span.distinction').html(response.visitor.user.student.distinction);
+                // } else {
+                //     $('span.applied-for').html(response.visitor.applied_for);
+                //     $('div.contact-res').html('0'+response.visitor.cell_no);
+                //     $('span.class-type').html(response.visitor.class_type);
+                //     $('span.domicile').html(response.visitor.domicile);
+                //     $('span.degree').html(response.visitor.degree);
+                // }
             });
             $('#modal-default').modal('show');
         });
