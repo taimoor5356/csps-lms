@@ -30,7 +30,7 @@ class Mail extends Mailable
      */
     public function build()
     {
-        // return $this->from($this->email)->view('admin.mail.student_mail');
-        return $this->subject($this->subject)->view('admin.mail.student_mail');
+        // return $this->from($this->email)->view('mail.student_mail');
+        return $this->subject($this->subject)->view('mail.student_mail');
     }
 }

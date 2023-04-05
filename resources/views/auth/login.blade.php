@@ -1,4 +1,4 @@
-@extends('admin.layout.login_app')
+@extends('layout.login_app')
 @section('content')
 @section('style')
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
@@ -124,8 +124,11 @@
                                 <h4 class="font-weight-bolder">Notification</h4>
                             </div>
                             <div class="card-body pt-0">
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Campus CSS/PMS Seminar on April 2nd, 2023 at 3:00pm</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- Free On-Line CSS/PMS Seminar on April 1st, 2023 at 3:00pm</p>
+                                @php 
+                                    $setting = \App\Models\Setting::first();
+                                @endphp
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->oncampus_description." ".$setting->oncampus_date_time : ""}}</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->online_description." ".$setting->online_date_time : ""}}</p>
                                 {{-- <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS/PMS-2022 Exam in Feb, 2024 --}}
                                 </p>
                             </div>

@@ -1,0 +1,288 @@
+@extends('layout.app')
+@section('content')
+@section('style')
+    <!-- Styling Here -->
+    <style>
+        .teacher-modal-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+
+        .teacher-modal-card-body {
+            flex: 1 1 auto;
+            min-height: 1px;
+            padding: 1rem;
+        }
+
+        .gutters-sm {
+            margin-right: -8px;
+            margin-left: -8px;
+        }
+
+        .gutters-sm>.col,
+        .gutters-sm>[class*=col-] {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        .mb-3,
+        .my-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .bg-gray-300 {
+            background-color: #e2e8f0;
+        }
+
+        .h-100 {
+            height: 100% !important;
+        }
+
+        .shadow-none {
+            box-shadow: none !important;
+        }
+        .child-table>tr>td {
+            border: 1px solid lightgrey;
+        }
+    </style>
+    <!-- Styling Here -->
+@endsection
+@section('breadcrumbs')
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
+                    class="text-light">Teacher</span></li>
+        </ol>
+        <h6 class="font-weight-bolder text-white mb-0">Teacher</h6>
+    </nav>
+@endsection
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex">
+                    <h6>Teacher</h6>
+                    <div class="alert-messages w-50 ms-auto text-center">
+                        <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
+                                <span class="success-header"></span>
+                                <div class="close-toast-msg ms-auto text-end cursor-pointer">
+                                    X
+                                </div>
+                            </div>
+                            <div class="toast-body text-white text-bold">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-buttons ms-auto text-end">
+                        @can('teacher_create')
+                            <a href="{{ route('create.teacher') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
+                        @endcan
+                        @can('teacher_delete')
+                            <a href="{{ route('trashed.teachers') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
+                        @endcan
+                        @if (Auth::user()->hasRole('teacher'))
+                            <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
+                        @endif
+                    </div>
+                </div>
+                <div class="card-body pb-2">
+                    @include('teachers._table')
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<!-- Section Modal -->
+@section('modal')
+<div class="row">
+    <div class="col-md-4">
+        <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="modal-title-default">Teacher Detail</h6>
+                        <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                        <button type="button" class="close-modal btn btn-danger  ml-auto"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+<!-- Section Modal -->
+@section('page_js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Scripting Here -->
+<script>
+    $(document).ready(function() {
+        @if (session('success'))
+            $('.toast .success-header').html('Success');
+            $('.toast .toast-header').addClass('bg-success');
+            $('.toast .toast-body').addClass('bg-success');
+            $('.toast .toast-body').html("{{session('success')}}");
+            $('.toast').toast('show');
+        @elseif(session('error'))
+            $('.toast .success-header').html('Error');
+            $('.toast .toast-header').addClass('bg-danger');
+            $('.toast .toast-body').addClass('bg-danger');
+            $('.toast .toast-body').html("{{session('error')}}");
+            $('.toast').toast('show');
+        @endif
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
+            responsive: true,
+            processing: true,
+            stateSave: true,
+            // serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('teachers') }}"
+            },
+            columns: [
+                // {
+                //     className: 'dt-control',
+                //     orderable: false,
+                //     data: null,
+                //     defaultContent: '',
+                // },
+                {
+                    data: 'image',
+                    name: 'image',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'name_email',
+                    name: 'name_email'
+                },
+                {
+                    data: 'dob_cnic',
+                    name: 'dob_cnic'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            }
+        });
+        // Data Table Ends
+
+        // Child Row starts
+        // Add event listener for opening and closing details
+        $(document).on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+    
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+        // Child Row ends
+
+        // Open Modal to View Information
+        $(document).on('click', '.view-teacher-detail', function() {
+            var _this = $(this);
+            var teacherId = _this.attr('data-teacher-id');
+            $.get('teacher/' + teacherId + '/show', function(data) {
+                $('span.batch-no').html(data.batch_no);
+                $('span.reg-no').html(data.reg_no);
+                $('span.applied-for').html(data.applied_for);
+                $('span.domicile').html(data.domicile);
+                $('span.degree').html(data.degree);
+                $('span.subject').html(data.major_subjects);
+                $('span.cgpa').html(data.cgpa);
+                $('span.board-university').html(data.board_university);
+                $('span.occupation').html(data.teacher_occupation);
+                $('span.distinction').html(data.distinction);
+                $('div.full-name').html(data.user.name);
+                $('div.email').html(data.user.email);
+                $('div.father-name').html(data.father_name);
+                $('div.father-occupation').html(data.father_occupation);
+                $('div.dob').html(data.dob);
+                $('div.cnic').html(data.cnic);
+                $('div.contact-res').html(data.contact_res);
+                $('div.cell-no').html(data.cell_no);
+                $('div.address').html(data.address);
+                var url = '{{ asset('public/assets/img/teacher/:image') }}';
+                url = url.replace(':image', data.user.photo);
+                $('img.profile-img').attr('src', url);
+            });
+            $('#modal-default').modal('show');
+        });
+        // Ends Open Modal to View Information
+
+        // Close Modal
+        $(document).on('click', '.close-modal', function() {
+            $('#modal-default').modal('hide');
+        });
+        // Close Modal
+
+        // Open Delete teacher Modal
+        $(document).on('click', '.delete-teacher', function(e) {
+            e.preventDefault();
+            var teacherId = $(this).attr('data-teacher-id');
+            Swal.fire({
+                title: 'Are you sure?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post('teacher/' + teacherId + '/delete', {_token: '{{ csrf_token() }}'},function() {
+                    });
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'teacher has been deleted.',
+                        icon: 'success',
+                        timer: 4500,
+                        showCancelButton: false,
+                        showConfirmButton: false,
+                    });
+                    table.draw(false);
+                }
+            });
+        });
+        // Ends Open Delete teacher Modal
+    });
+</script>
+<!-- Scripting Here -->
+@endsection

@@ -16,6 +16,7 @@ class CreateStudentsTable extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->increments()->unique()->nullable();
+            $table->tinyInteger('email_changed_status')->default(0)->comment('Should be 1 for every student');
             $table->string('batch_no')->nullable();
             $table->string('reg_no')->unique()->nullable();
             // $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');
