@@ -11,6 +11,7 @@ use App\Interfaces\NoticeBoardRepositoryInterface;
 use App\Interfaces\StudentRepositoryInterface;
 use App\Interfaces\SuggestionsRepositoryInterface;
 use App\Interfaces\TeacherReviewRepositoryInterface;
+use App\Interfaces\VisitorRepositoryInterface;
 use App\Interfaces\ZoomClassesRepositoryInterface;
 use App\Repositories\AttendanceRepository;
 use App\Repositories\DownloadCenterRepository;
@@ -21,6 +22,7 @@ use App\Repositories\NoticeBoardRepository;
 use App\Repositories\StudentRepository;
 use App\Repositories\SuggestionsRepository;
 use App\Repositories\TeacherReviewRepository;
+use App\Repositories\VisitorRepository;
 use App\Repositories\ZoomClassesRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SuggestionsRepositoryInterface::class, SuggestionsRepository::class);
         $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class); 
         $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class); 
+        $this->app->bind(VisitorRepositoryInterface::class, VisitorRepository::class); 
     }
 
     /**

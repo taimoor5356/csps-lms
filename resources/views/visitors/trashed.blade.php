@@ -56,12 +56,12 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white" aria-current="page"><a class="text-white" href="{{ route('students') }}">Students</a>
+            <li class="breadcrumb-item text-sm text-white" aria-current="page"><a class="text-white" href="{{ route('visitors') }}">Visitors</a>
             </li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
                     class="text-light">Trashed</span></li>
         </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Students</h6>
+        <h6 class="font-weight-bolder text-white mb-0">Visitors</h6>
     </nav>
 @endsection
 <div class="container-fluid py-4">
@@ -69,7 +69,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Trashed Students</h6>
+                    <h6>Trashed Visitors</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,11 +84,11 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('students') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
+                        <a href="{{ route('visitors') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View All</a>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('students._table')
+                    @include('visitors._table')
                 </div>
             </div>
         </div>
@@ -365,10 +365,12 @@
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
+            stateSave: true,
             ajax: {
-                url: "{{ route('trashed.students') }}"
+                url: "{{ route('trashed.visitor') }}"
             },
-            columns: [{
+            columns: [
+                {
                     data: 'image',
                     name: 'image',
                     orderable: false,
@@ -379,29 +381,25 @@
                     name: 'name_email'
                 },
                 {
-                    data: 'fathername_occupation',
-                    name: 'fathername_occupation'
-                },
-                {
-                    data: 'dob_cnic',
-                    name: 'dob_cnic'
+                    data: 'degree_university',
+                    name: 'degree_university'
                 },
                 {
                     data: 'domicile',
                     name: 'domicile'
                 },
                 {
-                    data: 'degree_university',
-                    name: 'degree_university'
+                    data: 'cell_no',
+                    name: 'cell_no'
                 },
                 {
-                    data: 'subject_cgpa',
-                    name: 'subject_cgpa'
+                    data: 'applied_for',
+                    name: 'applied_for'
                 },
-                // {
-                //     data: 'distinction',
-                //     name: 'distinction'
-                // },
+                {
+                    data: 'class_type',
+                    name: 'class_type'
+                },
                 {
                     data: 'action',
                     name: 'action',

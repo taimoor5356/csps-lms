@@ -92,14 +92,17 @@ class SettingController extends Controller
 
     public function updateSettings(Request $request)
     {
-        Setting::where('id', 1)->update([
-            'type' => '',
-            'online_description' => $request->online_description,
-            'oncampus_description' => $request->oncampus_description,
-            'online_date_time' => $request->online_date_time,
-            'oncampus_date_time' => $request->oncampus_date_time,
-        ]);
+        $setting = Setting::where('id', 1)->first();
+        if (isset($setting)) {
+        } else {
+            $setting = new Setting();
+        }
+        $setting->type =  '';
+        $setting->online_description =  $request->online_description;
+        $setting->oncampus_description =  $request->oncampus_description;
+        $setting->online_date_time =  $request->online_date_time;
+        $setting->oncampus_date_time =  $request->oncampus_date_time;
+        $setting->save();
         return redirect()->back()->with('success', 'Updated Successfully');
     }
-
 }

@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Student;
 use App\Models\Visitor;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Interfaces\VisitorRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class VisitorController extends Controller
 {
+    private $visitorRepository;
+
+    public function __construct(VisitorRepositoryInterface $visitorRepository)
+    {
+        $this->visitorRepository = $visitorRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +40,7 @@ class VisitorController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/students/' . $row->user->photo . '" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/visitors/' . $row->user->photo . '" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -43,7 +49,7 @@ class VisitorController extends Controller
                     return '    
                     <div class="d-flex px-2 py-1">
                         <div>
-                            <img src="' . $url . '/public/assets/img/students/" class="avatar avatar-lg"
+                            <img src="' . $url . '/public/assets/img/visitors/" class="avatar avatar-lg"
                                 alt="user1">
                         </div>
                     </div>
@@ -137,19 +143,10 @@ class VisitorController extends Controller
     public function index(Request $request)
     {
         //
-        try {
-            $visitorsDetail = Visitor::with('user')->get();
-            if (Auth::user()->hasRole('visitor')) {
-                $visitorsDetail = Visitor::with('user')->where('user_id', Auth::user()->id)->get();
-            }
-            if ($request->ajax()) {
-                return $this->showTableData($visitorsDetail, $trashed = null);
-            }
-            return view('visitors.index');
-        } catch (\Exception $e) {
-            dd($e);
-            return redirect()->back()->withError('Something went wrong');
+        if ($request->ajax()) {
+            return $this->visitorRepository->index($request);
         }
+        return view('visitors.index');
     }
 
     /**
@@ -172,49 +169,7 @@ class VisitorController extends Controller
     public function store(Request $request)
     {
         //
-        try {
-            DB::beginTransaction();
-            if ( $request->class_type == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
-                return response()->json(['status' => false, 'msg' => 'All fields required']);
-            }
-            if (!preg_match('/^[A-Za-z ]+$/', $request->name)) {
-                return response()->json(['status' => false, 'msg' => 'Name cannot be in number format']);
-            }
-            if (ctype_alpha($request->cell_no)) {
-                return response()->json(['status' => false, 'msg' => 'Contact number cannot be in alphabet format']);
-            }
-            if (!preg_match('/^[A-Za-z ]+$/', $request->degree)) {
-                return response()->json(['status' => false, 'msg' => 'Qualification cannot be in number format']);
-            }
-            if (strlen($request->cell_no) > 9 || strlen($request->cell_no) < 9) {
-                return response()->json(['status' => false, 'msg' => 'Only nine digits contact number is allowed']);
-            }
-            $defaultPassword = '876543210';
-            $user = User::create([
-                'name' => $request->name,
-                'email' => strtolower(substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com'),
-                'gender' => $request->gender,
-                'password' => Hash::make($defaultPassword),
-                'role_id' => 5,
-                'registration_date' => Carbon::now(),
-                'approved_status' => 0,
-                // 'photo' => $file
-            ]);
-            $visitor = Visitor::create([
-                'user_id' => $user->id,
-                'class_type' => $request->class_type,
-                'applied_for' => $request->applied_for,
-                'domicile' => $request->domicile,
-                'degree' => $request->degree,
-                'cell_no' => '03'.$request->cell_no
-            ]);
-            DB::commit();
-            return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
-        } catch (\Exception $e) {
-
-            DB::rollback();
-            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
-        }
+        return $this->visitorRepository->store($request->all());
     }
 
     /**
@@ -226,14 +181,7 @@ class VisitorController extends Controller
     public function show($id)
     {
         //
-        try {
-            $student = Visitor::with('user.student')->where('id', $id)->first();
-            if (isset($student)) {
-                return response()->json(['status' => true, 'visitor' => $student, 'msg' => 'Successfull']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['status' => false, 'msg' => 'Unexpected Error Occured']);
-        }
+        return $this->visitorRepository->show($id);
     }
 
     /**
@@ -246,13 +194,13 @@ class VisitorController extends Controller
     {
         //
         try {
-            $student = Visitor::with('user')->where('id', $id)->first();
-            if ($student->user->approved_status == 1) {
-                return redirect()->back()->with('error', 'User already approved Go check in Student detail page');
+            $visitor = Visitor::with('user')->where('id', $id)->first();
+            if ($visitor->user->approved_status == 1) {
+                return redirect()->back()->with('error', 'User already approved Go check in Visitor detail page');
             }
-            if (isset($student)) {
-                $user_id = $student->user_id;
-                return view('visitors.edit', compact('student', 'id', 'user_id'));
+            if (isset($visitor)) {
+                $user_id = $visitor->user_id;
+                return view('visitors.edit', compact('visitor', 'id', 'user_id'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
@@ -282,6 +230,7 @@ class VisitorController extends Controller
     public function destroy($id)
     {
         //
+        return $this->visitorRepository->destroy($id);
     }
 
     /**
@@ -290,9 +239,13 @@ class VisitorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function trashed($id)
+    public function trashed(Request $request)
     {
         //
+        if ($request->ajax()) {
+            return $this->visitorRepository->trashed($request);
+        }
+        return view('visitors.trashed');
     }
 
     /**
@@ -304,6 +257,7 @@ class VisitorController extends Controller
     public function restore($id)
     {
         //
+        return $this->visitorRepository->restore($id);
     }
 
     /**
@@ -315,5 +269,6 @@ class VisitorController extends Controller
     public function permanentDelete($id)
     {
         //
+        return $this->visitorRepository->permanentDelete($id);
     }
 }

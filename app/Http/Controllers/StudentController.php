@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 class StudentController extends Controller
 {
     use ImageUpload;
-    private StudentRepositoryInterface $studentRepository;
+    private $studentRepository;
 
     public function __construct(StudentRepositoryInterface $studentRepository)
     {

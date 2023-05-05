@@ -84,9 +84,9 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @can('visitor_create')
+                        {{-- @can('visitor_create')
                             <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endcan
+                        @endcan --}}
                         @can('visitor_delete')
                             <a href="{{ route('trashed.visitor') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                         @endcan
@@ -567,13 +567,16 @@
                     });
                     Swal.fire({
                         title: 'Deleted!',
-                        text: 'visitor has been deleted.',
+                        text: 'Visitor has been deleted.',
                         icon: 'success',
-                        timer: 4500,
+                        timer: 2000,
                         showCancelButton: false,
                         showConfirmButton: false,
                     });
                     table.draw(false);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 }
             });
         });

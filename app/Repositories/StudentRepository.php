@@ -152,17 +152,19 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function create()
     {
-        
+        //
     }
 
     public function show($id) 
     {
-        $student = Student::with('user')->where('id', $id)->first();
-        if (isset($student)) {
-            return $student;
+        try {
+            $student = Student::with('user')->where('id', $id)->first();
+            if (isset($student)) {
+                return $student;
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
         }
-        
-        
     }
 
     public function store($request) 
@@ -450,10 +452,5 @@ class StudentRepository implements StudentRepositoryInterface
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Something went wrong');
         }
-    }
-
-    public function getFulfilledStudents() 
-    {
-        return Student::where('is_fulfilled', true);
     }
 }

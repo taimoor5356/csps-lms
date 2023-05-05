@@ -137,10 +137,33 @@
                                         <tr>
                                         </tr>
                                     @else
+                                        <!-- On Campus -->
                                         <tr>
-                                            <td class="text-center" colspan="3">
-                                                No Data Available
+                                            <td>
+                                                On Campus
                                             </td>
+                                            <td>
+                                                <textarea class="w-100 form-control" rows="2" name="oncampus_description" id="oncampus-description">Free On-Campus CSS/PMS Seminar on</textarea>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="text" name="oncampus_date_time"
+                                                    value="May, 1st 2023">
+                                            </td>
+                                        </tr>
+                                        <!-- OnLine -->
+                                        <tr>
+                                            <td>
+                                                OnLine
+                                            </td>
+                                            <td>
+                                                <textarea class="w-100 form-control" rows="2" name="online_description" id="online-description">Free On-Line CSS/PMS Seminar on</textarea>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="text" name="online_date_time"
+                                                    value="May, 6th 2023">
+                                            </td>
+                                        </tr>
+                                        <tr>
                                         </tr>
                                     @endif
                                 </tbody>
