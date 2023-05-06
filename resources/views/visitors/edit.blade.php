@@ -173,10 +173,6 @@
                     }
                 });
             }, 1000);
-            setTimeout(() => {
-                $('#save').prop('disabled', false);
-                $('.loader').addClass('d-none');
-            }, 5000);
         });
         $(document).on('click', '#add-education', function () {
             if ($('.new-education-row').length >= 4) {
