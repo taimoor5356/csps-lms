@@ -103,12 +103,12 @@
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control batch_no" name="batch_no"
                     id="batch-no">
                     <option value="" selected>Select Batch No</option>
-                    <option value="80" @isset($student) @if($student->batch_no == '80') selected @endisset @endisset>80</option>
-                    <option value="81" @isset($student) @if($student->batch_no == '81') selected @endisset @endisset>81</option>
-                    <option value="82" @isset($student) @if($student->batch_no == '82') selected @endisset @endisset>82</option>
-                    <option value="83" @isset($student) @if($student->batch_no == '83') selected @endisset @endisset>83</option>
-                    <option value="84" @isset($student) @if($student->batch_no == '84') selected @endisset @endisset>84</option>
                     <option value="85" @isset($student) @if($student->batch_no == '85') selected @endisset @endisset>85</option>
+                    <option value="84" @isset($student) @if($student->batch_no == '84') selected @endisset @endisset>84</option>
+                    <option value="83" @isset($student) @if($student->batch_no == '83') selected @endisset @endisset>83</option>
+                    <option value="82" @isset($student) @if($student->batch_no == '82') selected @endisset @endisset>82</option>
+                    <option value="81" @isset($student) @if($student->batch_no == '81') selected @endisset @endisset>81</option>
+                    <option value="80" @isset($student) @if($student->batch_no == '80') selected @endisset @endisset>80</option>
                 </select>
             </div>
         </div>
@@ -234,11 +234,42 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
+                <label for="discount-reason" class="form-control-label">Discount Reason *</label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control discount-reason" id="discount-reason"
+                    name="discount_reason" type="text"
+                    value="@isset($student){{$student->discount_reason}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Discount Reason" required>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
                 <label for="total-fee" class="form-control-label">Total Fee *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control total-fee" id="total-fee"
                     name="total_fee" type="number"
                     value="@isset($student){{$student->total_fee}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Total Fee">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="paid-fee" class="form-control-label">Paying Fee</label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control paid-fee" id="paid-fee"
+                    name="paid" type="number"
+                    value="0"
+                    readonly
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="" required minlength="4" min="1000">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="custom-control custom-radio mb-3">
+                <label for="payment-transfer-mode" class="form-control-label">Payment Transfer Mode *</label>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control payment-transfer-mode" name="payment_transfer_mode"
+                    id="payment-transfer-mode" required>
+                    <option value="" selected>Select Payment Mode</option>
+                    <option value="cheque">Cheque</option>
+                    <option value="bank">Bank</option>
+                    <option value="easypaisa">Easy Paisa</option>
+                </select>
             </div>
         </div>
         <div class="col-md-3">

@@ -23,7 +23,9 @@ class AddColsInStudents extends Migration
             $table->enum('mock_exam_evaluation', ['mock', 'evaluation'])->nullable()->after('fee_type');
             $table->enum('installment', ['first', 'second', 'third', 'fourth'])->nullable()->after('mock_exam_evaluation');
             $table->enum('discount', ['2.5', '5.0', '7.5', '10', '100'])->nullable()->after('installment');
+            $table->string('discount_reason')->nullable();
             $table->string('total_fee')->nullable()->after('discount');
+            $table->enum('payment_transfer_mode', ['cheque', 'bank', 'easypaisa'])->nullable();
             $table->string('due_date')->nullable()->after('total_fee');
             $table->string('freeze')->nullable()->after('due_date');
             $table->string('leave')->nullable()->after('freeze');

@@ -221,12 +221,13 @@ class StudentRepository implements StudentRepositoryInterface
                     'roll_no' => $request->roll_no,
                     'class_type' => $request->class_type,
                     'applied_for' => $request->applied_for,
-                    // 'mock_exam_evaluation' => $request->mock_exam_evaluation,
                     'fee_type' => $request->fee_type,
                     'installment' => $request->installment,
                     'discount' => $request->discount,
+                    'discount_reason' => $request->discount_reason,
                     'total_fee' => $request->total_fee,
                     'paid' => $request->paid,
+                    'payment_transfer_mode' => $request->payment_transfer_mode,
                     'due_date' => $request->due_date,
                     'freeze' => $request->freeze,
                     'leave' => $request->leave,
@@ -241,6 +242,7 @@ class StudentRepository implements StudentRepositoryInterface
                     'fee_type' => $request->fee_type,
                     'installment' => $request->installment,
                     'discount' => $request->discount,
+                    'discount_reason' => $request->discount_reason,
                     'total_fee' => $request->total_fee,
                     'paid' => $request->paid,
                     'total_paid' => $request->paid,
@@ -298,6 +300,7 @@ class StudentRepository implements StudentRepositoryInterface
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }
@@ -309,6 +312,7 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function update($request, $id) 
     {
+        dd('here');
         try {
             DB::beginTransaction();
             $student = Student::with('user')->where('id', $id)->first();
@@ -338,7 +342,8 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->fee_type = $request->fee_type;
                     $student->installment = $request->installment;
                     $student->discount = $request->discount;
-                    // $student->total_fee = $request->total_fee;
+                    $student->discount_reason = $request->discount_reason;
+                    $student->payment_transfer_mode = $request->payment_transfer_mode;
                     $student->due_date = $request->due_date;
                     $student->freeze = $request->freeze;
                     $student->leave = $request->leave;
@@ -354,6 +359,7 @@ class StudentRepository implements StudentRepositoryInterface
                         'fee_type' => $request->fee_type,
                         'installment' => $request->installment,
                         'discount' => $request->discount,
+                        'discount_reason' => $request->discount_reason,
                         'total_fee' => $student->total_fee,
                         'paid' => $request->paid,
                         'due_date' => $request->due_date,

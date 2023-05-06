@@ -113,14 +113,18 @@
            $('#roll-no').val(regNo+'-'+cssPmsYr+'-'+batchNo);
         });
         $(document).on('click', '.fee_type', function () {
-            $('#total-fee').val($(this).attr('data-fee'));
+            // $('#total-fee').val($(this).attr('data-fee'));
         });
         $(document).on('change', '.discount', function () {
             var feeType = $('.fee_type:checked').attr('data-fee');
             var discount = $(this).val();
             var percentage = (discount/100)*feeType;
             var result = feeType - percentage;
-            $('#total-fee').val(result);
+            // $('#total-fee').val(result);
+        });
+        $(document).on('keyup change', '#total-fee', function () {
+            let totalFee = $(this).val();
+            $('#paid-fee').val(totalFee);
         });
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
@@ -169,6 +173,10 @@
                     }
                 });
             }, 1000);
+            setTimeout(() => {
+                $('#save').prop('disabled', false);
+                $('.loader').addClass('d-none');
+            }, 5000);
         });
         $(document).on('click', '#add-education', function () {
             if ($('.new-education-row').length >= 4) {

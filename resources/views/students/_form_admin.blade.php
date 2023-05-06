@@ -234,6 +234,15 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
+                <label for="discount-reason" class="form-control-label">Discount Reason *</label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control discount-reason" id="discount-reason"
+                    name="discount_reason" type="text"
+                    value="@isset($student){{$student->discount_reason}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Discount Reason" required>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
                 <label for="total-fee" class="form-control-label">Total Fee *</label>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control total-fee" id="total-fee"
                     name="total_fee" type="number"
