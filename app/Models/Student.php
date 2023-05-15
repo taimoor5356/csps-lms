@@ -23,4 +23,10 @@ class Student extends Model
     {
         return $this->hasMany(FeePlan::class, 'student_id', 'id');
     }
+
+    // relation with fee plan
+    public function registered_batch()
+    {
+        return $this->hasMany(RegisteredBatch::class, 'id', 'batch_no');
+    }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Models\RegisteredYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -252,11 +253,13 @@ class VisitorController extends Controller
             }
             if (isset($student)) {
                 $user_id = $student->user_id;
-                return view('visitors.edit', compact('student', 'id', 'user_id'));
+                $registeredYears = RegisteredYear::where('status', '1')->get();
+                return view('visitors.edit', compact('student', 'id', 'user_id', 'registeredYears'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->with('error', 'Something went wrong');
         }
     }

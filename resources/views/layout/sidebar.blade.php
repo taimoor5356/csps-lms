@@ -433,6 +433,11 @@
                                 <i class="fa fa-minus text-dark opacity-10"></i>Seminar Dates Setting
                             </a>
                         </li>
+                        <li class="nav-item ">
+                            <a class="nav-link " href="{{ route('settings.registration_settings') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Registration Setting
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>

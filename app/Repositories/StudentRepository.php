@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Interfaces\StudentRepositoryInterface;
 use App\Models\FeePlan;
+use App\Models\RegisteredNumber;
 
 class StudentRepository implements StudentRepositoryInterface 
 {
@@ -221,12 +222,16 @@ class StudentRepository implements StudentRepositoryInterface
                     'roll_no' => $request->roll_no,
                     'class_type' => $request->class_type,
                     'applied_for' => $request->applied_for,
+                    'written_exam_type' => !is_null($request->written_exam_type) ? $request->written_exam_type : null,
+                    'interview_type' => !is_null($request->interview_type) ? $request->interview_type : null,
+                    'examination_type' => !is_null($request->examination_type) ? $request->examination_type : null,
                     'fee_type' => $request->fee_type,
                     'installment' => $request->installment,
                     'discount' => $request->discount,
                     'discount_reason' => $request->discount_reason,
                     'total_fee' => $request->total_fee,
                     'paid' => $request->paid,
+                    'total_paid' => $request->paid,
                     'payment_transfer_mode' => $request->payment_transfer_mode,
                     'due_date' => $request->due_date,
                     'freeze' => $request->freeze,
@@ -261,6 +266,9 @@ class StudentRepository implements StudentRepositoryInterface
                     'reg_no' => $request->reg_no,
                     'roll_no' => $request->roll_no,
                     'applied_for' => $request->applied_for,
+                    'written_exam_type' => !is_null($request->written_exam_type) ? $request->written_exam_type : null,
+                    'interview_type' => !is_null($request->interview_type) ? $request->interview_type : null,
+                    'examination_type' => !is_null($request->examination_type) ? $request->examination_type : null,
                     'father_name' => $request->father_name,
                     'father_occupation' => $request->father_occupation,
                     'dob' => $request->dob,
@@ -291,6 +299,11 @@ class StudentRepository implements StudentRepositoryInterface
                     // 'fee_submit_date' => $request->fee_submit_date
                 ]);
             }
+            $userRegistrationNumber = RegisteredNumber::create([
+                'user_id' => $user->id,
+                'registered_batch_id' => $request->batch_no,
+                'registration_number' => $request->reg_no
+            ]);
             $user->assignRole(3);
             $subject = 'Login Details';
             if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
@@ -312,7 +325,6 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function update($request, $id) 
     {
-        dd('here');
         try {
             DB::beginTransaction();
             $student = Student::with('user')->where('id', $id)->first();
@@ -321,17 +333,20 @@ class StudentRepository implements StudentRepositoryInterface
                 $student->user->email = $request->email;
                 $student->user->gender = $request->gender;
                 $studentTotalPaidFee = $student->total_paid;
+                $fullyPaid = 0;
                 if (Auth::user()->hasRole('admin')) {
-                    if ($request->total_fee < $request->paid) {
+                    if (($request->total_fee - $request->discount) < $request->paid) {
                         return response()->json(['status' => false, 'msg' => 'Total fee cannot be less than paid fee']);
                     }
-                    if ($student->total_paid == $request->total_fee) {
-                        return response()->json(['status' => false, 'msg' => 'Already fully paid']);
-                    }
+                    if ($student->total_paid == ($request->total_fee - $request->discount)) {
+                        $fullyPaid = 1;
+                        // return response()->json(['status' => false, 'msg' => 'Already fully paid']);
+                    } 
+                    $student->total_fee = $request->total_fee;
                     $student->paid = $studentTotalPaidFee + $request->paid;
                     $student->total_paid = $studentTotalPaidFee + $request->paid;
                     $studentTotalPaidAmount = $studentTotalPaidFee + $request->paid;
-                    if ($student->total_fee < $studentTotalPaidAmount) {
+                    if (($request->total_fee - $request->discount) < $studentTotalPaidAmount) {
                         return response()->json(['status' => false, 'msg' => 'Please check paid fee section']);
                     }
                     $student->batch_no = $request->batch_no;
@@ -350,29 +365,35 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->fee_refund = $request->fee_refund;
                     $student->notification_sent = $request->notification_sent;
                     $student->challan_generated = $request->challan_generated;
+                    $student->challan_number = $request->challan_number;
                     $student->fee_submit_date = $request->fee_submit_date;
                     $student->applied_for = $request->applied_for;
+                    $student->written_exam_type = !is_null($request->written_exam_type) ? $request->written_exam_type : null;
+                    $student->interview_type = !is_null($request->interview_type) ? $request->interview_type : null;
+                    $student->examination_type = !is_null($request->examination_type) ? $request->examination_type : null;
                     $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
-                    $feePlan = FeePlan::create([
-                        'user_id' => $student->user->id,
-                        'student_id' => $student->id,
-                        'fee_type' => $request->fee_type,
-                        'installment' => $request->installment,
-                        'discount' => $request->discount,
-                        'discount_reason' => $request->discount_reason,
-                        'total_fee' => $student->total_fee,
-                        'paid' => $request->paid,
-                        'due_date' => $request->due_date,
-                        'freeze' => $request->freeze,
-                        'leave' => $request->leave,
-                        'fee_refund' => isset($request->fee_refund) ? '1' : '0',
-                        'fee_notification' => isset($request->notification_sent) ? '1' : '0',
-                        'challan_generated' => $request->challan_generated,
-                        'payment_transfer_mode' => $request->payment_transfer_mode
-                    ]);
-                    $alreadyPaid = $paidFee->total_paid;
-                    $feePlan->total_paid = $alreadyPaid + $request->paid;
-                    $feePlan->save();
+                    if ($fullyPaid == 0) {
+                        $feePlan = FeePlan::create([
+                            'user_id' => $student->user->id,
+                            'student_id' => $student->id,
+                            'fee_type' => $request->fee_type,
+                            'installment' => $request->installment,
+                            'discount' => $request->discount,
+                            'discount_reason' => $request->discount_reason,
+                            'total_fee' => $request->total_fee,
+                            'paid' => $request->paid,
+                            'due_date' => $request->due_date,
+                            'freeze' => $request->freeze,
+                            'leave' => $request->leave,
+                            'fee_refund' => isset($request->fee_refund) ? '1' : '0',
+                            'fee_notification' => isset($request->notification_sent) ? '1' : '0',
+                            'challan_generated' => $request->challan_generated,
+                            'payment_transfer_mode' => $request->payment_transfer_mode
+                        ]);
+                        $alreadyPaid = $paidFee->total_paid;
+                        $feePlan->total_paid = $alreadyPaid + $request->paid;
+                        $feePlan->save();
+                    }
                 }
                 if (Auth::user()->hasRole('student')) {
                     // $student->user->password = Hash::make($request->password);

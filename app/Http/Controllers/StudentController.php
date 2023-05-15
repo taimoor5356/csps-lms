@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Interfaces\StudentRepositoryInterface;
+use App\Models\RegisteredYear;
 use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
@@ -86,9 +87,10 @@ class StudentController extends Controller
         //
         try {
             $roles = Role::get();
-            $student = Student::with('user')->where('id', $id)->first();
+            $student = Student::with('user', 'registered_batch')->where('id', $id)->first();
             if (isset($student)) {
-                return view('students.edit', compact('student', 'id', 'roles'));
+                $registeredYears = RegisteredYear::where('status', '1')->get();
+                return view('students.edit', compact('student', 'id', 'roles', 'registeredYears'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }

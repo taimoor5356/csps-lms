@@ -1,27 +1,29 @@
 @extends('layout.app')
 @section('content')
 @section('style')
-<!-- Styling Here -->
-<style>
-    /* #notification {
-        position: absolute;
-        top: 5px;
-        left: 35%;
-    } */
-    .fee-font {
-        font-size: 11px;
-    }
-    .loader {
-        border: 2px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 2px solid transparent;
-        width: 15px;
-        height: 15px;
-        -webkit-animation: spin 1s linear infinite; /* Safari */
-        animation: spin 1s linear infinite;
-    }
-</style>
-<!-- Styling Here -->
+    <!-- Styling Here -->
+    <style>
+        /* #notification {
+                position: absolute;
+                top: 5px;
+                left: 35%;
+            } */
+        .fee-font {
+            font-size: 11px;
+        }
+
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 2px solid transparent;
+            width: 15px;
+            height: 15px;
+            -webkit-animation: spin 1s linear infinite;
+            /* Safari */
+            animation: spin 1s linear infinite;
+        }
+    </style>
+    <!-- Styling Here -->
 @endsection
 @section('breadcrumbs')
     <nav aria-label="breadcrumb">
@@ -29,8 +31,8 @@
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
             <li class="breadcrumb-item text-sm text-white" aria-current="page"><a href="{{ route('students') }}"
                     class="text-white">Students</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Edit</span></li>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Edit</span>
+            </li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Students</h6>
     </nav>
@@ -54,8 +56,9 @@
                         <input type="hidden" name="visitor" value="true">
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
-                                <button class="btn btn-success px-4" type="submit">
-                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
+                                <button class="btn btn-success px-4 text-white" id="save" type="submit">
+                                    <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none"
+                                        style="float: right"></div>
                                 </button>
                             </div>
                         </div>
@@ -76,59 +79,116 @@
             $('.toast .success-header').html('Success');
             $('.toast .toast-header').addClass('bg-success');
             $('.toast .toast-body').addClass('bg-success');
-            $('.toast .toast-body').html("{{session('success')}}");
+            $('.toast .toast-body').html("{{ session('success') }}");
             $('.toast').toast('show');
-        @elseif(session('error'))
+        @elseif (session('error'))
             $('.toast .success-header').html('Error');
             $('.toast .toast-header').addClass('bg-danger');
             $('.toast .toast-body').addClass('bg-danger');
-            $('.toast .toast-body').html("{{session('error')}}");
+            $('.toast .toast-body').html("{{ session('error') }}");
             $('.toast').toast('show');
         @endif
-        $(document).on('keyup', '#reg-no', function () {
+        $(document).on('change', '#applied_for', function () {
+            if ($(this).val() == 'written') {
+                $('#written-exam-type').removeClass('d-none');
+                $('#interview-type').addClass('d-none');
+            } else if ($(this).val() == 'interview') {
+                $('#written-exam-type').addClass('d-none');
+                $('#interview-type').removeClass('d-none');
+            } else {
+                $('#written-exam-type').addClass('d-none');
+                $('#interview-type').addClass('d-none');
+            }
+        });
+        $(document).on('keyup', '#reg-no', function() {
             $('#roll-no1').val($(this).val());
         });
-        $(document).on('change', '#css-pms-yr', function () {
+        $(document).on('change', '#css-pms-yr', function() {
             $('#reg-no2').val($(this).val());
+            let cssPmsYr = $(this).val();
+            $.ajax({
+                url: "{{ route('fetch_batch_nos') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    year_id: cssPmsYr
+                },
+                success: function(response) {
+                    $('#batch-no').html('');
+                    if (response.status == true) {
+                        var html =
+                            "<option value='' disabled selected>Select Batch No</option>";
+                        let batches = response.batch_nos.forEach(ele => {
+                            html += `
+                                <option value="` + ele.id + `">` + ele.batch + `</option>
+                            `;
+                        });
+                        $('#batch-no').html(html);
+                    }
+                }
+            });
         });
-        $(document).on('change', '#batch-no', function () {
-            $('#reg-no3').val($(this).val());
-        });
-        $(document).on('keyup change click', function () {
-            var regNo = $('#reg-no').val();
-            var cssPmsYr = $('#css-pms-yr').val();
-            var batchNo = $('#batch-no').val();
+        $(document).on('change', '#batch-no', function() {
+            let _this = $(this);
+            let year = $('#css-pms-yr').val();
+            $('#reg-no3').val(_this.val());
+            $.ajax({
+                type: "POST",
+                url: "{{ route('lastregistrationnumber') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    year_id: year,
+                    batch_id: _this.val(),
+                },
+                success: function(response) {
+                    $('#reg-no').val('');
+                    if (response.status == true) {
+                        $('#reg-no').val(response.registration_number);
+                        setTimeout(() => {
+                            $('#roll-no').val('');
+                            var cssPmsYr = $('#css-pms-yr').find('option:selected')
+                                .html();
+                            var batchNo = $('#batch-no').find('option:selected').html();
+                            if (cssPmsYr == null) {
+                                cssPmsYr = '';
+                            } else {
+                                cssPmsYr = cssPmsYr.replaceAll('_', '-');
+                            }
+                            if (batchNo == null) {
+                                batchNo = '';
+                            }
+                            if (response.registration_number != "") {
+                                $('#roll-no').val(response.registration_number + '-' +
+                                    cssPmsYr + '-' + batchNo);
+                            } else {
+                                $('#roll-no').val('' + '-' +
+                                    '' + '-' + '');
+                            }
+                        }, 500);
+                    }
+                }
+            });
 
-            if (regNo == null) {
-                regNo = '';
-            }
-            if (cssPmsYr == null) {
-                cssPmsYr = '';
-            } else {
-                cssPmsYr = cssPmsYr.replaceAll('_', '-');
-            }
-            if (batchNo == null) {
-                batchNo = '';
-            }
-           $('#roll-no').val(regNo+'-'+cssPmsYr+'-'+batchNo);
         });
-        $(document).on('click', '.fee_type', function () {
+        $(document).on('click', '.fee_type', function() {
             // $('#total-fee').val($(this).attr('data-fee'));
         });
-        $(document).on('change', '.discount', function () {
+        $(document).on('change', '.discount', function() {
             var feeType = $('.fee_type:checked').attr('data-fee');
             var discount = $(this).val();
-            var percentage = (discount/100)*feeType;
+            var percentage = (discount / 100) * feeType;
             var result = feeType - percentage;
             // $('#total-fee').val(result);
         });
-        $(document).on('keyup change', '#total-fee', function () {
+        $(document).on('keyup change', '#paying-fee', function() {
             let totalFee = $(this).val();
             $('#paid-fee').val(totalFee);
         });
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);
+            $('#save').removeClass('btn-success');
+            $('#save').addClass('btn-danger');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -143,7 +203,7 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.status == true) {
                             $('.toast .toast-header').removeClass('bg-danger');
                             $('.toast .toast-header').removeClass('bg-danger');
@@ -154,6 +214,8 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').addClass('btn-success');
+                            $('#save').removeClass('btn-danger');
                             $('.loader').addClass('d-none');
                         } else if (response.status == false) {
                             $('.toast .toast-header').removeClass('bg-success');
@@ -165,16 +227,20 @@
                             $('.toast .toast-body').html(response.msg);
                             $('.toast').toast('show');
                             $('#save').prop('disabled', false);
+                            $('#save').addClass('btn-success');
+                            $('#save').removeClass('btn-danger');
                             $('.loader').addClass('d-none');
                         } else {
                             $('#save').prop('disabled', false);
+                            $('#save').addClass('btn-success');
+                            $('#save').removeClass('btn-danger');
                             $('.loader').addClass('d-none');
                         }
                     }
                 });
             }, 1000);
         });
-        $(document).on('click', '#add-education', function () {
+        $(document).on('click', '#add-education', function() {
             if ($('.new-education-row').length >= 4) {
                 return false;
             } else {
@@ -183,7 +249,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="degree" class="form-control-label">Degree *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control degree" id="degree"
+                                <input @if (Auth::user()->hasRole('student'))  @endif class="form-control degree" id="degree"
                                     name="degree" type="text"
                                     value="@isset($student->user) {{ $student->degree }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Degree Name">
@@ -192,7 +258,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="major_subjects" class="form-control-label">Major Subjects *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control major_subjects"
+                                <input @if (Auth::user()->hasRole('student'))  @endif class="form-control major_subjects"
                                     id="major_subjects" name="major_subjects" type="text"
                                     value="@isset($student->user) {{ $student->major_subjects }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Major Subject">
@@ -201,7 +267,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="cgpa" class="form-control-label">CGPA/%age *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control cgpa" id="cgpa"
+                                <input @if (Auth::user()->hasRole('student'))  @endif class="form-control cgpa" id="cgpa"
                                     name="cgpa" min="0.1" max="100.00" step="0.1" type="number"
                                     value="@isset($student->user) {{ $student->cgpa }} @endisset" onfocus="focused(this)"
                                     onfocusout="defocused(this)" placeholder="Enter CGPA/%age">
@@ -210,7 +276,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="board_university" class="form-control-label">Board/University *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control board_university"
+                                <input @if (Auth::user()->hasRole('student'))  @endif class="form-control board_university"
                                     id="board_university" name="board_university" type="text"
                                     value="@isset($student->user) {{ $student->board_university }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Board/University">
@@ -219,7 +285,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="distinction" class="form-control-label">Profession *</label>
-                                <input @if (Auth::user()->hasRole('student')) @endif class="form-control distinction"
+                                <input @if (Auth::user()->hasRole('student'))  @endif class="form-control distinction"
                                     id="distinction" name="distinction" type="text"
                                     value="@isset($student->user) {{ $student->distinction }} @endisset"
                                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Enter Profesion">
@@ -235,7 +301,7 @@
             `);
             }
         });
-        $(document).on('click', '.remove-education-row', function () {
+        $(document).on('click', '.remove-education-row', function() {
             $(this).closest('.new-education-row').remove();
         });
     });

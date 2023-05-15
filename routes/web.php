@@ -102,4 +102,13 @@ Route::group(['middleware' => ['auth']], function() {
     // Expenses Routes
     require __DIR__.'/auth/expense.php';
 
+    // Registered Number Routes
+    require __DIR__.'/auth/registered_numbers.php';
+
+    // Registered Batches Routes
+    require __DIR__.'/auth/registered_batches.php';
+
+    // Registered Years Routes
+    require __DIR__.'/auth/registered_years.php';
+
 });

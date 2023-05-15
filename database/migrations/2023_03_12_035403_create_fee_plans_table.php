@@ -22,13 +22,13 @@ class CreateFeePlansTable extends Migration
             $table->float('discount', 8,2)->nullable(0.00);
             $table->string('discount_reason')->nullable();
             $table->bigInteger('total_fee')->default(0);
-            $table->enum('payment_transfer_mode', ['cheque', 'bank', 'easypaisa'])->nullable();
             $table->date('due_date')->nullable();
             $table->date('freeze')->nullable();
             $table->date('leave')->nullable();
             $table->tinyInteger('fee_refund')->nullable();
             $table->tinyInteger('fee_notification')->nullable();
             $table->tinyInteger('challan_generated')->nullable();
+            $table->string('payment_transfer_mode')->nullable();
             $table->timestamps();
         });
     }
