@@ -93,10 +93,6 @@
                         <option value="{{$batch->id}}" @isset($batch) @isset($student) @if($batch->id == $student->batch_no) selected @endif @endisset @endisset>{{$batch->batch}}</option>
                     @endforeach
                 </select>
-                {{-- <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch-no" id="batch-no"
-                    name="batch_no" type="text"
-                    value="@isset($student->user){{$student->batch_no}}@endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Batch No"> --}}
             </div>
         </div>
         <div class="col-md-3">
