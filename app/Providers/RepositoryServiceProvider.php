@@ -2,27 +2,29 @@
 
 namespace App\Providers;
 
-use App\Interfaces\AttendanceRepositoryInterface;
-use App\Interfaces\DownloadCenterRepositoryInterface;
-use App\Interfaces\ExaminationRepositoryInterface;
-use App\Interfaces\TeacherRepositoryInterface;
-use App\Interfaces\LectureRepositoryInterface;
-use App\Interfaces\NoticeBoardRepositoryInterface;
-use App\Interfaces\StudentRepositoryInterface;
-use App\Interfaces\SuggestionsRepositoryInterface;
-use App\Interfaces\TeacherReviewRepositoryInterface;
-use App\Interfaces\ZoomClassesRepositoryInterface;
-use App\Repositories\AttendanceRepository;
-use App\Repositories\DownloadCenterRepository;
-use App\Repositories\ExaminationRepository;
-use App\Repositories\TeacherRepository;
 use App\Repositories\LectureRepository;
-use App\Repositories\NoticeBoardRepository;
 use App\Repositories\StudentRepository;
-use App\Repositories\SuggestionsRepository;
-use App\Repositories\TeacherReviewRepository;
-use App\Repositories\ZoomClassesRepository;
+use App\Repositories\TeacherRepository;
+use App\Repositories\VisitorRepository;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\AttendanceRepository;
+use App\Repositories\ExaminationRepository;
+use App\Repositories\NoticeBoardRepository;
+use App\Repositories\SuggestionsRepository;
+use App\Repositories\ZoomClassesRepository;
+use App\Repositories\TeacherReviewRepository;
+use App\Interfaces\LectureRepositoryInterface;
+use App\Interfaces\StudentRepositoryInterface;
+use App\Interfaces\TeacherRepositoryInterface;
+use App\Interfaces\VisitorRepositoryInterface;
+use App\Repositories\DownloadCenterRepository;
+use App\Interfaces\AttendanceRepositoryInterface;
+use App\Interfaces\ExaminationRepositoryInterface;
+use App\Interfaces\NoticeBoardRepositoryInterface;
+use App\Interfaces\SuggestionsRepositoryInterface;
+use App\Interfaces\ZoomClassesRepositoryInterface;
+use App\Interfaces\TeacherReviewRepositoryInterface;
+use App\Interfaces\DownloadCenterRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -43,6 +45,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(SuggestionsRepositoryInterface::class, SuggestionsRepository::class);
         $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class); 
         $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class); 
+        $this->app->bind(VisitorRepositoryInterface::class, VisitorRepository::class); 
     }
 
     /**

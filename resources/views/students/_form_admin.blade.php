@@ -64,18 +64,9 @@
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
-        {{-- <div class="col-md-3">
-            <div class="form-group mb-3">
-                <label for="batch" class="form-control-label">Batch *</label>
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch" id="batch"
-                    name="batch" type="text"
-                    value="@isset($student->user) {{ $student->batch }} @endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Batch">
-            </div>
-        </div> --}}
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="css_pms_yr" class="form-control-label">CSS/PMS Year *</label>
+                <label for="css-pms-yr" class="form-control-label">CSS/PMS Year *</label>
                 <select @if (Auth::user()->hasRole('student')) readonly @endif class="form-control css-pms-yr" name="year"
                     id="css-pms-yr">
                     <option value="" selected>Select CSS/PMS Year</option>
@@ -87,31 +78,33 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="batch_no" class="form-control-label">Batch No *</label>
-                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control batch_no" name="batch_no"
-                    id="batch-no">
-                    @php
+                <label for="batch-no" class="form-control-label">Batch No *</label>
+                @php
+                    if (isset($student)) {
                         $batches = \App\Models\RegisteredBatch::where('registered_year_id', $student->year)->get();
-                    @endphp
-                    <option value="" disabled selected>Select Batch No</option>
+                    } else {
+                        $batches = \App\Models\RegisteredBatch::get();
+                    }
+                @endphp
+                <select @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch-no" name="batch_no"
+                    id="batch-no">
+                    <option value="" selected>Select Batch No</option>
                     @foreach ($batches as $batch)
-                        <option value="{{$batch->id}}" @isset($student) @if($student->batch_no == $batch->id) selected @endif @endisset>{{$batch->batch}}</option>
+                        <option value="{{$batch->id}}" @isset($batch) @isset($student) @if($batch->id == $student->batch_no) selected @endif @endisset @endisset>{{$batch->batch}}</option>
                     @endforeach
-                    {{-- <option value="80" @isset($student) @if($student->batch_no == '80') selected @endisset @endisset>80</option>
-                    <option value="81" @isset($student) @if($student->batch_no == '81') selected @endisset @endisset>81</option>
-                    <option value="82" @isset($student) @if($student->batch_no == '82') selected @endisset @endisset>82</option>
-                    <option value="83" @isset($student) @if($student->batch_no == '83') selected @endisset @endisset>83</option>
-                    <option value="84" @isset($student) @if($student->batch_no == '84') selected @endisset @endisset>84</option>
-                    <option value="85" @isset($student) @if($student->batch_no == '85') selected @endisset @endisset>85</option> --}}
                 </select>
+                {{-- <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch-no" id="batch-no"
+                    name="batch_no" type="text"
+                    value="@isset($student->user){{$student->batch_no}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Batch No"> --}}
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="reg_no" class="form-control-label">Reg No *</label>
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control reg_no" id="reg-no"
+                <label for="reg-no" class="form-control-label">Reg No *</label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control reg-no" id="reg-no"
                     name="reg_no" type="text"
-                    value="@isset($student->user){{$student->reg_no }}@endisset"
+                    value="@isset($student->user){{$student->reg_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Registration No">
             </div>
         </div>
@@ -121,9 +114,9 @@
                 <input type="hidden" id="reg-no1" value="">
                 <input type="hidden" id="reg-no2" value="">
                 <input type="hidden" id="reg-no3" value="">
-                <input readonly class="form-control roll_no" id="roll-no"
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control roll_no" readonly id="roll-no"
                     name="roll_no" type="text"
-                    value="@isset($student->user){{$student->roll_no}}@endisset"
+                    value="@isset($student){{$student->roll_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -150,16 +143,16 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-3 @if(is_null($student->written_exam_type)) d-none @endif" id="written-exam-type">
+        <div class="col-md-3 @isset($student->user) @if(is_null($student->written_exam_type)) d-none @endif @else d-none @endisset" id="written-exam-type">
             <div class="form-group mb-3">
                 <label for="applied_for" class="form-control-label">Written Exam Type *</label>
-                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="{{$student->written_exam_type}}">
+                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="@isset($student->user){{$student->written_exam_type}}@endisset">
             </div>
         </div>
-        <div class="col-md-3 @if(is_null($student->interview_type)) d-none @endif" id="interview-type">
+        <div class="col-md-3 @isset($student->user) @if(is_null($student->interview_type)) d-none @endif @else d-none @endisset" id="interview-type">
             <div class="form-group mb-3">
                 <label for="interview-type" class="form-control-label">Interview Type *</label>
-                <input type="text" name="interview_type" class="form-control interview_type" placeholder="Class, Mock type etc" value="{{$student->interview_type}}">
+                <input type="text" name="interview_type" class="form-control interview_type" placeholder="Class, Mock type etc" value="@isset($student->user){{$student->interview_type}}@endisset">
             </div>
         </div>
         <div class="col-md-3">
@@ -242,7 +235,6 @@
                     <option value="first" @isset($student) @if($student->installment == 'first') selected @endisset @endisset>1st</option>
                     <option value="second" @isset($student) @if($student->installment == 'second') selected @endisset @endisset>2nd</option>
                     <option value="third" @isset($student) @if($student->installment == 'third') selected @endisset @endisset>3rd</option>
-                    <option value="fourth" @isset($student) @if($student->installment == 'fourth') selected @endisset @endisset>4th</option>
                 </select>
             </div>
         </div>
@@ -376,9 +368,9 @@
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control payment-transfer-mode" name="payment_transfer_mode"
                     id="payment-transfer-mode" required>
                     <option value="" selected>Select Payment Mode</option>
-                    <option value="cheque" @if($student->payment_transfer_mode == 'cheque') selected @endif>Cheque</option>
-                    <option value="bank" @if($student->payment_transfer_mode == 'bank') selected @endif>Bank</option>
-                    <option value="easypaisa" @if($student->payment_transfer_mode == 'easypaisa') selected @endif>Easy Paisa</option>
+                    <option value="cheque" @isset($student->user) @if($student->payment_transfer_mode == 'cheque') selected @endif @endisset>Cheque</option>
+                    <option value="bank" @isset($student->user) @if($student->payment_transfer_mode == 'bank') selected @endif @endisset>Bank</option>
+                    <option value="easypaisa" @isset($student->user) @if($student->payment_transfer_mode == 'easypaisa') selected @endif @endisset>Easy Paisa</option>
                 </select>
             </div>
         </div>

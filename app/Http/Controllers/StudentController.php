@@ -48,7 +48,8 @@ class StudentController extends Controller
     public function create()
     {
         //
-        return view('students.create');
+        $registeredYears = RegisteredYear::get();
+        return view('students.create', compact('registeredYears'));
     }
 
     /**

@@ -238,7 +238,8 @@ class StudentRepository implements StudentRepositoryInterface
                     'leave' => $request->leave,
                     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
                     'notification_sent' => isset($request->notification_sent) ? '1' : '0',
-                    'challan_generated' => $request->challan_generated,
+                    'challan_generated' => !empty($request->challan_generated) ? $request->challan_generated : null,
+                    'challan_number' => !empty($request->challan_number) ? $request->challan_number : null,
                     'fee_submit_date' => $request->fee_submit_date,
                 ]);
                 $feePlan = FeePlan::create([
@@ -256,7 +257,7 @@ class StudentRepository implements StudentRepositoryInterface
                     'leave' => $request->leave,
                     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
                     'fee_notification' => isset($request->notification_sent) ? '1' : '0',
-                    'challan_generated' => $request->challan_generated,
+                    'challan_generated' => !empty($request->challan_generated) ? $request->challan_generated : null,
                     'payment_transfer_mode' => $request->payment_transfer_mode
                 ]);
             } else if (Auth::user()->hasRole('student')) {
@@ -284,22 +285,17 @@ class StudentRepository implements StudentRepositoryInterface
                     'contact_res' => $request->contact_res,
                     'cell_no' => $request->cell_no,
                     'year' => $request->year,
-                    'class_type' => $request->class_type,
-                    // 'fee_type' => $request->fee_type,
-                    // 'mock_exam_evaluation' => $request->mock_exam_evaluation,
-                    // 'installment' => $request->installment,
-                    // 'discount' => $request->discount,
-                    // 'total_fee' => $request->total_fee,
-                    // 'due_date' => $request->due_date,
-                    // 'freeze' => $request->freeze,
-                    // 'leave' => $request->leave,
-                    // 'fee_refund' => $request->fee_refund ? '1' : '0',
-                    // 'notification_sent' => $request->notification_sent ? '1' : '0',
-                    // 'challan_generated' => $request->challan_generated,
-                    // 'fee_submit_date' => $request->fee_submit_date
+                    'class_type' => $request->class_type
                 ]);
             }
-            $userRegistrationNumber = RegisteredNumber::create([
+            $userRegistrationNumber = RegisteredNumber::where('registered_batch_id', '=', $request->batch_no)->where('registration_number', '=', $request->reg_no)->first();
+            if (isset($userRegistrationNumber)) {
+                return response()->json([
+                    'status' => false,
+                    'msg' => 'Batch and Registration number already exists',
+                ]);
+            }
+            $userRegistrationNumberStore = RegisteredNumber::create([
                 'user_id' => $user->id,
                 'registered_batch_id' => $request->batch_no,
                 'registration_number' => $request->reg_no

@@ -6,10 +6,8 @@ use App\Interfaces\ZoomClassesRepositoryInterface;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
-use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -153,7 +151,7 @@ class ZoomClassesRepository implements ZoomClassesRepositoryInterface
 
     public function create()
     {
-        
+        //
     }
 
     public function show($id) 

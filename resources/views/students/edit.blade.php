@@ -126,48 +126,6 @@
                 }
             });
         });
-        // $(document).on('change', '#batch-no', function() {
-        //     let _this = $(this);
-        //     let year = $('#css-pms-yr').val();
-        //     $('#reg-no3').val(_this.val());
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "{{ route('lastregistrationnumber') }}",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             year_id: year,
-        //             batch_id: _this.val(),
-        //         },
-        //         success: function(response) {
-        //             $('#reg-no').val('');
-        //             if (response.status == true) {
-        //                 $('#reg-no').val(response.registration_number);
-        //                 setTimeout(() => {
-        //                     $('#roll-no').val('');
-        //                     var cssPmsYr = $('#css-pms-yr').find('option:selected')
-        //                         .html();
-        //                     var batchNo = $('#batch-no').find('option:selected').html();
-        //                     if (cssPmsYr == null) {
-        //                         cssPmsYr = '';
-        //                     } else {
-        //                         cssPmsYr = cssPmsYr.replaceAll('_', '-');
-        //                     }
-        //                     if (batchNo == null) {
-        //                         batchNo = '';
-        //                     }
-        //                     if (response.registration_number != "") {
-        //                         $('#roll-no').val(response.registration_number + '-' +
-        //                             cssPmsYr + '-' + batchNo);
-        //                     } else {
-        //                         $('#roll-no').val('' + '-' +
-        //                             '' + '-' + '');
-        //                     }
-        //                 }, 1000);
-        //             }
-        //         }
-        //     });
-
-        // });
         $(document).on('click', '.fee_type', function () {
             $('#total-fee').val($(this).attr('data-fee'));
             var feeType = $('.fee_type:checked').attr('data-fee');

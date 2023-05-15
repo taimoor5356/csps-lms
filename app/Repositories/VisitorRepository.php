@@ -1,36 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Visitor;
-use Illuminate\Http\Request;
+use App\Models\RegisteredYear;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\Controller;
-use App\Interfaces\VisitorRepositoryInterface;
-use App\Models\RegisteredYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Interfaces\VisitorRepositoryInterface;
 
-class VisitorController extends Controller
+class VisitorRepository implements VisitorRepositoryInterface 
 {
-    private VisitorRepositoryInterface $visitorRepository;
-
-    public function __construct(VisitorRepositoryInterface $visitorRepository)
-    {
-        $this->visitorRepository = $visitorRepository;
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     // showTableData for index() and trashed()
     public function showTableData($data, $trashed)
     {
@@ -140,117 +126,150 @@ class VisitorController extends Controller
             ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'cell_no', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action', 'applied_for', 'class_type'])
             ->make(true);
     }
-    // showTableData for Index and Trashed
 
-    public function index(Request $request)
+    public function index($request) 
     {
-        //
-        if ($request->ajax()) {
-            return $this->visitorRepository->index($request);
+        try {
+            $visitorsDetail = Visitor::with('user')->get();
+            if (Auth::user()->hasRole('visitor')) {
+                $visitorsDetail = Visitor::with('user')->where('user_id', Auth::user()->id)->get();
+            }
+            return $this->showTableData($visitorsDetail, $trashed = null);
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->back()->withError('Something went wrong');
         }
-        return view('visitors.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
-        return view('visitors.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store($request) 
+    {
+        try {
+            DB::beginTransaction();
+            if ( $request->class_type == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
+                return response()->json(['status' => false, 'msg' => 'All fields required']);
+            }
+            if (!preg_match('/^[A-Za-z ]+$/', $request->name)) {
+                return response()->json(['status' => false, 'msg' => 'Name cannot be in number format']);
+            }
+            if (ctype_alpha($request->cell_no)) {
+                return response()->json(['status' => false, 'msg' => 'Contact number cannot be in alphabet format']);
+            }
+            if (!preg_match('/^[A-Za-z ]+$/', $request->degree)) {
+                return response()->json(['status' => false, 'msg' => 'Qualification cannot be in number format']);
+            }
+            if (strlen($request->cell_no) > 9 || strlen($request->cell_no) < 9) {
+                return response()->json(['status' => false, 'msg' => 'Only nine digits contact number is allowed']);
+            }
+            $defaultPassword = '876543210';
+            $user = User::create([
+                'name' => $request->name,
+                'email' => strtolower(substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com'),
+                'gender' => $request->gender,
+                'password' => Hash::make($defaultPassword),
+                'role_id' => 5,
+                'registration_date' => Carbon::now(),
+                'approved_status' => 0,
+                // 'photo' => $file
+            ]);
+            $visitor = Visitor::create([
+                'user_id' => $user->id,
+                'class_type' => $request->class_type,
+                'applied_for' => $request->applied_for,
+                'domicile' => $request->domicile,
+                'degree' => $request->degree,
+                'cell_no' => '03'.$request->cell_no
+            ]);
+            DB::commit();
+            return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function show($id) 
     {
         //
-        return $this->visitorRepository->store($request->all());
+        try {
+            $student = Visitor::with('user.student')->where('id', $id)->first();
+            if (isset($student)) {
+                return response()->json(['status' => true, 'visitor' => $student, 'msg' => 'Successfull']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'msg' => 'Unexpected Error Occured']);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-        return $this->visitorRepository->show($id);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        //
-        return $this->visitorRepository->edit($id);
+        try {
+            $student = Visitor::with('user')->where('id', $id)->first();
+            if (isset($student)) {
+                if ($student->user->approved_status == 1) {
+                    return redirect()->back()->with('error', 'User already approved Go check in Student detail page');
+                }
+                $user_id = $student->user_id;
+                $registeredYears = RegisteredYear::where('status', '1')->get();
+                return view('visitors.edit', compact('student', 'id', 'user_id', 'registeredYears'));
+            } else {
+                return redirect()->back()->with('error', 'User doesnot exists');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function update($request, $id) 
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy($id) 
     {
-        //
+        try {
+            $student = Student::with('user')->where('id', $id)->first();
+            if (isset($student)) {
+                if (isset($student->user)) {
+                    $student->user->delete();
+                    $student->delete();
+                    return redirect()->back()->with('success', 'Deleted Successfully');
+                }
+            } else {
+                return redirect()->back()->with('error', 'User doesnot exists');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function trashed($id)
+    public function trashed($request)
     {
-        //
+        $trashedLectures = Student::with(['user' => fn($q) => $q->onlyTrashed()])->onlyTrashed()->get();
+        try {
+            return $this->showTableData($trashedLectures, $trashed = 'trashed');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function restore($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function permanentDelete($id)
-    {
-        //
+        try {
+            $trashedStudent = Student::with(['user' => fn($q) => $q->onlyTrashed()])->where('id', $id)->onlyTrashed()->first();
+            if (isset($trashedStudent)) {
+                $trashedStudent->user->restore();
+                $trashedStudent->restore();
+                return redirect()->back()->with('success', 'Student data Restored');
+            } else {
+                return redirect()->back()->with('error', 'Something went wrong');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 }

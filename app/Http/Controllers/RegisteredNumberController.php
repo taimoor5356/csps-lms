@@ -91,7 +91,7 @@ class RegisteredNumberController extends Controller
 
     public function fetchBatchNumbers(Request $request)
     {
-        $batchNos = RegisteredBatch::where('registered_year_id', $request->year_id)->orderBy('id', 'DESC')->limit(10)->get();
+        $batchNos = RegisteredBatch::where('registered_year_id', $request->year_id)->orderBy('id', 'DESC')->limit(15)->get();
         return response()->json([
             'status' => true,
             'batch_nos' => $batchNos
@@ -102,15 +102,14 @@ class RegisteredNumberController extends Controller
     {
         $registrationNumber = RegisteredNumber::where('registered_batch_id', $request->batch_id)->get()->last();
         if (isset($registrationNumber)) {
-            return response()->json([
-                'status' => true,
-                'registration_number' => ($registrationNumber->registration_number) + (1)
-            ]);
+            $nextNumber = $registrationNumber->registration_number + 1;
         } else {
-            return response()->json([
-                'status' => true,
-                'registration_number' => 1
-            ]);
+            $nextNumber = 1;
         }
+        $registrationNumberWithZeros = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        return response()->json([
+            'status' => true,
+            'registration_number' => $registrationNumberWithZeros
+        ]);
     }
 }

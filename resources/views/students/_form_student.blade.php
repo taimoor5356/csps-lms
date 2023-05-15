@@ -80,7 +80,7 @@
                     id="css-pms-yr">
                     <option value="" selected>Select CSS/PMS Year</option>
                     @foreach ($registeredYears as $year)
-                        <option value="{{$year->id}}" @isset($student) @if($student->batch_no == $year->registered_year) selected @endisset @endisset>{{$year->registered_year}}</option>
+                        <option value="{{$year->id}}" @isset($student) @if($student->year == $year->id) selected @endisset @endisset>{{$year->registered_year}}</option>
                     @endforeach
                 </select>
             </div>
@@ -88,9 +88,15 @@
         <div class="col-md-3">
             <div class="form-group mb-3">
                 <label for="batch-no" class="form-control-label">Batch No *</label>
+                @php
+                    $batches = \App\Models\RegisteredBatch::where('registered_year_id', $student->year)->get();
+                @endphp
                 <select @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch-no" name="batch_no"
                     id="batch-no">
                     <option value="" selected>Select Batch No</option>
+                    @foreach ($batches as $batch)
+                        <option value="{{$batch->id}}" @isset($batch) @if($batch->id == $student->batch_no) selected @endif @endisset>{{$batch->batch}}</option>
+                    @endforeach
                 </select>
                 {{-- <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control batch-no" id="batch-no"
                     name="batch_no" type="text"
@@ -115,7 +121,7 @@
                 <input type="hidden" id="reg-no3" value="">
                 <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control roll_no" readonly id="roll-no"
                     name="roll_no" type="text"
-                    value=""
+                    value="@isset($student){{$student->roll_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
