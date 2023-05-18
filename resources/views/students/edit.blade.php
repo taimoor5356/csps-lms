@@ -71,6 +71,7 @@
 @endsection
 @section('page_js')
 <!-- Scripting Here -->
+@include('layout.roll_no')
 <script>
     $(document).ready(function() {
         @if (session('success'))
@@ -86,61 +87,6 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        $(document).on('change', '#applied_for', function () {
-            if ($(this).val() == 'written') {
-                $('#written-exam-type').removeClass('d-none');
-                $('#interview-type').addClass('d-none');
-            } else if ($(this).val() == 'interview') {
-                $('#written-exam-type').addClass('d-none');
-                $('#interview-type').removeClass('d-none');
-            } else {
-                $('#written-exam-type').addClass('d-none');
-                $('#interview-type').addClass('d-none');
-            }
-        });
-        $(document).on('keyup', '#reg-no', function() {
-            $('#roll-no1').val($(this).val());
-        });
-        $(document).on('change', '#css-pms-yr', function() {
-            $('#reg-no2').val($(this).val());
-            let cssPmsYr = $(this).val();
-            $.ajax({
-                url: "{{ route('fetch_batch_nos') }}",
-                type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    year_id: cssPmsYr
-                },
-                success: function(response) {
-                    $('#batch-no').html('');
-                    if (response.status == true) {
-                        var html =
-                            "<option value='' disabled selected>Select Batch No</option>";
-                        let batches = response.batch_nos.forEach(ele => {
-                            html += `
-                                <option value="` + ele.id + `">` + ele.batch + `</option>
-                            `;
-                        });
-                        $('#batch-no').html(html);
-                    }
-                }
-            });
-        });
-        $(document).on('click', '.fee_type', function () {
-            $('#total-fee').val($(this).attr('data-fee'));
-            var feeType = $('.fee_type:checked').attr('data-fee');
-            var discount = $('.discount').val();
-            var percentage = (discount/100)*feeType;
-            var result = feeType - percentage;
-            $('#total-fee').val(result);
-        });
-        $(document).on('change', '.discount', function () {
-            var feeType = $('.fee_type:checked').attr('data-fee');
-            var discount = $(this).val();
-            var percentage = (discount/100)*feeType;
-            var result = feeType - percentage;
-            $('#total-fee').val(result);
-        });
         $(document).on('submit', '#admin-form, #student-form', function(e) {
             e.preventDefault();
             $('#save').prop('disabled', true);

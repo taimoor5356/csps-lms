@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\RegisteredBatch;
-use App\Models\RegisteredNumber;
 use Illuminate\Http\Request;
 
-class RegisteredNumberController extends Controller
+class RegisteredBatchContoller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -48,10 +46,6 @@ class RegisteredNumberController extends Controller
     public function show($id)
     {
         //
-        $registeredNumber = RegisteredNumber::where('registered_batch_id', $id)->get()->last();
-        if (isset($registeredNumber)) {
-            dd($registeredNumber->registration_number);
-        }
     }
 
     /**
@@ -86,29 +80,5 @@ class RegisteredNumberController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function fetchBatchNumbers(Request $request)
-    {
-        $batchNos = RegisteredBatch::where('registered_year_id', $request->year_id)->orderBy('id', 'DESC')->limit(15)->get();
-        return response()->json([
-            'status' => true,
-            'batch_nos' => $batchNos
-        ]);
-    }
-
-    public function fetchLastRegistrationNumber(Request $request)
-    {
-        $registrationNumber = RegisteredNumber::where('registered_batch_id', $request->batch_id)->get()->last();
-        if (isset($registrationNumber)) {
-            $nextNumber = $registrationNumber->registration_number + 1;
-        } else {
-            $nextNumber = 1;
-        }
-        $registrationNumberWithZeros = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-        return response()->json([
-            'status' => true,
-            'registration_number' => $registrationNumberWithZeros
-        ]);
     }
 }
