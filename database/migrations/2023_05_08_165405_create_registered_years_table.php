@@ -16,7 +16,7 @@ class CreateRegisteredYearsTable extends Migration
         Schema::create('registered_years', function (Blueprint $table) {
             $table->id();
             $table->string('registered_year');
-            $table->enum('status', ['0', '1'])->default(0);
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

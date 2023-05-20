@@ -22,7 +22,7 @@ class CreateInterviewsTable extends Migration
             $table->string('reg_no')->nullable();
             $table->string('written_result_sr_no')->nullable();
             $table->string('roll_no')->nullable();
-            $table->enum('domicile', ['punjab', 'kpk', 'sindh', 'baloch', 'ict', 'ajk', 'gb'])->nullable();
+            $table->string('domicile')->nullable();
             $table->string('written_exam_preparation_from_csps')->default('no');
             $table->string('mock_interview_date')->nullable();
             $table->string('mock_interview_time')->nullable();

@@ -2,9 +2,6 @@
     <table class="data-table table align-items-center mb-0">
         <thead>
             <tr>
-                {{-- <th class="text-uppercase text-dark text-xs font-weight-bolder">
-                    Show/Hide
-                </th> --}}
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Photo
                 </th>

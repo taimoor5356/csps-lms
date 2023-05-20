@@ -73,103 +73,9 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        // $(document).on('change', '#applied_for', function () {
-        //     if ($(this).val() == 'written') {
-        //         $('#written-exam-type').removeClass('d-none');
-        //         $('#interview-type').addClass('d-none');
-        //     } else if ($(this).val() == 'interview') {
-        //         $('#written-exam-type').addClass('d-none');
-        //         $('#interview-type').removeClass('d-none');
-        //     } else {
-        //         $('#written-exam-type').addClass('d-none');
-        //         $('#interview-type').addClass('d-none');
-        //     }
-        // });
-        // $(document).on('keyup', '#reg-no', function() {
-        //     $('#roll-no1').val($(this).val());
-        // });
-        // $(document).on('change', '#css-pms-yr', function() {
-        //     $('#reg-no2').val($(this).val());
-        //     let cssPmsYr = $(this).val();
-        //     $.ajax({
-        //         url: "{{ route('fetch_batch_nos') }}",
-        //         type: "POST",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             year_id: cssPmsYr
-        //         },
-        //         success: function(response) {
-        //             $('#batch-no').html('');
-        //             if (response.status == true) {
-        //                 var html =
-        //                     "<option value='' disabled selected>Select Batch No</option>";
-        //                 let batches = response.batch_nos.forEach(ele => {
-        //                     html += `
-        //                         <option value="` + ele.id + `">` + ele.batch + `</option>
-        //                     `;
-        //                 });
-        //                 $('#batch-no').html(html);
-        //             }
-        //         }
-        //     });
-        // });
-        // $(document).on('change', '#batch-no', function() {
-        //     let _this = $(this);
-        //     let year = $('#css-pms-yr').val();
-        //     $('#reg-no3').val(_this.val());
-        //     $.ajax({
-        //         type: "POST",
-        //         url: "{{ route('lastregistrationnumber') }}",
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             year_id: year,
-        //             batch_id: _this.val(),
-        //         },
-        //         success: function(response) {
-        //             $('#reg-no').val('');
-        //             if (response.status == true) {
-        //                 $('#reg-no').val(response.registration_number);
-        //                 setTimeout(() => {
-        //                     $('#roll-no').val('');
-        //                     var cssPmsYr = $('#css-pms-yr').find('option:selected')
-        //                         .html();
-        //                     var batchNo = $('#batch-no').find('option:selected').html();
-        //                     if (cssPmsYr == null) {
-        //                         cssPmsYr = '';
-        //                     } else {
-        //                         cssPmsYr = cssPmsYr.replaceAll('_', '-');
-        //                     }
-        //                     if (batchNo == null) {
-        //                         batchNo = '';
-        //                     }
-        //                     if (response.registration_number != "") {
-        //                         $('#roll-no').val(response.registration_number + '-' +
-        //                             cssPmsYr + '-' + batchNo);
-        //                     } else {
-        //                         $('#roll-no').val('' + '-' +
-        //                             '' + '-' + '');
-        //                     }
-        //                 }, 500);
-        //             }
-        //         }
-        //     });
-
-        // });
-        // $(document).on('click', '.fee_type', function () {
-        //     $('#total-fee').val($(this).attr('data-fee'));
-        // });
-        // $(document).on('change', '.discount', function () {
-        //     var feeType = $('.fee_type:checked').attr('data-fee');
-        //     var discount = $(this).val();
-        //     var percentage = (discount/100)*feeType;
-        //     var result = feeType - percentage;
-        //     $('#total-fee').val(result);
-        // });
         $(document).on('submit', '#student-form', function(e) {
             e.preventDefault();
-            $('#save').prop('disabled', true);
-            $('#save').removeClass('btn-success');
-            $('#save').addClass('btn-danger');
+            button(true, 'btn-danger', 'btn-success');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -186,35 +92,16 @@
                     processData: false,
                     success: function (response) {
                         if (response.status == true) {
-                            $('.toast .toast-header').removeClass('bg-danger');
-                            $('.toast .toast-header').removeClass('bg-danger');
-                            $('.toast .toast-body').removeClass('bg-danger');
-                            $('.toast .success-header').html('Success');
-                            $('.toast .toast-header').addClass('bg-success');
-                            $('.toast .toast-body').addClass('bg-success');
-                            $('.toast .toast-body').html(response.msg);
-                            $('.toast').toast('show');
-                            $('#save').prop('disabled', false);
-                            $('#save').removeClass('btn-danger');
-                            $('#save').addClass('btn-success');
+                            alertMessage(response.msg, 'bg-danger', 'Success', 'bg-success');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         } else if (response.status == false) {
-                            $('.toast .toast-header').removeClass('bg-success');
-                            $('.toast .toast-header').removeClass('bg-success');
-                            $('.toast .toast-body').removeClass('bg-success');
-                            $('.toast .success-header').html('Error');
-                            $('.toast .toast-header').addClass('bg-danger');
-                            $('.toast .toast-body').addClass('bg-danger');
-                            $('.toast .toast-body').html(response.msg);
-                            $('.toast').toast('show');
-                            $('#save').prop('disabled', false);
-                            $('#save').removeClass('btn-danger');
-                            $('#save').addClass('btn-sucess');
+                            alertMessage(response.msg, 'bg-danger', 'Error', 'bg-danger');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         } else {
-                            $('#save').prop('disabled', false);
-                            $('#save').removeClass('btn-danger');
-                            $('#save').addClass('btn-sucess');
+                            alertMessage(response.msg, 'bg-danger', 'Error', 'bg-danger');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         }
                     }
@@ -282,10 +169,22 @@
             `);
             }
         });
-        // $(document).on('click', '.remove-education-row', function () {
-        //     $(this).closest('.new-education-row').remove();
-        // });
     });
+    function alertMessage(message, removeclass, header, addclass) {
+        $('.toast .toast-header').removeClass(removeclass);
+        $('.toast .toast-header').removeClass(removeclass);
+        $('.toast .toast-body').removeClass(removeclass);
+        $('.toast .success-header').html(header);
+        $('.toast .toast-header').addClass(addclass);
+        $('.toast .toast-body').addClass(addclass);
+        $('.toast .toast-body').html(message);
+        $('.toast').toast('show');
+    }
+    function button(status, addclass, removeclass) {
+        $('#save').prop('disabled', status);
+        $('#save').removeClass(removeclass);
+        $('#save').addClass(addclass);
+    }
 </script>
 <!-- Scripting Here -->
 @endsection

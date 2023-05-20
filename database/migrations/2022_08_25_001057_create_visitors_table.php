@@ -16,7 +16,7 @@ class CreateVisitorsTable extends Migration
         Schema::create('visitors', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->increments()->unique()->nullable();
-            $table->enum('class_type', ['campus', 'online'])->comment('Campus, Online')->nullable();
+            $table->string('class_type')->comment('Campus, Online')->nullable();
             // $table->string('batch_no')->nullable();
             // $table->string('reg_no')->unique()->nullable();
             $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');

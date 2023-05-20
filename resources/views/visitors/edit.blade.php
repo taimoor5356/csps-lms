@@ -91,9 +91,7 @@
         @endif
         $(document).on('submit', '#visitor-form', function(e) {
             e.preventDefault();
-            $('#save').prop('disabled', true);
-            $('#save').removeClass('btn-success');
-            $('#save').addClass('btn-danger');
+            button(true, 'btn-danger', 'btn-success');
             $('.loader').removeClass('d-none');
             var formData = new FormData(this);
             $.ajaxSetup({
@@ -110,35 +108,16 @@
                     processData: false,
                     success: function(response) {
                         if (response.status == true) {
-                            $('.toast .toast-header').removeClass('bg-danger');
-                            $('.toast .toast-header').removeClass('bg-danger');
-                            $('.toast .toast-body').removeClass('bg-danger');
-                            $('.toast .success-header').html('Success');
-                            $('.toast .toast-header').addClass('bg-success');
-                            $('.toast .toast-body').addClass('bg-success');
-                            $('.toast .toast-body').html(response.msg);
-                            $('.toast').toast('show');
-                            $('#save').prop('disabled', false);
-                            $('#save').addClass('btn-success');
-                            $('#save').removeClass('btn-danger');
+                            alertMessage(response.msg, 'bg-danger', 'Success', 'bg-success');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         } else if (response.status == false) {
-                            $('.toast .toast-header').removeClass('bg-success');
-                            $('.toast .toast-header').removeClass('bg-success');
-                            $('.toast .toast-body').removeClass('bg-success');
-                            $('.toast .success-header').html('Error');
-                            $('.toast .toast-header').addClass('bg-danger');
-                            $('.toast .toast-body').addClass('bg-danger');
-                            $('.toast .toast-body').html(response.msg);
-                            $('.toast').toast('show');
-                            $('#save').prop('disabled', false);
-                            $('#save').addClass('btn-success');
-                            $('#save').removeClass('btn-danger');
+                            alertMessage(response.msg, 'bg-danger', 'Error', 'bg-danger');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         } else {
-                            $('#save').prop('disabled', false);
-                            $('#save').addClass('btn-success');
-                            $('#save').removeClass('btn-danger');
+                            alertMessage(response.msg, 'bg-danger', 'Error', 'bg-danger');
+                            button(false, 'btn-success', 'btn-danger');
                             $('.loader').addClass('d-none');
                         }
                     }
@@ -210,6 +189,21 @@
             $(this).closest('.new-education-row').remove();
         });
     });
+    function alertMessage(message, removeclass, header, addclass) {
+        $('.toast .toast-header').removeClass(removeclass);
+        $('.toast .toast-header').removeClass(removeclass);
+        $('.toast .toast-body').removeClass(removeclass);
+        $('.toast .success-header').html(header);
+        $('.toast .toast-header').addClass(addclass);
+        $('.toast .toast-body').addClass(addclass);
+        $('.toast .toast-body').html(message);
+        $('.toast').toast('show');
+    }
+    function button(status, addclass, removeclass) {
+        $('#save').prop('disabled', status);
+        $('#save').removeClass(removeclass);
+        $('#save').addClass(addclass);
+    }
 </script>
 <!-- Scripting Here -->
 @endsection

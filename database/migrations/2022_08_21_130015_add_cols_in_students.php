@@ -17,14 +17,14 @@ class AddColsInStudents extends Migration
             //
             $table->string('roll_no')->nullable()->after('cell_no');
             $table->string('year')->comment('CSS,PMS year')->nullable()->after('roll_no');
-            $table->enum('class_type', ['campus', 'online'])->comment('Campus, Online')->nullable()->after('year');
-            $table->enum('applied_for', ['written', 'interview'])->comment('Written, Interview')->nullable()->after('class_type');
+            $table->string('class_type')->comment('Campus, Online')->nullable()->after('year');
+            $table->string('applied_for')->comment('Written, Interview')->nullable()->after('class_type');
             $table->string('written_exam_type')->nullable();
             $table->string('interview_type')->nullable();
             $table->string('examination_type')->nullable();
-            $table->enum('fee_type', ['all', 'compulsory', 'custom', 'mock', 'evaluation', 'interview'])->nullable()->after('applied_for');
-            $table->enum('mock_exam_evaluation', ['mock', 'evaluation'])->nullable()->after('fee_type');
-            $table->enum('installment', ['first', 'second', 'third', 'fourth'])->nullable()->after('mock_exam_evaluation');
+            $table->string('fee_type')->nullable()->after('applied_for');
+            $table->string('mock_exam_evaluation')->nullable()->after('fee_type');
+            $table->string('installment')->nullable()->after('mock_exam_evaluation');
             $table->string('discount')->nullable()->after('installment');
             $table->string('discount_reason')->nullable();
             $table->string('total_fee')->nullable()->after('discount');
@@ -33,8 +33,8 @@ class AddColsInStudents extends Migration
             $table->string('due_date')->nullable()->after('total_fee');
             $table->string('freeze')->nullable()->after('due_date');
             $table->string('leave')->nullable()->after('freeze');
-            $table->enum('fee_refund', ['0', '1'])->nullable()->after('leave');
-            $table->enum('notification_sent', ['0', '1'])->nullable()->after('fee_refund');
+            $table->string('fee_refund')->nullable()->after('leave');
+            $table->string('notification_sent')->nullable()->after('fee_refund');
             $table->string('challan_generated')->nullable()->after('notification_sent');
             $table->string('challan_number')->nullable()->after('challan_generated');
             $table->string('payment_transfer_mode')->nullable()->after('challan_number');

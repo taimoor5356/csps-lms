@@ -18,6 +18,7 @@ class CreateStudentsTable extends Migration
             $table->integer('user_id')->increments()->unique()->nullable();
             $table->tinyInteger('email_changed_status')->default(0)->comment('Should be 1 for every student');
             $table->string('batch_no')->nullable();
+            $table->string('batch_starting_date')->nullable();
             $table->string('reg_no')->unique()->nullable();
             // $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');
             $table->string('father_name')->nullable();

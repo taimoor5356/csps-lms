@@ -28,6 +28,7 @@ class CreateFeePlansTable extends Migration
             $table->tinyInteger('fee_refund')->nullable();
             $table->tinyInteger('fee_notification')->nullable();
             $table->tinyInteger('challan_generated')->nullable();
+            $table->string('challan_number')->nullable();
             $table->string('payment_transfer_mode')->nullable();
             $table->timestamps();
         });

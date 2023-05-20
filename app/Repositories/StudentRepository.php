@@ -4,7 +4,10 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\FeePlan;
 use App\Models\Student;
+use Illuminate\Support\Str;
+use App\Models\RegisteredNumber;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -12,8 +15,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Interfaces\StudentRepositoryInterface;
-use App\Models\FeePlan;
-use App\Models\RegisteredNumber;
 
 class StudentRepository implements StudentRepositoryInterface 
 {
@@ -153,7 +154,7 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function create()
     {
-        
+        //
     }
 
     public function show($id) 
@@ -215,50 +216,51 @@ class StudentRepository implements StudentRepositoryInterface
                 }
                 $student = Student::create([
                     'user_id' => $user->id,
+                    'batch_starting_date' => $request->batch_starting_date,
                     'contact_res' => $request->contact_no,
                     'reg_no' => $request->reg_no,
                     'year' => $request->year,
                     'batch_no' => $request->batch_no,
                     'roll_no' => $request->roll_no,
                     'class_type' => $request->class_type,
-                    'applied_for' => $request->applied_for,
+                    // 'applied_for' => $request->applied_for,
                     'written_exam_type' => !is_null($request->written_exam_type) ? $request->written_exam_type : null,
                     'interview_type' => !is_null($request->interview_type) ? $request->interview_type : null,
                     'examination_type' => !is_null($request->examination_type) ? $request->examination_type : null,
-                    'fee_type' => $request->fee_type,
+                    // 'fee_type' => $request->fee_type,
                     'installment' => $request->installment,
                     'discount' => $request->discount,
                     'discount_reason' => $request->discount_reason,
-                    'total_fee' => $request->total_fee,
                     'paid' => $request->paid,
+                    'total_fee' => $request->total_fee,
                     'total_paid' => $request->paid,
-                    'payment_transfer_mode' => $request->payment_transfer_mode,
                     'due_date' => $request->due_date,
                     'freeze' => $request->freeze,
                     'leave' => $request->leave,
+                    'payment_transfer_mode' => $request->payment_transfer_mode,
                     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
                     'notification_sent' => isset($request->notification_sent) ? '1' : '0',
                     'challan_generated' => !empty($request->challan_generated) ? $request->challan_generated : null,
-                    'challan_number' => !empty($request->challan_number) ? $request->challan_number : null,
+                    'challan_number' => !empty($request->challan_generated) ? Str::random(12).$user->id : null,
                     'fee_submit_date' => $request->fee_submit_date,
                 ]);
                 $feePlan = FeePlan::create([
                     'user_id' => $user->id,
                     'student_id' => $student->id,
-                    'fee_type' => $request->fee_type,
-                    'installment' => $request->installment,
-                    'discount' => $request->discount,
-                    'discount_reason' => $request->discount_reason,
-                    'total_fee' => $request->total_fee,
-                    'paid' => $request->paid,
-                    'total_paid' => $request->paid,
-                    'due_date' => $request->due_date,
-                    'freeze' => $request->freeze,
-                    'leave' => $request->leave,
-                    'fee_refund' => isset($request->fee_refund) ? '1' : '0',
-                    'fee_notification' => isset($request->notification_sent) ? '1' : '0',
-                    'challan_generated' => !empty($request->challan_generated) ? $request->challan_generated : null,
-                    'payment_transfer_mode' => $request->payment_transfer_mode
+                    'installment' => $student->installment,
+                    'discount' => $student->discount,
+                    'discount_reason' => $student->discount_reason,
+                    'total_fee' => $student->total_fee,
+                    'paid' => $student->paid,
+                    'total_paid' => $student->paid,
+                    'due_date' => $student->due_date,
+                    'freeze' => $student->freeze,
+                    'leave' => $student->leave,
+                    'fee_refund' => isset($student->fee_refund) ? '1' : '0',
+                    'fee_notification' => isset($student->notification_sent) ? '1' : '0',
+                    'challan_generated' => !empty($student->challan_generated) ? $student->challan_generated : null,
+                    'challan_number' => !empty($student->challan_generated) ? $student->challan_number : null,
+                    'payment_transfer_mode' => $student->payment_transfer_mode
                 ]);
             } else if (Auth::user()->hasRole('student')) {
                 $student = Student::create([
@@ -309,9 +311,17 @@ class StudentRepository implements StudentRepositoryInterface
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
-            return response()->json(['status' => false, 'msg' => 'Something went wrong']);
+            if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
+                $pattern = "/Duplicate entry '.*' for key '(.*?)'/";
+                preg_match($pattern, $e->getMessage(), $matches);
+                $columnName = $matches[1];
+                $columnName = str_replace('_', ' ', $columnName);
+                $columnName = ucfirst($columnName);
+                return response()->json(['status' => false, 'msg' => "Duplicate entry for $columnName"]);
+            } else {
+                return response()->json(['status' => false, 'msg' => "Something went wrong"]);
+            }
         }
     }
 
@@ -425,9 +435,17 @@ class StudentRepository implements StudentRepositoryInterface
                 return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
             }
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
-            return response()->json(['status' => false, 'msg' => 'Something went wrong']);
+            if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
+                $pattern = "/Duplicate entry '.*' for key '(.*?)'/";
+                preg_match($pattern, $e->getMessage(), $matches);
+                $columnName = $matches[1];
+                $columnName = str_replace('_', ' ', $columnName);
+                $columnName = ucfirst($columnName);
+                return response()->json(['status' => false, 'msg' => "Duplicate entry for $columnName"]);
+            } else {
+                return response()->json(['status' => false, 'msg' => "Something went wrong"]);
+            }
         }
     }
 
