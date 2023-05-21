@@ -132,13 +132,15 @@ class RegisteredBatchesRepository implements RegisteredBatchesRepositoryInterfac
         //
         try {
             DB::beginTransaction();
-            $registeredBatch = RegisteredBatch::where('registered_year_id', $request->registered_year_id)->delete();
             $batches = $request->batch;
             foreach ($batches as $key => $batch) {
-                $saveRegisteredBatch = RegisteredBatch::create([
-                    'registered_year_id' => $request->registered_year_id,
-                    'batch' => !is_null($batch) ? $batch : null
-                ]);
+                $registeredBatch = RegisteredBatch::where('registered_year_id', $request->registered_year_id)->where('batch', $batch)->exists();
+                if (!$registeredBatch) {
+                    $saveRegisteredBatch = RegisteredBatch::create([
+                        'registered_year_id' => $request->registered_year_id,
+                        'batch' => !is_null($batch) ? $batch : null
+                    ]);
+                }
             }
             DB::commit();
             return redirect()->back()->withSuccess('Data saved successfully');
