@@ -313,7 +313,6 @@ class StudentRepository implements StudentRepositoryInterface
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
                 $pattern = "/Duplicate entry '.*' for key '(.*?)'/";
