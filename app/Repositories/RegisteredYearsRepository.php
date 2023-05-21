@@ -153,7 +153,6 @@ class RegisteredYearsRepository implements RegisteredYearsRepositoryInterface
                 return redirect()->back()->withError('Year not found');
             }
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return redirect()->back()->withError('Something went wrong');
         }

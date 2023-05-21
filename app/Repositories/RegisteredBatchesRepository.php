@@ -143,7 +143,6 @@ class RegisteredBatchesRepository implements RegisteredBatchesRepositoryInterfac
             DB::commit();
             return redirect()->back()->withSuccess('Data saved successfully');
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             return redirect()->back()->withError('Something went wrong');
         }
