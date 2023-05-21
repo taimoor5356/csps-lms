@@ -217,7 +217,7 @@ class StudentRepository implements StudentRepositoryInterface
                 $student = Student::create([
                     'user_id' => $user->id,
                     'batch_starting_date' => $request->batch_starting_date,
-                    'contact_res' => $request->contact_no,
+                    'cell_no' => $request->cell_no,
                     'reg_no' => $request->reg_no,
                     'year' => $request->year,
                     'batch_no' => $request->batch_no,
@@ -287,7 +287,9 @@ class StudentRepository implements StudentRepositoryInterface
                     'contact_res' => $request->contact_res,
                     'cell_no' => $request->cell_no,
                     'year' => $request->year,
-                    'class_type' => $request->class_type
+                    'class_type' => $request->class_type,
+                    'rules_and_regulation' => !is_null($request->rules_and_regulation) ? $request->rules_and_regulation : '0',
+                    'declaration' => !is_null($request->declaration) ? $request->declaration : '0',
                 ]);
             }
             $userRegistrationNumber = RegisteredNumber::where('registered_batch_id', '=', $request->batch_no)->where('registration_number', '=', $request->reg_no)->first();
@@ -357,7 +359,7 @@ class StudentRepository implements StudentRepositoryInterface
                     }
                     $student->batch_no = $request->batch_no;
                     $student->reg_no = $request->reg_no;
-                    $student->contact_res = $request->contact_no;
+                    $student->cell_no = $request->cell_no;
                     $student->roll_no = $request->roll_no;
                     $student->year = $request->year;
                     $student->fee_type = $request->fee_type;
@@ -419,11 +421,14 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->student_occupation = $request->distinction;
                     $student->address = $request->address;
                     $student->cell_no = $request->cell_no;
+                    $student->contact_res = $request->contact_res;
                     $student->degree = $request->degree;
                     $student->major_subjects = $request->major_subjects;
                     $student->cgpa = $request->cgpa;
                     $student->board_university = $request->board_university;
                     $student->distinction = $request->distinction;
+                    $student->rules_and_regulation = !is_null($request->rules_and_regulation) ? $request->rules_and_regulation : '0';
+                    $student->declaration = !is_null($request->declaration) ? $request->declaration : '0';
                 }
                 $student->save();
                 $student->user->save();

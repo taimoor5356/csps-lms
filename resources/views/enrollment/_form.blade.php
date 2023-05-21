@@ -20,12 +20,11 @@
 </div>
 <hr class="horizontal dark">
 <p class="text-uppercase text-sm">Enrollment Details</p>
-<div class="container">
     <div class="row">
         <div class=" col-md-6">
             <div class="form-group">
                 <label for="fee" class="form-control-label">Select Student *</label>
-                <select class="form-control js-example-theme-single" name="user_id" id="user_id">
+                <select class="form-control" name="user_id" id="user_id">
                     <option value="0" disabled selected>Select Student</option>
                     @foreach ($students as $key => $student)
                         @isset($student->user)
@@ -42,7 +41,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="name" class="form-control-label">Select Course *</label>
-                <select class="form-control js-example-theme-single" name="course_id" id="course_id">
+                <select class="form-control" name="course_id" id="course_id">
                     <option value="0" selected disabled>Select Courses</option>
                     @foreach ($courses as $key => $course)
                         @isset($course)
@@ -55,5 +54,4 @@
             </div>
         </div>
     </div>
-</div>
 <hr class="horizontal dark">

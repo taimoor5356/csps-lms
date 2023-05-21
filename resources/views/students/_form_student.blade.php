@@ -46,14 +46,14 @@
                     onfocusout="defocused(this)" placeholder="Student Name" required>
             </div>
         </div>
-        <!-- Contact No -->
+        <!-- Cell No -->
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="contact-no" class="form-control-label">Contact No {!!$sterik!!}</label>
-                <input class="form-control contact-no" id="contact-no"
-                    name="contact_no" type="number"
+                <label for="cell-no" class="form-control-label">Cell No {!!$sterik!!}</label>
+                <input class="form-control cell-no" id="cell-no"
+                    name="cell_no" type="number"
                     value="@isset($student->user){{$student->cell_no}}@endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No" required>
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No" required>
             </div>
         </div>
         <!-- Gender -->
@@ -495,19 +495,19 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="contact-no" class="form-control-label">Contact No {!!$sterik!!}</label>
-                <input class="form-control contact-no" id="contact-no"
+                <label for="cell-no" class="form-control-label">Cell No {!!$sterik!!}</label>
+                <input class="form-control cell-no" id="cell-no"
                     name="cell_no" type="number"
                     value="@isset($student)0{{$student->cell_no}}@endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No">
             </div>
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
                 <label for="em-contact-no" class="form-control-label">Emergency Contact No {!!$sterik!!}</label>
                 <input class="form-control em-contact-no" id="em-contact-no"
-                    name="em_contact_no" type="number"
-                    value="@isset($student->user){{$student->user->em_contact_no}}@endisset"
+                    name="contact_res" type="number"
+                    value="@isset($student)0{{$student->contact_res}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Emergency Contact No">
             </div>
         </div>
@@ -528,12 +528,23 @@
     
     <div class="row">
         <div class="col-md-6">
-            <small>Rules and Regulation <input type="checkbox" name="rules_and_regulation" value="1"></small>
-            <p style="font-size: 10px">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias eaque nesciunt facilis quisquam pariatur consectetur ad. Ipsam, minus culpa odit voluptatibus, voluptate rerum, cupiditate voluptates quos molestiae ullam vero hic.</p>
+            <small>Rules and Regulation <input type="checkbox" name="rules_and_regulation" value="1" @isset($student) @if($student->rules_and_regulation == '1') checked @endif @endisset></small>
+            <p class="text-danger" style="font-size: 10px">Dues once paid are neither refundable nor adjustable in any case. Any damage caused by the student will be charged accordingly. Institution will not in any case be responsible for any loss suffered by a student. Morally presentable dress code is to be observed.</p>
         </div>
         <div class="col-md-6">
-            <small>Declaration <input type="checkbox" name="declaration" value="1"></small>
-            <p style="font-size: 10px">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias eaque nesciunt facilis quisquam pariatur consectetur ad. Ipsam, minus culpa odit voluptatibus, voluptate rerum, cupiditate voluptates quos molestiae ullam vero hic.</p>
+            <small>Declaration <input type="checkbox" name="declaration" value="1" @isset($student) @if($student->declaration == '1') checked @endif @endisset></small>
+            <p class="text-danger my-0" style="font-size: 10px">
+                1. I hereby certify that the information give here is authentic to the best of my knowledge and belief.
+            </p>
+            <p class="text-danger my-0" style="font-size: 10px">
+                2. Undertake that I will abide by all the rules and regulations of the institute and those that will be implemented in figure.
+            </p>
+            <p class="text-danger my-0" style="font-size: 10px">
+                3. Acknowledge that the administration reserves the right to expel the student without any refund of fee for voilating the rules of the institute.
+            </p>
+            <p class="text-danger my-0" style="font-size: 10px">
+                4. Therefore, agree to uphold all the rules and regulations and co-operate with administration and teachers.
+            </p>
         </div>
     </div>
     <!------------------------------------------------------------------------------------------------------------------------------------>

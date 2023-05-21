@@ -37,14 +37,14 @@
                     onfocusout="defocused(this)" placeholder="Student Name" required>
             </div>
         </div>
-        <!-- Contact No -->
+        <!-- Cell No -->
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="contact-no" class="form-control-label">Contact No {!!$sterik!!}</label>
-                <input class="form-control contact-no" id="contact-no"
-                    name="contact_no" type="number"
-                    value="@isset($student){{$student->contact_res}}@endisset"
-                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No" required>
+                <label for="cell-no" class="form-control-label">Cell No {!!$sterik!!}</label>
+                <input class="form-control cell-no" id="cell-no"
+                    name="cell_no" type="number"
+                    value="@isset($student)0{{$student->cell_no}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No" required>
             </div>
         </div>
         <!-- Gender -->

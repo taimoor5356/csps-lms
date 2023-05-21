@@ -39,6 +39,8 @@ class AddColsInStudents extends Migration
             $table->string('challan_number')->nullable()->after('challan_generated');
             $table->string('payment_transfer_mode')->nullable()->after('challan_number');
             $table->string('fee_submit_date')->nullable()->after('payment_transfer_mode');
+            $table->string('rules_and_regulation')->nullable()->after('fee_submit_date');
+            $table->string('declaration')->nullable()->after('rules_and_regulation');
         });
     }
 
