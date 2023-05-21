@@ -18,13 +18,17 @@ use App\Interfaces\StudentRepositoryInterface;
 use App\Interfaces\TeacherRepositoryInterface;
 use App\Interfaces\VisitorRepositoryInterface;
 use App\Repositories\DownloadCenterRepository;
+use App\Repositories\RegisteredYearsRepository;
 use App\Interfaces\AttendanceRepositoryInterface;
+use App\Repositories\RegisteredBatchesRepository;
 use App\Interfaces\ExaminationRepositoryInterface;
 use App\Interfaces\NoticeBoardRepositoryInterface;
 use App\Interfaces\SuggestionsRepositoryInterface;
 use App\Interfaces\ZoomClassesRepositoryInterface;
 use App\Interfaces\TeacherReviewRepositoryInterface;
 use App\Interfaces\DownloadCenterRepositoryInterface;
+use App\Interfaces\RegisteredYearsRepositoryInterface;
+use App\Interfaces\RegisteredBatchesRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -46,6 +50,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeacherRepositoryInterface::class, TeacherRepository::class); 
         $this->app->bind(AttendanceRepositoryInterface::class, AttendanceRepository::class); 
         $this->app->bind(VisitorRepositoryInterface::class, VisitorRepository::class); 
+        $this->app->bind(RegisteredYearsRepositoryInterface::class, RegisteredYearsRepository::class); 
+        $this->app->bind(RegisteredBatchesRepositoryInterface::class, RegisteredBatchesRepository::class); 
     }
 
     /**

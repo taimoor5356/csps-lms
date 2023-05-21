@@ -54,96 +54,220 @@
 @endsection
 <!-- Section Modal -->
 @section('modal')
-<div class="row">
-    <div class="col-md-4">
-        <div class="modal fade" id="add-new-year" tabindex="-1" role="dialog" aria-labelledby="add-new-year"
-            aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">Add New Year</h6>
-                        <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
-                            aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('regsitered_year.store') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <label for="registered-year">Enter Year</label>
-                            <input type="text" class="form-control" name="registered_year" id="registered-year"
-                                placeholder="Enter Year" required>
-                            <label for="registered-year">Status (Active/Inactive)</label>
-                            <br>
-                            <input type="checkbox" name="status" id="status" class="mx-2">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="close-modal btn btn-danger ml-auto"
-                                data-bs-dismiss="modal">Close</button>
-                        </div>
-                    </form>
+<div class="col-md-4">
+    <div class="modal fade" id="add-new-year" tabindex="-1" role="dialog" aria-labelledby="add-new-year"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="modal-title-default">Add New Year</h6>
+                    <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
+                <form action="{{ route('regsitered_year.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="registered-year">Enter Year</label>
+                        <input type="text" class="form-control" name="registered_year" id="registered-year"
+                            placeholder="Enter Year" required>
+                        <div class="row mt-2">
+                            <div class="col-md-12 col-sm-12">
+                                <label for="batches">Enter Batches</label>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input type="text" class="form-control batch" name="batch[]"
+                                            placeholder="Enter Batch Number">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="form-control btn btn-success add-row">+</button>
+                                    </div>
+                                </div>
+                                <div class="appended-row">
+                                </div>
+                            </div>
+                        </div>
+                        <label for="registered-year">Status (Active/Inactive)</label>
+                        <br>
+                        <input type="checkbox" name="status" id="status" class="mx-2">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="close-modal btn btn-danger ml-auto"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+<!-- Update Year Modal -->
+<div class="col-md-4">
+    <div class="modal fade" id="update-year" tabindex="-1" role="dialog" aria-labelledby="update-year"
+        aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="modal-title-default">Update Year</h6>
+                    <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form action="{{ route('registered_year.update') }}" data-year-id="" method="POST"
+                    id="update-year-data">
+                    @csrf
+                    <div class="modal-body">
+                        <label for="registered-year">Enter Year</label>
+                        <input type="text" class="form-control updated-year-name" name="registered_year"
+                            id="registered-year" placeholder="Enter Year" required>
+                        <div class="row mt-2">
+                            <div class="col-md-12 col-sm-12">
+                                <label for="batches">Enter Batches</label>
+                                <div class="row first-appended-data">
+                                    <div class="col-10">
+                                        <input type="text" class="form-control updated-batch-number batch"
+                                            name="batch[]" placeholder="Enter Batch Number">
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="form-control btn btn-success add-row">+</button>
+                                    </div>
+                                </div>
+                                <div class="appended-row">
+                                </div>
+                            </div>
+                        </div>
+                        <label for="registered-year">Status (Active/Inactive)</label>
+                        <br>
+                        <input type="checkbox" name="status" id="status" class="mx-2 updated-status-check">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <input type="hidden" name="registered_year_id" id="registered-year-id" value="">
+                        <button type="button" class="close-modal btn btn-danger ml-auto"
+                            data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 <!-- Section Modal -->
 @section('page_js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Scripting Here -->
-    <script>
-        $(document).ready(function() {
-            @if (session('success'))
-                $('.toast .success-header').html('Success');
-                $('.toast .toast-header').addClass('bg-success');
-                $('.toast .toast-body').addClass('bg-success');
-                $('.toast .toast-body').html("{{ session('success') }}");
-                $('.toast').toast('show');
-            @elseif (session('error'))
-                $('.toast .success-header').html('Error');
-                $('.toast .toast-header').addClass('bg-danger');
-                $('.toast .toast-body').addClass('bg-danger');
-                $('.toast .toast-body').html("{{ session('error') }}");
-                $('.toast').toast('show');
-            @endif
-            // Data Table Starts
-            var table = $('.data-table').DataTable({
-                responsive: true,
-                processing: true,
-                stateSave: true,
-                // serverSide: true,
-                bDestroy: true,
-                scrollX: true,
-                autoWidth: false,
-                ajax: {
-                    url: "{{ route('registered_years') }}"
-                },
-                columns: [{
-                        data: 'years',
-                        name: 'years'
-                    },
-                    {
-                        data: 'batches',
-                        name: 'batches'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
-                ],
-                initComplete: function(settings, json) {
-                    $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
-                    $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
-                        "custom-pagination");
-                    $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
-                        "text-color");
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- Scripting Here -->
+<script>
+    $(document).ready(function() {
+        @if (session('success'))
+            $('.toast .success-header').html('Success');
+            $('.toast .toast-header').addClass('bg-success');
+            $('.toast .toast-body').addClass('bg-success');
+            $('.toast .toast-body').html("{{ session('success') }}");
+            $('.toast').toast('show');
+        @elseif (session('error'))
+            $('.toast .success-header').html('Error');
+            $('.toast .toast-header').addClass('bg-danger');
+            $('.toast .toast-body').addClass('bg-danger');
+            $('.toast .toast-body').html("{{ session('error') }}");
+            $('.toast').toast('show');
+        @endif
+        $(document).on('click', '.year-update', function() {
+            var _this = $(this);
+            $('.appended-row').html('');
+            $('#registered-year-id').val($(this).attr('data-year-id'));
+            $('.updated-year-name').val(_this.attr('data-year-value'));
+            var batches = _this.attr('data-year-batches');
+            var dataBatches = JSON.parse(batches);
+            console.log(dataBatches);
+            $('.first-appended-data').html(`
+                <div class="col-10">
+                    <input type="text" class="form-control updated-batch-number batch"
+                        name="batch[]" placeholder="Enter Batch Number" value="`+(dataBatches.length > 0 ? dataBatches[0].batch : '')+`">
+                </div>
+                <div class="col-2">
+                    <button type="button" class="form-control btn btn-success add-row">+</button>
+                </div>
+            `);
+            var html = '';
+            if (dataBatches.length > 0) {
+                for (let index = 1; index < dataBatches.length; index++) {
+                    html += `
+                        <div class="row single-batch-row">
+                            <div class="col-10">
+                                <input type="text" class="form-control batch" name="batch[]" placeholder="Enter Batch Number" value="`+dataBatches[index].batch+`">
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="form-control btn btn-danger delete-row">x</button>
+                            </div>
+                        </div>
+                    `;
                 }
-            });
-            // Data Table Ends
+                $('.appended-row').html(html);
+            } else {
+                $('.appended-row').html(html);
+            }
+            if (_this.attr('data-year-status') == '1') {
+                $('.updated-status-check').attr('checked', true);
+            } else {
+                $('.updated-status-check').attr('checked', false);
+            }
         });
-    </script>
-    <!-- Scripting Here -->
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
+            responsive: true,
+            processing: true,
+            stateSave: true,
+            // serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('registered_years') }}"
+            },
+            columns: [{
+                    data: 'years',
+                    name: 'years'
+                },
+                {
+                    data: 'batches',
+                    name: 'batches'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            }
+        });
+        // Data Table Ends
+        $(document).on('click', '.add-row', function() {
+            var html = '';
+            html += `
+                    <div class="row single-batch-row">
+                        <div class="col-10">
+                            <input type="text" class="form-control batch" name="batch[]" placeholder="Enter Batch Number">
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="form-control btn btn-danger delete-row">x</button>
+                        </div>
+                    </div>
+                `;
+            $('.appended-row').append(html);
+        });
+        $(document).on('click', '.delete-row', function() {
+            $(this).closest('.single-batch-row').remove();
+        });
+    });
+</script>
+<!-- Scripting Here -->
 @endsection

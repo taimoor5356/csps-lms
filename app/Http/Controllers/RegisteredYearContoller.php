@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\RegisteredYearsRepositoryInterface;
 use Illuminate\Http\Request;
 use App\Models\RegisteredYear;
 use Yajra\DataTables\DataTables;
@@ -10,6 +11,12 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisteredYearContoller extends Controller
 {
+    private RegisteredYearsRepositoryInterface $registeredYearsRepository;
+
+    public function __construct(RegisteredYearsRepositoryInterface $registeredYearsRepository)
+    {
+        $this->registeredYearsRepository = $registeredYearsRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -53,12 +60,7 @@ class RegisteredYearContoller extends Controller
     {
         //
         if ($request->ajax()) {
-            try {
-                $registeredYears = RegisteredYear::with('registeredBatches')->get();
-                return $this->showTableData($registeredYears, $trashed = null);
-            } catch (\Exception $e) {
-                return redirect()->back()->withError('Something went wrong');
-            }
+            return $this->registeredYearsRepository->index($request);
         }
         return view('registration_setting.index');
     }
@@ -82,19 +84,7 @@ class RegisteredYearContoller extends Controller
     public function store(Request $request)
     {
         //
-        try {
-            DB::beginTransaction();
-            $saveRegisteredYear = RegisteredYear::create([
-                'registered_year' => $request->registered_year,
-                'status' => !is_null($request->status) ? '1' : '0'
-            ]);
-            DB::commit();
-            return redirect()->back()->withSuccess('Data saved successfully');
-        } catch (\Exception $e) {
-            dd($e);
-            DB::rollback();
-            return redirect()->back()->withError('Something went wrong');
-        }
+        return $this->registeredYearsRepository->store($request->all());
     }
 
     /**
@@ -126,9 +116,10 @@ class RegisteredYearContoller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        return $this->registeredYearsRepository->update($request->all());
     }
 
     /**
