@@ -420,6 +420,7 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->domicile = $request->domicile;
                     $student->student_occupation = $request->distinction;
                     $student->address = $request->address;
+                    $student->whatsapp_group_number = $request->whatsapp_group_number;
                     $student->cell_no = $request->cell_no;
                     $student->contact_res = $request->contact_res;
                     $student->degree = $request->degree;
