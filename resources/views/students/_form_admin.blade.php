@@ -137,20 +137,42 @@
             </div>
         </div>
         <hr class="horizontal dark">
-        <p>Applying For</p>
-        <!-- Written Exam Type -->
-        <div class="col-md-3">
+        <!-- Set Applying For -->
+        <div class="col-md-3 set-applying-for">
             <div class="form-group mb-3">
-                <label for="applied_for" class="form-control-label">Written Exam Type {!!$sterik!!}</label>
-                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="@isset($student){{$student->written_exam_type}}@endisset" required>
+                <label for="set-applyingFor" class="form-control-label">Applying For {!!$sterik!!}</label>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control set-applyingFor"
+                    name="applied_for" id="set-applyingFor">
+                    <option value="" selected>Select Applying For</option>
+                    <option value="written" @isset($student) @if($student->applied_for == 'written') selected @endisset @endisset>Written Exam</option>
+                    <option value="interview" @isset($student) @if($student->applied_for == 'interview') selected @endisset @endisset>Interview</option>
+                    <option value="examination" @isset($student) @if($student->applied_for == 'examination') selected @endisset @endisset>Examination Type</option>
+                </select>
             </div>
         </div>
-        <!-- Interview Type -->
+        <!-- Offset -->
+        <div class="offset-9">
+        </div>
+        <!-- Subject Type -->
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="interview-type" class="form-control-label">Interview Type {!!$sterik!!}</label>
+                <label for="subject-type" class="form-control-label">Subject Type</label>
+                <input type="text" name="subject_type" class="form-control subject-type" id="subject-type" placeholder="Subject Type" value="@isset($student){{$student->subject_type}}@endisset" required>
+            </div>
+        </div>
+        <!-- Written Exam Type -->
+        {{-- <div class="col-md-3 applying-for-type-written">
+            <div class="form-group mb-3">
+                <label for="applied_for" class="form-control-label">Written Exam Type {!!$sterik!!}</label>
+                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="@isset($student){{$student->written_exam_type}}@endisset">
+            </div>
+        </div> --}}
+        <!-- Interview Type -->
+        <div class="col-md-3 applying-for-type-interview">
+            <div class="form-group mb-3">
+                <label for="interview-type" class="form-control-label">Interview Type</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control interview_type"
-                    name="interview_type" id="interview_type" required>
+                    name="interview_type" id="interview_type">
                     <option value="" selected>Select Interview Type</option>
                     <option value="classes" @isset($student) @if($student->interview_type == 'classes') selected @endisset @endisset>Classes</option>
                     <option value="mock_interviews" @isset($student) @if($student->interview_type == 'mock_interviews') selected @endisset @endisset>Mock Interviews</option>
@@ -158,11 +180,11 @@
             </div>
         </div>
         <!-- Examination Type -->
-        <div class="col-md-3">
+        <div class="col-md-3 applying-for-type-examination">
             <div class="form-group mb-3">
-                <label for="examination_type" class="form-control-label">Examination {!!$sterik!!}</label>
+                <label for="examination_type" class="form-control-label">Examination</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control examination_type"
-                    name="examination_type" id="examination_type" required>
+                    name="examination_type" id="examination_type">
                     <option value="" selected>Select Exam type</option>
                     <option value="mock_exam" @isset($student) @if($student->examination_type == 'mock_exam') selected @endisset @endisset>Mock Exam</option>
                     <option value="test_series" @isset($student) @if($student->examination_type == 'test_series') selected @endisset @endisset>Test Series</option>
@@ -225,9 +247,6 @@
                     name="paid" type="number"
                     value="0"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="" required minlength="0" min="0">
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control paid-fee" id="paid-fee"
-                    name="paid" type="hidden"
-                    value="0" required minlength="4" min="1000">
             </div>
         </div>
         <!-- Remaining -->
@@ -259,10 +278,10 @@
         <!-- Left -->
         <div class="col-md-3">
             <div class="custom-control custom-radio mb-3">
-                <label for="leave" class="form-control-label">Left</label>
-                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control leave" id="leave"
-                    name="leave" type="date"
-                    value="@isset($student){{$student->leave}}@endisset"
+                <label for="left" class="form-control-label">Left</label>
+                <input @if (Auth::user()->hasRole('student')) readonly @endif class="form-control left" id="left"
+                    name="left" type="date"
+                    value="@isset($student){{$student->left}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)">
             </div>
         </div>
@@ -289,20 +308,28 @@
                     onfocus="focused(this)" onfocusout="defocused(this)" required>
             </div>
         </div>
-        <!-- Challan Number -->
-        <div class="col-md-3">
-            <div class="custom-control custom-radio">
-                <label for="challan_number" class="form-control-label">Challan Number</label>
-                <br />
-                <input @isset($student) @else readonly @endisset type="text" name="challan_number" id="challan_number" class="challan_number form-control" value="@isset($student){{$student->challan_number}}@endisset" required>
-            </div>
-        </div>
         <!-- Generate Challan -->
         <div class="col-md-3">
             <div class="custom-control custom-radio mb-3">
                 <label for="generate-challan" class="form-control-label">Generate Challan {!!$sterik!!}</label>
                 <br />
                 <input @isset($student) @if($student->challan_generated == '1') checked @endif @endisset type="checkbox" name="challan_generated" id="generate-challan" class="generate-challan mx-2" value="1" required>
+            </div>
+        </div>
+        <!-- Challan Number -->
+        <div class="col-md-3">
+            <div class="custom-control custom-radio">
+                <label for="challan_number" class="form-control-label">Challan Number</label>
+                <br />
+                <input readonly type="text" name="challan_number" id="challan_number" class="challan_number form-control" value="@isset($student){{$student->challan_number}}@endisset">
+            </div>
+        </div>
+        <!-- Receipt Number -->
+        <div class="col-md-3">
+            <div class="custom-control custom-radio">
+                <label for="receipt_number" class="form-control-label">Receipt Number</label>
+                <br />
+                <input @isset($student) readonly @endisset type="text" name="receipt_number" id="receipt_number" class="receipt_number form-control" value="@isset($student){{$student->receipt_number}}@endisset" placeholder="Enter Receipt Number" required>
             </div>
         </div>
         <!-- Fee Refund -->
@@ -317,10 +344,10 @@
         <!-- Send Fee Notification -->
         <div class="col-md-3">
             <div class="custom-control custom-radio mb-3">
-                <label class="custom-control-label m-0 p-0" for="send-fee-notification">Send Fee Notification {!!$sterik!!}</label>
+                <label class="custom-control-label" for="send-fee-notification">Send Fee Notification {!!$sterik!!}</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) disabled @endif name="notification_sent"
-                    class="custom-control-input send-fee-notification" value="1" id="send-fee-notification" type="checkbox" @isset($student) @if($student->notification_sent == '1') checked @endisset @endisset required>
+                    class="custom-control-input send-fee-notification mx-2" value="1" id="send-fee-notification" type="checkbox" @isset($student) @if($student->notification_sent == '1') checked @endisset @endisset required>
             </div>
         </div>
     </div>

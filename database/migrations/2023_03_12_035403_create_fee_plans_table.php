@@ -19,7 +19,7 @@ class CreateFeePlansTable extends Migration
             $table->string('student_id');
             $table->string('fee_type')->nullable();
             $table->string('installment')->nullable();
-            $table->float('discount', 8,2)->nullable(0.00);
+            $table->float('discount', 8,2)->nullable();
             $table->string('discount_reason')->nullable();
             $table->bigInteger('total_fee')->default(0);
             $table->date('due_date')->nullable();

@@ -169,6 +169,19 @@
             `);
             }
         });
+        // $(document).on('change', '#set-applyingFor', function () {
+        //     var _this = $(this);
+        //     $('.applying-for-type-written').addClass('d-none');
+        //     $('.applying-for-type-interview').addClass('d-none');
+        //     $('.applying-for-type-examination').addClass('d-none');
+        //     if (_this.val() == 'written') {
+        //         $('.applying-for-type-written').removeClass('d-none');
+        //     } else if (_this.val() == 'interview') {
+        //         $('.applying-for-type-interview').removeClass('d-none');
+        //     } else if (_this.val() == 'examination') {
+        //         $('.applying-for-type-examination').removeClass('d-none');
+        //     }
+        // });
     });
     function alertMessage(message, removeclass, header, addclass) {
         $('.toast .toast-header').removeClass(removeclass);

@@ -23,6 +23,8 @@ class CreateUsersTable extends Migration
             $table->date('registration_date')->nullable();
             $table->integer('approved_status')->default('0')->nullable()->comment('If Fee Paid');
             $table->string('photo')->nullable()->comment('User Profile Photo');
+            $table->enum('gender', ['M', 'F'])->nullable();
+            $table->timestamp('approval_date')->nullable();
             $table->date('deleted_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
