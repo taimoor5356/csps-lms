@@ -201,6 +201,18 @@ class StudentRepository implements StudentRepositoryInterface
                         'approved_status' => 1,
                     ]);
                 }
+                if (isset($userRegistrationNumber)) {
+                    return response()->json([
+                        'status' => false,
+                        'msg' => 'Batch and Registration number already exists',
+                    ]);
+                } else {
+                    $userRegistrationNumberStore = RegisteredNumber::create([
+                        'user_id' => $user->id,
+                        'registered_batch_id' => $request->batch_no,
+                        'registration_number' => $request->reg_no
+                    ]);
+                }
                 if ($request->total_fee < $request->paid) {
                     return response()->json(['status' => false, 'msg' => 'Total fee cannot be less than paid fee']);
                 }
@@ -253,22 +265,12 @@ class StudentRepository implements StudentRepositoryInterface
                 //     'challan_number' => !empty($student->challan_generated) ? $student->challan_number : null,
                 //     'payment_transfer_mode' => $student->payment_transfer_mode
                 // ]);
-                $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
-                $feePlan = $this->feePlan($student);
-                $alreadyPaid = $paidFee->total_paid;
-                $feePlan->total_paid = $alreadyPaid + $request->paid;
-                $feePlan->save();
-                if (isset($userRegistrationNumber)) {
-                    return response()->json([
-                        'status' => false,
-                        'msg' => 'Batch and Registration number already exists',
-                    ]);
-                } else {
-                    $userRegistrationNumberStore = RegisteredNumber::create([
-                        'user_id' => $user->id,
-                        'registered_batch_id' => $request->batch_no,
-                        'registration_number' => $request->reg_no
-                    ]);
+                if ($request->paid > 0) {
+                    $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
+                    $feePlan = $this->feePlan($student);
+                    $alreadyPaid = $paidFee->total_paid;
+                    $feePlan->total_paid = $alreadyPaid + $request->paid;
+                    $feePlan->save();
                 }
                 $user->assignRole(3);
                 $subject = 'Login Details';
@@ -393,10 +395,12 @@ class StudentRepository implements StudentRepositoryInterface
                         // ]);
                         $request->user_id = $student->user->id;
                         $request->id = $student->id; // student id
-                        $feePlan = $this->feePlan($request);
-                        $alreadyPaid = $paidFee->total_paid;
-                        $feePlan->total_paid = $alreadyPaid + $request->paid;
-                        $feePlan->save();
+                        if ($request->paid > 0) {
+                            $feePlan = $this->feePlan($request);
+                            $alreadyPaid = $paidFee->total_paid;
+                            $feePlan->total_paid = $alreadyPaid + $request->paid;
+                            $feePlan->save();
+                        }
                     }
                 }
                 if (Auth::user()->hasRole('student')) {

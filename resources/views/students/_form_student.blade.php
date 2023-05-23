@@ -552,8 +552,9 @@
                 <select class="form-control optional_subjects" name="optional_subjects"
                     id="optional_subjects">
                     <option value="" selected>Select Subject</option>
-                    <option value="1">Sub 1</option>
-                    <option value="2">Sub 2</option>
+                    @foreach ($optionalSubjects as $subject)
+                        <option value="{{$subject->id}}">{{$subject->name}} ({{$subject->category}})</option>
+                    @endforeach
                 </select>
             </div>
         </div>

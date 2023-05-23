@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Interfaces\StudentRepositoryInterface;
+use App\Models\Course;
 use App\Models\RegisteredYear;
 use Illuminate\Support\Facades\Auth;
 
@@ -87,11 +88,19 @@ class StudentController extends Controller
     {
         //
         try {
-            $roles = Role::get();
-            $student = Student::with('user', 'registered_batch')->where('id', $id)->first();
+            $optionalSubjects = Course::where('category', 'optional')->get();
+            if (Auth::user()->hasRole('student')) {
+                if (Auth::user()->student->applied_for == 'written') {
+                    $student = Student::with('user', 'registered_batch')->where('id', $id)->where('applied_for', 'written')->first();
+                } else {
+                    return redirect()->back()->with('error', 'You donot have permission to access');
+                }
+            } else if (Auth::user()->hasRole('admin')) {
+                $student = Student::with('user', 'registered_batch')->where('id', $id)->first();
+            }
             if (isset($student)) {
                 $registeredYears = RegisteredYear::where('status', '1')->get();
-                return view('students.edit', compact('student', 'id', 'roles', 'registeredYears'));
+                return view('students.edit', compact('student', 'id', 'registeredYears', 'optionalSubjects'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
