@@ -22,7 +22,7 @@ class CreateStudentsTable extends Migration
             $table->tinyInteger('email_changed_status')->default(0)->comment('Should be 1 for every student');
             $table->string('batch_starting_date')->nullable();
             // name
-            $table->char('cell_no', 11)->nullable();
+            $table->unsignedBigInteger('cell_no', 20)->nullable();
             // gender
             $table->string('year')->comment('CSS,PMS year')->nullable();
             $table->string('batch_no')->nullable();
@@ -69,7 +69,8 @@ class CreateStudentsTable extends Migration
             $table->string('student_occupation')->nullable();
             $table->string('distinction')->nullable();
             $table->longText('address')->nullable();
-            $table->char('contact_res', 11)->nullable();
+            $table->unsignedBigInteger('whatsapp_group_number', 20)->nullable();
+            $table->unsignedBigInteger('contact_res', 20)->nullable();
             $table->string('optional_subjects')->nullable();
             $table->string('rules_and_regulation')->nullable();
             $table->string('declaration')->nullable();

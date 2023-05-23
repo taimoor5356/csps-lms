@@ -530,10 +530,19 @@
         </div>
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="cell-no" class="form-control-label">Cell No {!!$sterik!!}</label>
+                <label for="cell-no" class="form-control-label">Cell No / Whatsapp No {!!$sterik!!}</label>
                 <input class="form-control cell-no" id="cell-no"
                     name="cell_no" type="number"
                     value="@isset($student)0{{$student->cell_no}}@endisset"
+                    onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="whatsapp-group-number" class="form-control-label">Join Whatsapp Group</label>
+                <input class="form-control whatsapp-group-number" id="whatsapp-group-number"
+                    name="whatsapp_group_number" type="number"
+                    value="@isset($student)0{{$student->whatsapp_group_number}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No">
             </div>
         </div>
