@@ -427,6 +427,7 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->cgpa = $request->cgpa;
                     $student->board_university = $request->board_university;
                     $student->distinction = $request->distinction;
+                    $student->optional_subjects = $request->optional_subjects;
                     $student->rules_and_regulation = !is_null($request->rules_and_regulation) ? $request->rules_and_regulation : '0';
                     $student->declaration = !is_null($request->declaration) ? $request->declaration : '0';
                 }

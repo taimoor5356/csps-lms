@@ -553,7 +553,7 @@
                     id="optional_subjects">
                     <option value="" selected>Select Subject</option>
                     @foreach ($optionalSubjects as $subject)
-                        <option value="{{$subject->id}}">{{$subject->name}} ({{$subject->category}})</option>
+                        <option value="{{$subject->id}}" @isset($student) @if($student->optional_subjects == $subject->id) selected @endif @endisset>{{$subject->name}} ({{$subject->category}})</option>
                     @endforeach
                 </select>
             </div>
