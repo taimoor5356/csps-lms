@@ -268,7 +268,11 @@ class StudentRepository implements StudentRepositoryInterface
                 if ($request->paid > 0) {
                     $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
                     $feePlan = $this->feePlan($student);
-                    $alreadyPaid = $paidFee->total_paid;
+                    if (isset($paidFee)) {
+                        $alreadyPaid = $paidFee->total_paid;
+                    } else {
+                        $alreadyPaid = 0;
+                    }
                     $feePlan->total_paid = $alreadyPaid + $request->paid;
                     $feePlan->save();
                 }
@@ -284,7 +288,6 @@ class StudentRepository implements StudentRepositoryInterface
                 return response()->json(['status' => false, 'msg' => 'You donot have permission to perform this action']);
             }
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
                 $pattern = "/Duplicate entry '.*' for key '(.*?)'/";
@@ -397,7 +400,11 @@ class StudentRepository implements StudentRepositoryInterface
                         $request->id = $student->id; // student id
                         if ($request->paid > 0) {
                             $feePlan = $this->feePlan($request);
-                            $alreadyPaid = $paidFee->total_paid;
+                            if (isset($alreadyPaid)) {
+                                $alreadyPaid = $paidFee->total_paid;
+                            } else {
+                                $alreadyPaid = 0;
+                            }
                             $feePlan->total_paid = $alreadyPaid + $request->paid;
                             $feePlan->save();
                         }
