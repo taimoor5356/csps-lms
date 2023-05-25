@@ -148,6 +148,7 @@ class VisitorRepository implements VisitorRepositoryInterface
 
     public function store($request) 
     {
+        $request = (object)$request;
         try {
             DB::beginTransaction();
             if ( $request->class_type == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
