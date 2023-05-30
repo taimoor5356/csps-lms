@@ -136,7 +136,6 @@ class VisitorRepository implements VisitorRepositoryInterface
             }
             return $this->showTableData($visitorsDetail, $trashed = null);
         } catch (\Exception $e) {
-            dd($e);
             return redirect()->back()->withError('Something went wrong');
         }
     }
@@ -149,9 +148,13 @@ class VisitorRepository implements VisitorRepositoryInterface
     public function store($request) 
     {
         $request = (object)$request;
+        $classType = '';
+        if (!empty($request->class_type)) {
+            $classType = $request->class_type;
+        }
         try {
             DB::beginTransaction();
-            if ( $request->class_type == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
+            if ( $classType == '' || $request->applied_for == '' || $request->name == '' || $request->gender == '' || $request->cell_no == '' || $request->degree == '' || $request->domicile == '') {
                 return response()->json(['status' => false, 'msg' => 'All fields required']);
             }
             if (!preg_match('/^[A-Za-z ]+$/', $request->name)) {
@@ -179,7 +182,7 @@ class VisitorRepository implements VisitorRepositoryInterface
             ]);
             $visitor = Visitor::create([
                 'user_id' => $user->id,
-                'class_type' => $request->class_type,
+                'class_type' => $classType,
                 'applied_for' => $request->applied_for,
                 'domicile' => $request->domicile,
                 'degree' => $request->degree,
