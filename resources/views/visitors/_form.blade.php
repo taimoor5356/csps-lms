@@ -20,6 +20,14 @@
     $setting = \App\Models\Setting::first();
 @endphp
 <div class="row my-0 py-0">
+    <div class="row d-flex justify-content-end">
+        <div class="col-lg-3 col-md-3 my-0 py-0">
+            <div class="form-group mb-3 my-0 py-0">
+                <label for="class-type" class="form-control-label">Date *</label>
+                <input type="date" class="form-control" name="date" id="date">
+            </div>
+        </div>
+    </div>
     <div class="admin-form row my-0 py-0">
         <div class="col-lg-6 col-md-6 my-0 py-0">
             <div class="form-group mb-3 my-0 py-0">

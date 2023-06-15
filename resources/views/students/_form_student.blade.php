@@ -163,7 +163,14 @@
         <div class="col-md-3">
             <div class="form-group mb-3">
                 <label for="subject-type" class="form-control-label">Subject Type</label>
-                <input type="text" name="subject_type" class="form-control subject-type" id="subject-type" placeholder="Subject Type" value="@isset($student){{$student->subject_type}}@endisset" required>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control set-applyingFor select2"
+                    name="subject_type" id="set-applyingFor">
+                    <option value="" selected>Select Subject Type</option>
+                    <option value="all" @isset($student) @if($student->subject_type == 'all') selected @endisset @endisset>All</option>
+                    <option value="compulsory" @isset($student) @if($student->subject_type == 'compulsory') selected @endisset @endisset>Compulsory</option>
+                    <option value="selected" @isset($student) @if($student->subject_type == 'selected') selected @endisset @endisset>Selected</option>
+                </select>
+                {{-- <input type="text" name="subject_type" class="form-control subject-type" id="subject-type" placeholder="Subject Type" value="@isset($student){{$student->subject_type}}@endisset" required> --}}
             </div>
         </div>
         <!-- Written Exam Type -->

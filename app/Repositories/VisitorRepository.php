@@ -22,6 +22,13 @@ class VisitorRepository implements VisitorRepositoryInterface
     {
         return DataTables::of($data)
             ->addIndexColumn()
+            ->addColumn('date', function ($row) {
+                if ($row) {
+                    return !is_null($row->date) ? $row->date : Carbon::parse($row->created_at)->format('M d, Y');
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('image', function ($row) {
                 $url = URL::to('/');
                 if ($row->user) {
@@ -130,9 +137,9 @@ class VisitorRepository implements VisitorRepositoryInterface
     public function index($request) 
     {
         try {
-            $visitorsDetail = Visitor::with('user')->get();
+            $visitorsDetail = Visitor::with('user')->orderBy('created_at', 'desc');
             if (Auth::user()->hasRole('visitor')) {
-                $visitorsDetail = Visitor::with('user')->where('user_id', Auth::user()->id)->get();
+                $visitorsDetail = Visitor::with('user')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
             }
             return $this->showTableData($visitorsDetail, $trashed = null);
         } catch (\Exception $e) {
@@ -186,7 +193,8 @@ class VisitorRepository implements VisitorRepositoryInterface
                 'applied_for' => $request->applied_for,
                 'domicile' => $request->domicile,
                 'degree' => $request->degree,
-                'cell_no' => '03'.$request->cell_no
+                'cell_no' => '03'.$request->cell_no,
+                'date' => $request->date,
             ]);
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);

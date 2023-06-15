@@ -74,6 +74,7 @@
 @include('layout.roll_no')
 <script>
     $(document).ready(function() {
+        $('.select2').select2();
         @if (session('success'))
             $('.toast .success-header').html('Success');
             $('.toast .toast-header').addClass('bg-success');

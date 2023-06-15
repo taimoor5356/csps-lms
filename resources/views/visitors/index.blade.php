@@ -406,12 +406,10 @@
                 url: "{{ route('visitors') }}"
             },
             columns: [
-                // {
-                //     className: 'dt-control',
-                //     orderable: false,
-                //     data: null,
-                //     defaultContent: '',
-                // },
+                {
+                    data: 'date',
+                    name: 'date',
+                },
                 {
                     data: 'image',
                     name: 'image',
@@ -448,6 +446,9 @@
                     orderable: false,
                     searchable: false
                 },
+            ],
+            order: [
+        	    [0, "desc"]
             ],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");

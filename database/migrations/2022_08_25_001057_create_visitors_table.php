@@ -22,6 +22,7 @@ class CreateVisitorsTable extends Migration
             $table->string('degree')->nullable();
             $table->char('cell_no', 11)->nullable();
             $table->tinyInteger('approved_student')->default('0');
+            $table->string('date')->nullable();
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

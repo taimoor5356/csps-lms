@@ -150,23 +150,6 @@
                 </select>
             </div>
         </div>
-        <!-- Offset -->
-        <div class="offset-9">
-        </div>
-        <!-- Subject Type -->
-        <div class="col-md-3">
-            <div class="form-group mb-3">
-                <label for="subject-type" class="form-control-label">Subject Type</label>
-                <input type="text" name="subject_type" class="form-control subject-type" id="subject-type" placeholder="Subject Type" value="@isset($student){{$student->subject_type}}@endisset" required>
-            </div>
-        </div>
-        <!-- Written Exam Type -->
-        {{-- <div class="col-md-3 applying-for-type-written">
-            <div class="form-group mb-3">
-                <label for="applied_for" class="form-control-label">Written Exam Type {!!$sterik!!}</label>
-                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="@isset($student){{$student->written_exam_type}}@endisset">
-            </div>
-        </div> --}}
         <!-- Interview Type -->
         <div class="col-md-3 applying-for-type-interview">
             <div class="form-group mb-3">
@@ -190,6 +173,57 @@
                     <option value="test_series" @isset($student) @if($student->examination_type == 'test_series') selected @endisset @endisset>Test Series</option>
                     <option value="evaluation" @isset($student) @if($student->examination_type == 'evaluation') selected @endisset @endisset>Evaluation</option>
                 </select>
+            </div>
+        </div>
+        <!-- Offset -->
+        <div class="offset-3">
+        </div>
+        <!-- Subject Type -->
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="subject-type" class="form-control-label">Subject Type</label>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control set-subject-type"
+                    name="subject_type" id="subject-type">
+                    <option value="" selected>Select Subject Type</option>
+                    <option value="all" @isset($student) @if($student->subject_type == 'all') selected @endisset @endisset>ALL</option>
+                    <option value="compulsory" @isset($student) @if($student->subject_type == 'compulsory') selected @endisset @endisset>Compulsory</option>
+                    <option value="selected" @isset($student) @if($student->subject_type == 'selected') selected @endisset @endisset>Selected</option>
+                </select>
+            </div>
+        </div>
+        <!-- Subject Selection -->
+        <div class="col-md-9 mb-3">
+            <label for="subjects-list">Select Subject</label>
+            <div class="subjects-list border border-default rounded" style="max-height: 320px; overflow: auto;">
+
+                <div id="all-subjects-view-list" class="@isset($student) @else d-none @endisset">
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> All Subjects 1
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> All Subjects 2
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> All Subjects 3
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> All Subjects 4
+                    </span>
+                </div>
+                <div id="compulsory-subjects-view-list" class="@isset($student) @else d-none @endisset">
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 1
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 2
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 3
+                    </span>
+                    <span class="px-2 my-0">
+                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 4
+                    </span>
+                </div>
             </div>
         </div>
         <hr class="horizontal dark">

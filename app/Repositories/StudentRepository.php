@@ -246,6 +246,7 @@ class StudentRepository implements StudentRepositoryInterface
                     'receipt_number' => $request->receipt_number,
                     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
                     'notification_sent' => isset($request->notification_sent) ? '1' : '0',
+                    'optional_subjects' => $request->optional_subjects,
                 ]);
                 // $feePlan = FeePlan::create([
                 //     'user_id' => $user->id,
@@ -435,7 +436,7 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->cgpa = $request->cgpa;
                     $student->board_university = $request->board_university;
                     $student->distinction = $request->distinction;
-                    $student->optional_subjects = $request->optional_subjects;
+                    // $student->optional_subjects = $request->optional_subjects;
                     $student->rules_and_regulation = !is_null($request->rules_and_regulation) ? $request->rules_and_regulation : '0';
                     $student->declaration = !is_null($request->declaration) ? $request->declaration : '0';
                 }

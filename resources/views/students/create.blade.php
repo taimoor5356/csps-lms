@@ -1,6 +1,7 @@
 @extends('layout.app')
 @section('content')
 @section('style')
+<link href="{{ asset('public/assets/css/select2.min.css') }}" rel="stylesheet" />
 <!-- Styling Here -->
 <style>
     .fee-font {
@@ -56,10 +57,12 @@
 @section('modal')
 @endsection
 @section('page_js')
+<script src="{{ asset('public/assets/js/select2.min.js') }}"></script>
 <!-- Scripting Here -->
 @include('layout.roll_no')
 <script>
     $(document).ready(function() {
+        $('.select2').select2();
         @if (session('success'))
             $('.toast .success-header').html('Success');
             $('.toast .toast-header').addClass('bg-success');
@@ -169,19 +172,16 @@
             `);
             }
         });
-        // $(document).on('change', '#set-applyingFor', function () {
-        //     var _this = $(this);
-        //     $('.applying-for-type-written').addClass('d-none');
-        //     $('.applying-for-type-interview').addClass('d-none');
-        //     $('.applying-for-type-examination').addClass('d-none');
-        //     if (_this.val() == 'written') {
-        //         $('.applying-for-type-written').removeClass('d-none');
-        //     } else if (_this.val() == 'interview') {
-        //         $('.applying-for-type-interview').removeClass('d-none');
-        //     } else if (_this.val() == 'examination') {
-        //         $('.applying-for-type-examination').removeClass('d-none');
-        //     }
-        // });
+        $(document).on('change', '#subject-type', function () {
+            var _this = $(this);
+            $('#all-subjects-view-list').addClass('d-none');
+            $('#compulsory-subjects-view-list').addClass('d-none');
+            if (_this.val() == 'all' || _this.val() == 'selected') {
+                $('#all-subjects-view-list').removeClass('d-none');
+            } else if (_this.val() == 'compulsory') {
+                $('#compulsory-subjects-view-list').removeClass('d-none');
+            }
+        });
     });
     function alertMessage(message, removeclass, header, addclass) {
         $('.toast .toast-header').removeClass(removeclass);

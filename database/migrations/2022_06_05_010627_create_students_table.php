@@ -32,6 +32,7 @@ class CreateStudentsTable extends Migration
             $table->string('class_type')->comment('Campus, Online')->nullable();
             $table->string('applied_for')->comment('Written, Interview')->nullable();
             $table->string('subject_type')->nullable();
+            $table->json('selected_subjects')->nullable();
             $table->string('interview_type')->nullable();
             $table->string('examination_type')->nullable();
             $table->string('installment')->nullable();
