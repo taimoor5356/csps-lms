@@ -422,7 +422,7 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->written_fpsc_roll_no = $request->written_fpsc_roll_no;
                     $student->domicile = $request->domicile;
                     $student->written_exam_preparation_from_csps = $request->written_exam_preparation_from_csps;
-                    $student->applied_for = $request->applied_for;
+                    $student->interview_applied_for = $request->interview_applied_for;
                     $student->student_occupation = $request->distinction;
                     $student->address = $request->address;
                     $student->whatsapp_group_number = $request->whatsapp_group_number;

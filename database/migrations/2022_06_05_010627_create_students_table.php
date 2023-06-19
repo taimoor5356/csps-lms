@@ -84,6 +84,7 @@ class CreateStudentsTable extends Migration
             $table->string('mock_interview_date_time')->nullable();
             $table->string('mock_interview_rules_regulations')->nullable();
             $table->string('interview_performa')->nullable();
+            $table->string('interview_applied_for')->nullable();
 
             $table->date('deleted_at')->nullable();
             $table->timestamps();
