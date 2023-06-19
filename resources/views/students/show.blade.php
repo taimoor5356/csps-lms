@@ -78,7 +78,7 @@
                     <hr>
                     <p class="text-center">
                         
-                        @isset($student){{ !is_null($student->batch_no) ? $student->batch_no : '#batch'}}@endisset
+                        @isset($student){{ !is_null($student->batch_no) ? $student->batch->batch : '#batch'}}@endisset
                     </p>
                     <hr>
                     <p class="text-center">
@@ -87,8 +87,14 @@
                     </p>
                     <hr>
                     <p class="text-center">
-                        
-                        @isset($student){{ !is_null($student->user->approved_status) ? $student->user->approved_status == 1 ? 'Clear' : 'Not Clear' : '#fee-status'}}@endisset
+                        Fee Status: 
+                        @isset($student)
+                            @if(((($student->total_fee) - ($student->discount)) - ($student->total_paid)) == 0)
+                                <span class="bg-success p-2 rounded text-white">Clear</span>
+                            @else 
+                                <span class="bg-danger p-2 rounded text-white">Not Clear</span>
+                            @endif
+                        @endisset
                     </p>
                     <hr>
                 </div>
@@ -124,11 +130,6 @@
                                 type="button" role="tab" aria-controls="results"
                                 aria-selected="false">Results</button>
                         </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes"
-                                type="button" role="tab" aria-controls="notes"
-                                aria-selected="false">Notes</button>
-                        </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="personal-info" role="tabpanel" aria-labelledby="personal-info-tab">
@@ -138,17 +139,13 @@
                             <div class="row my-2">
                                 <h6>Compulsory Subjects</h6>
                                 <hr>
-                                @foreach ($student->user->enrolled_courses as $enrolledCourse)
-                                    @if ($enrolledCourse->course->category == 'compulsory')
-                                        <p><span>{{$enrolledCourse->course->name}}</span><span style="float: right">{{$enrolledCourse->course->marks}} marks</span></p>
-                                    @endif
+                                @foreach ($compulsorySubjects as $cSubject)
+                                    <p><span  class="@isset($student) @if(in_array($cSubject->id, json_decode($student->selected_subjects))) text-dark @else text-light @endif @endisset">{{$cSubject->name}}</span><span style="float: right">{{$cSubject->marks}} marks</span></p>
                                 @endforeach
                                 <h6>Optional Subjects</h6>
                                 <hr>
-                                @foreach ($student->user->enrolled_courses as $enrolledCourse)
-                                    @if ($enrolledCourse->course->category == 'optional')
-                                        <p><span>{{$enrolledCourse->course->name}}</span><span style="float: right">{{$enrolledCourse->course->marks}} marks</span></p>
-                                    @endif
+                                @foreach ($optionalSubjects as $oSubject)
+                                    <p><span  class="@isset($student) @if(in_array($oSubject->id, json_decode($student->selected_subjects))) text-dark @else text-light @endif @endisset">{{$oSubject->name}}</span><span style="float: right">{{$oSubject->marks}} marks</span></p>
                                 @endforeach
                             </div>
                         </div>
@@ -168,11 +165,15 @@
                                         @php $paid = 0; @endphp
                                         @foreach ($student->fee_plan as $student_fee)
                                             <tr>
-                                                <td class="text-center">{{$student_fee->challan_generated}}</td>
+                                                <td class="text-center">{{$student->challan_number}}</td>
                                                 <td class="text-center">{{$student_fee->installment}}</td>
                                                 <td class="text-center">{{$student_fee->total_fee}}</td>
                                                 <td class="text-center">{{$student_fee->paid}}</td>
-                                                <td class="text-center">{{$student_fee->created_at->format('Y-M-d')}}</td>
+                                                <td class="text-center">
+                                                    Due Date: {{$student_fee->due_date}}
+                                                    <br>
+                                                    Paid Date: {{$student_fee->created_at->format('Y-m-d')}}
+                                                </td>
                                                 <td class="text-center">
                                                     @php
                                                         $paid += $student_fee->paid;
@@ -376,13 +377,6 @@
                                             <p class="card-text">Content</p>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
-                            <div class="row">
-                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 my-3">
-                                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium porro consectetur nisi animi labore sed assumenda veniam, qui vero sint, exercitationem, fugit nihil dolores tempora. Eum itaque quis voluptas atque.
                                 </div>
                             </div>
                         </div>

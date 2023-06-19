@@ -156,36 +156,12 @@
                 </select>
             </div>
         </div>
-        <!-- Offset -->
-        <div class="offset-9">
-        </div>
-        <!-- Subject Type -->
-        <div class="col-md-3">
-            <div class="form-group mb-3">
-                <label for="subject-type" class="form-control-label">Subject Type</label>
-                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control set-applyingFor select2"
-                    name="subject_type" id="set-applyingFor">
-                    <option value="" selected>Select Subject Type</option>
-                    <option value="all" @isset($student) @if($student->subject_type == 'all') selected @endisset @endisset>All</option>
-                    <option value="compulsory" @isset($student) @if($student->subject_type == 'compulsory') selected @endisset @endisset>Compulsory</option>
-                    <option value="selected" @isset($student) @if($student->subject_type == 'selected') selected @endisset @endisset>Selected</option>
-                </select>
-                {{-- <input type="text" name="subject_type" class="form-control subject-type" id="subject-type" placeholder="Subject Type" value="@isset($student){{$student->subject_type}}@endisset" required> --}}
-            </div>
-        </div>
-        <!-- Written Exam Type -->
-        {{-- <div class="col-md-3 applying-for-type-written">
-            <div class="form-group mb-3">
-                <label for="applied_for" class="form-control-label">Written Exam Type {!!$sterik!!}</label>
-                <input type="text" name="written_exam_type" class="form-control" placeholder="English Essay, Compulsory etc" value="@isset($student){{$student->written_exam_type}}@endisset">
-            </div>
-        </div> --}}
         <!-- Interview Type -->
-        <div class="col-md-3">
+        <div class="col-md-3 applying-for-type-interview">
             <div class="form-group mb-3">
                 <label for="interview-type" class="form-control-label">Interview Type</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control interview_type"
-                    name="interview_type" id="interview_type" required>
+                    name="interview_type" id="interview_type">
                     <option value="" selected>Select Interview Type</option>
                     <option value="classes" @isset($student) @if($student->interview_type == 'classes') selected @endisset @endisset>Classes</option>
                     <option value="mock_interviews" @isset($student) @if($student->interview_type == 'mock_interviews') selected @endisset @endisset>Mock Interviews</option>
@@ -193,17 +169,38 @@
             </div>
         </div>
         <!-- Examination Type -->
-        <div class="col-md-3">
+        <div class="col-md-3 applying-for-type-examination">
             <div class="form-group mb-3">
                 <label for="examination_type" class="form-control-label">Examination</label>
                 <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control examination_type"
-                    name="examination_type" id="examination_type" required>
+                    name="examination_type" id="examination_type">
                     <option value="" selected>Select Exam type</option>
                     <option value="mock_exam" @isset($student) @if($student->examination_type == 'mock_exam') selected @endisset @endisset>Mock Exam</option>
                     <option value="test_series" @isset($student) @if($student->examination_type == 'test_series') selected @endisset @endisset>Test Series</option>
                     <option value="evaluation" @isset($student) @if($student->examination_type == 'evaluation') selected @endisset @endisset>Evaluation</option>
                 </select>
             </div>
+        </div>
+        <!-- Offset -->
+        <div class="offset-3">
+        </div>
+        <!-- Subject Type -->
+        <div class="col-md-3">
+            <div class="form-group mb-3">
+                <label for="subject-type" class="form-control-label">Subject Type</label>
+                <select @if (Auth::user()->hasRole('student')) disabled @endif class="form-control set-subject-type"
+                    name="subject_type" id="subject-type">
+                    <option value="" selected>Select Subject Type</option>
+                    <option value="all" @isset($student) @if($student->subject_type == 'all') selected @endisset @endisset>ALL</option>
+                    <option value="compulsory" @isset($student) @if($student->subject_type == 'compulsory') selected @endisset @endisset>Compulsory</option>
+                    <option value="selected" @isset($student) @if($student->subject_type == 'selected') selected @endisset @endisset>Selected</option>
+                </select>
+            </div>
+        </div>
+        <!-- Subject Selection -->
+        <div class="col-md-9 mb-3">
+            <label for="subjects-list">Select Subject</label>
+            @include('students.subject_selection')
         </div>
         <hr class="horizontal dark">
         <!-- Installment -->
@@ -548,8 +545,8 @@
             <div class="form-group mb-3">
                 <label for="whatsapp-group-number" class="form-control-label">Join Whatsapp Group</label>
                 <input class="form-control whatsapp-group-number" id="whatsapp-group-number"
-                    name="whatsapp_group_number" type="number"
-                    value="@isset($student)0{{$student->whatsapp_group_number}}@endisset"
+                    name="whatsapp_group_number" type="text"
+                    value="https://api.whatsapp.com/send/?phone=923165701593&text&type=phone_number&app_absent=0"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Cell No">
             </div>
         </div>
@@ -562,14 +559,15 @@
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Emergency Contact No">
             </div>
         </div>
+        @php 
+            $selectedCourses = $courses->whereIn('id', isset($student) ? json_decode($student->selected_subjects) : [])->get();
+        @endphp
         <div class="col-md-3">
             <div class="form-group mb-3">
-                <label for="optional_subjects" class="form-control-label">Optional Subject {!!$sterik!!}</label>
-                <select class="form-control optional_subjects" name="optional_subjects"
-                    id="optional_subjects">
-                    <option value="" selected>Select Subject</option>
-                    @foreach ($optionalSubjects as $subject)
-                        <option value="{{$subject->id}}" @isset($student) @if($student->optional_subjects == $subject->id) selected @endif @endisset>{{$subject->name}} ({{$subject->category}})</option>
+                <label for="" class="form-control-label">Registered Subjects</label>
+                <select class="form-control">
+                    @foreach ($selectedCourses as $sCourse)
+                        <option value="{{$sCourse->id}}">{{$sCourse->name}}</option>
                     @endforeach
                 </select>
             </div>

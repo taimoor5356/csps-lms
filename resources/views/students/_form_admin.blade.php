@@ -138,6 +138,7 @@
         </div>
         <hr class="horizontal dark">
         <!-- Set Applying For -->
+        <!-- Set Applying For -->
         <div class="col-md-3 set-applying-for">
             <div class="form-group mb-3">
                 <label for="set-applyingFor" class="form-control-label">Applying For {!!$sterik!!}</label>
@@ -194,37 +195,7 @@
         <!-- Subject Selection -->
         <div class="col-md-9 mb-3">
             <label for="subjects-list">Select Subject</label>
-            <div class="subjects-list border border-default rounded" style="max-height: 320px; overflow: auto;">
-
-                <div id="all-subjects-view-list" class="@isset($student) @else d-none @endisset">
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> All Subjects 1
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> All Subjects 2
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> All Subjects 3
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> All Subjects 4
-                    </span>
-                </div>
-                <div id="compulsory-subjects-view-list" class="@isset($student) @else d-none @endisset">
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 1
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 2
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 3
-                    </span>
-                    <span class="px-2 my-0">
-                        <input type="checkbox" name="selected_subjects[]"> Compulsory Subjects 4
-                    </span>
-                </div>
-            </div>
+            @include('students.subject_selection')
         </div>
         <hr class="horizontal dark">
         <!-- Installment -->
@@ -361,9 +332,9 @@
         <!-- Receipt Number -->
         <div class="col-md-3">
             <div class="custom-control custom-radio">
-                <label for="receipt_number" class="form-control-label">Receipt Number</label>
+                <label for="receipt_number" class="form-control-label">Receipt Number {!!$sterik!!}</label>
                 <br />
-                <input @isset($student) readonly @endisset type="text" name="receipt_number" id="receipt_number" class="receipt_number form-control" value="@isset($student){{$student->receipt_number}}@endisset" placeholder="Enter Receipt Number" required>
+                <input @if(Auth::user()->hasRole('admin')) @else @isset($student) readonly @endisset @endif type="text" name="receipt_number" id="receipt_number" class="receipt_number form-control" value="@isset($student){{$student->receipt_number}}@endisset" placeholder="Enter Receipt Number" required>
             </div>
         </div>
         <!-- Fee Refund -->
@@ -372,7 +343,7 @@
                 <label class="custom-control-label m-0 p-0" for="fee-refund">Fee Refund</label>
                 <br>
                 <input @if (Auth::user()->hasRole('student')) readonly @endif name="fee_refund"
-                    class="custom-control-input fee-refund" value="refunded" id="fee-refund" type="checkbox" @isset($student) @if($student->fee_refund == '1') checked @endisset @endisset>
+                    class="custom-control-input fee-refund" value="refunded" id="fee-refund" type="checkbox" @isset($student) @if($student->fee_refund == 'refunded') checked @endisset @endisset>
             </div>
         </div>
         <!-- Send Fee Notification -->

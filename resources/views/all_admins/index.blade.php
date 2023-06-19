@@ -106,7 +106,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="modal-title-default">Admin Detail</h6>
-                        <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
+                        <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -239,7 +239,7 @@
                     <div class="modal-footer">
                         {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                         <button type="button" class="close-modal btn btn-danger  ml-auto"
-                            data-dismiss="modal">Close</button>
+                            data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

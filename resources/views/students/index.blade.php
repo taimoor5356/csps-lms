@@ -55,7 +55,7 @@
     <!-- Styling Here -->
 @endsection
 @section('breadcrumbs')
-    @include('layout.breadcrumb', ['institute_name' => 'Institute Name', 'tab_name' => 'Users', 'page_title' => 'Students'])
+    @include('layout.breadcrumb', ['institute_name' => 'CSPs', 'tab_name' => 'Users', 'page_title' => 'Students'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
@@ -101,13 +101,13 @@
 @section('modal')
 <div class="row">
     <div class="col-md-4">
-        <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default"
+        <div class="modal fade" id="view-student-details" tabindex="-1" role="dialog" aria-labelledby="view-student-details"
             aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h6 class="modal-title" id="modal-title-default">Student Detail</h6>
-                        <button type="button" class="close-modal btn btn-danger" data-dismiss="modal"
+                        <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
                             aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -336,7 +336,7 @@
                     <div class="modal-footer">
                         {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
                         <button type="button" class="close-modal btn btn-danger  ml-auto"
-                            data-dismiss="modal">Close</button>
+                            data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
@@ -499,13 +499,13 @@
                 url = url.replace(':image', data.user.photo);
                 $('img.profile-img').attr('src', url);
             });
-            $('#modal-default').modal('show');
+            $('#view-student-details').modal('show');
         });
         // Ends Open Modal to View Information
 
         // Close Modal
         $(document).on('click', '.close-modal', function() {
-            $('#modal-default').modal('hide');
+            $('#view-student-details').modal('hide');
         });
         // Close Modal
 

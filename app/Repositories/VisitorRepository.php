@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\Student;
 use App\Models\Visitor;
 use App\Models\RegisteredYear;
@@ -117,7 +118,7 @@ class VisitorRepository implements VisitorRepositoryInterface
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
-                    $btn .= '<a href="#" class="btn btn-success bg-success p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                    $btn .= '<a href="#" class="btn btn-success bg-success p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
                         <a href="visitors/'. $row->id .'/edit" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                         if (Auth::user()->can('visitor_delete')) {
                             $btn .= '<a href="'. $row->id .'/delete" data-visitor-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-visitor" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>';
@@ -220,6 +221,7 @@ class VisitorRepository implements VisitorRepositoryInterface
     public function edit($id)
     {
         try {
+            $courses = Course::query();
             $student = Visitor::with('user')->where('id', $id)->first();
             if (isset($student)) {
                 if ($student->user->approved_status == 1) {
@@ -227,7 +229,7 @@ class VisitorRepository implements VisitorRepositoryInterface
                 }
                 $user_id = $student->user_id;
                 $registeredYears = RegisteredYear::where('status', '1')->get();
-                return view('visitors.edit', compact('student', 'id', 'user_id', 'registeredYears'));
+                return view('visitors.edit', compact('student', 'id', 'user_id', 'registeredYears', 'courses'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }

@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\FeePlan;
 use App\Models\Student;
 use Illuminate\Support\Str;
+use App\Models\RegisteredYear;
 use App\Models\RegisteredNumber;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use phpDocumentor\Reflection\Types\Null_;
 use App\Interfaces\StudentRepositoryInterface;
 
 class StudentRepository implements StudentRepositoryInterface 
@@ -121,7 +124,7 @@ class StudentRepository implements StudentRepositoryInterface
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="students/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="students/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#view-student-details"><i class="fa fa-eye"></i></a>
                         <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                     if (Auth::user()->can('student_delete')) {
                         $btn .='<a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
@@ -160,11 +163,11 @@ class StudentRepository implements StudentRepositoryInterface
     public function show($id) 
     {
         $student = Student::with('user')->where('id', $id)->first();
+        $compulsorySubjects = Course::where('category', 'compulsory')->get();
+        $optionalSubjects = Course::where('category', 'optional')->get();
         if (isset($student)) {
-            return $student;
+            return ['student' => $student, 'compulsorySubjects' => $compulsorySubjects, 'optionalSubjects' => $optionalSubjects];
         }
-        
-        
     }
 
     public function store($request) 
@@ -216,6 +219,10 @@ class StudentRepository implements StudentRepositoryInterface
                 if ($request->total_fee < $request->paid) {
                     return response()->json(['status' => false, 'msg' => 'Total fee cannot be less than paid fee']);
                 }
+                $selectedSubjects = NULL;
+                if (isset($request->selected_subjects)) {
+                    $selectedSubjects = $request->selected_subjects;
+                }
                 $student = Student::create([
                     'user_id' => $user->id,
                     'batch_starting_date' => $request->batch_starting_date,
@@ -228,8 +235,9 @@ class StudentRepository implements StudentRepositoryInterface
                     'class_type' => $request->class_type,
                     'applied_for' => $request->applied_for,
                     'subject_type' => $request->subject_type,
-                    'interview_type' => !is_null($request->interview_type) ? $request->interview_type : null,
-                    'examination_type' => !is_null($request->examination_type) ? $request->examination_type : null,
+                    'selected_subjects' => json_encode($selectedSubjects),
+                    'interview_type' => !is_null($request->interview_type) ? $request->interview_type : NULL,
+                    'examination_type' => !is_null($request->examination_type) ? $request->examination_type : NULL,
                     'installment' => $request->installment,
                     'discount' => $request->discount,
                     'discount_reason' => $request->discount_reason,
@@ -242,30 +250,12 @@ class StudentRepository implements StudentRepositoryInterface
                     'payment_transfer_mode' => $request->payment_transfer_mode,
                     'fee_submit_date' => $request->fee_submit_date,
                     'challan_generated' => !empty($request->challan_generated) ? $request->challan_generated : null,
-                    'challan_number' => !empty($request->challan_generated) ? Str::random(12).$user->id : null,
+                    'challan_number' => !empty($request->challan_generated) ? $user->id.Str::random(12).$user->id : null,
                     'receipt_number' => $request->receipt_number,
                     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
                     'notification_sent' => isset($request->notification_sent) ? '1' : '0',
-                    'optional_subjects' => $request->optional_subjects,
+                    // 'optional_subjects' => $request->optional_subjects,
                 ]);
-                // $feePlan = FeePlan::create([
-                //     'user_id' => $user->id,
-                //     'student_id' => $student->id,
-                //     'installment' => $student->installment,
-                //     'discount' => $student->discount,
-                //     'discount_reason' => $student->discount_reason,
-                //     'paid' => $student->paid,
-                //     'total_fee' => $student->total_fee,
-                //     'total_paid' => $student->paid,
-                //     'due_date' => $student->due_date,
-                //     'freeze' => $student->freeze,
-                //     'left' => $student->left,
-                //     'fee_refund' => isset($student->fee_refund) ? '1' : '0',
-                //     'fee_notification' => isset($student->notification_sent) ? '1' : '0',
-                //     'challan_generated' => !empty($student->challan_generated) ? $student->challan_generated : null,
-                //     'challan_number' => !empty($student->challan_generated) ? $student->challan_number : null,
-                //     'payment_transfer_mode' => $student->payment_transfer_mode
-                // ]);
                 if ($request->paid > 0) {
                     $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
                     $feePlan = $this->feePlan($student);
@@ -328,6 +318,18 @@ class StudentRepository implements StudentRepositoryInterface
 
     public function edit($id)
     {
+        try {
+            $student = Student::with('user', 'registered_batch')->where('id', $id)->first();
+            if (isset($student)) {
+                $courses = Course::query();
+                $registeredYears = RegisteredYear::where('status', '1')->get();
+                return view('students.edit', compact('student', 'id', 'registeredYears', 'courses'));
+            } else {
+                return redirect()->back()->with('error', 'User doesnot exists');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     public function update($request, $id) 
@@ -336,6 +338,10 @@ class StudentRepository implements StudentRepositoryInterface
             DB::beginTransaction();
             $student = Student::with('user')->where('id', $id)->first();
             if (isset($student)) {
+                $selectedSubjects = NULL;
+                if (isset($request->selected_subjects)) {
+                    $selectedSubjects = $request->selected_subjects;
+                }
                 $student->user->name = $request->name;
                 $student->user->email = $request->email;
                 $student->user->gender = $request->gender;
@@ -357,9 +363,9 @@ class StudentRepository implements StudentRepositoryInterface
                         return response()->json(['status' => false, 'msg' => 'Please check paid fee section']);
                     }
                     $student->batch_no = $request->batch_no;
+                    $student->roll_no = $request->roll_no;
                     $student->reg_no = $request->reg_no;
                     $student->cell_no = $request->cell_no;
-                    $student->roll_no = $request->roll_no;
                     $student->year = $request->year;
                     $student->fee_type = $request->fee_type;
                     $student->installment = $request->installment;
@@ -375,28 +381,15 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->challan_number = $request->challan_number;
                     $student->fee_submit_date = $request->fee_submit_date;
                     $student->applied_for = $request->applied_for;
+                    $student->subject_type = $request->subject_type;
+                    $student->selected_subjects = null;
+                    $student->selected_subjects = json_encode($selectedSubjects);
                     $student->written_exam_type = !is_null($request->written_exam_type) ? $request->written_exam_type : null;
                     $student->interview_type = !is_null($request->interview_type) ? $request->interview_type : null;
                     $student->examination_type = !is_null($request->examination_type) ? $request->examination_type : null;
+                    $student->receipt_number = $request->receipt_number;
                     $paidFee = FeePlan::where('student_id', $student->id)->get()->last();
                     if ($fullyPaid == 0) {
-                        // $feePlan = FeePlan::create([
-                        //     'user_id' => $student->user->id,
-                        //     'student_id' => $student->id,
-                        //     'fee_type' => $request->fee_type,
-                        //     'installment' => $request->installment,
-                        //     'discount' => $request->discount,
-                        //     'discount_reason' => $request->discount_reason,
-                        //     'total_fee' => $request->total_fee,
-                        //     'paid' => $request->paid,
-                        //     'due_date' => $request->due_date,
-                        //     'freeze' => $request->freeze,
-                        //     'left' => $request->left,
-                        //     'fee_refund' => isset($request->fee_refund) ? '1' : '0',
-                        //     'fee_notification' => isset($request->notification_sent) ? '1' : '0',
-                        //     'challan_generated' => $request->challan_generated,
-                        //     'payment_transfer_mode' => $request->payment_transfer_mode
-                        // ]);
                         $request->user_id = $student->user->id;
                         $request->id = $student->id; // student id
                         if ($request->paid > 0) {
@@ -425,10 +418,16 @@ class StudentRepository implements StudentRepositoryInterface
                     $student->father_occupation = $request->father_occupation;
                     $student->dob = $request->dob;
                     $student->cnic = $request->cnic;
+                    $student->written_result_fpsc_serial_no = $request->written_result_fpsc_serial_no;
+                    $student->written_fpsc_roll_no = $request->written_fpsc_roll_no;
                     $student->domicile = $request->domicile;
+                    $student->written_exam_preparation_from_csps = $request->written_exam_preparation_from_csps;
+                    $student->applied_for = $request->applied_for;
                     $student->student_occupation = $request->distinction;
                     $student->address = $request->address;
                     $student->whatsapp_group_number = $request->whatsapp_group_number;
+                    $student->selected_mock_interview = $request->selected_mock_interview;
+                    $student->mock_interview_date_time = $request->mock_interview_date_time;
                     $student->cell_no = $request->cell_no;
                     $student->contact_res = $request->contact_res;
                     $student->degree = $request->degree;
@@ -439,10 +438,11 @@ class StudentRepository implements StudentRepositoryInterface
                     // $student->optional_subjects = $request->optional_subjects;
                     $student->rules_and_regulation = !is_null($request->rules_and_regulation) ? $request->rules_and_regulation : '0';
                     $student->declaration = !is_null($request->declaration) ? $request->declaration : '0';
+                    $student->mock_interview_rules_regulations = !is_null($request->mock_interview_rules_regulations) ? $request->mock_interview_rules_regulations : '0';
                 }
                 $student->save();
                 $student->user->save();
-                $student->user->assignRole($request->role);
+                $student->user->assignRole(3);
                 DB::commit();
                 return response()->json(['status' => true, 'msg' => 'Data Updated Successfully']);
             } else {
@@ -450,6 +450,7 @@ class StudentRepository implements StudentRepositoryInterface
                 return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
             }
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
                 $pattern = "/Duplicate entry '.*' for key '(.*?)'/";

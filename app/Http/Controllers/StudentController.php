@@ -50,7 +50,8 @@ class StudentController extends Controller
     {
         //
         $registeredYears = RegisteredYear::where('status', '1')->get();
-        return view('students.create', compact('registeredYears'));
+        $courses = Course::query();
+        return view('students.create', compact('registeredYears', 'courses'));
     }
 
     /**
@@ -74,8 +75,8 @@ class StudentController extends Controller
     public function show($id)
     {
         //
-        $student = $this->studentRepository->show($id);
-        return view('students.show', compact('student'));
+        $data = $this->studentRepository->show($id);
+        return view('students.show')->with($data);
     }
 
     /**
@@ -87,26 +88,7 @@ class StudentController extends Controller
     public function edit($id)
     {
         //
-        try {
-            $optionalSubjects = Course::where('category', 'optional')->get();
-            if (Auth::user()->hasRole('student')) {
-                if (Auth::user()->student->applied_for == 'written') {
-                    $student = Student::with('user', 'registered_batch')->where('id', $id)->where('applied_for', 'written')->first();
-                } else {
-                    return redirect()->back()->with('error', 'You donot have permission to access');
-                }
-            } else if (Auth::user()->hasRole('admin')) {
-                $student = Student::with('user', 'registered_batch')->where('id', $id)->first();
-            }
-            if (isset($student)) {
-                $registeredYears = RegisteredYear::where('status', '1')->get();
-                return view('students.edit', compact('student', 'id', 'registeredYears', 'optionalSubjects'));
-            } else {
-                return redirect()->back()->with('error', 'User doesnot exists');
-            }
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Something went wrong');
-        }
+        return $this->studentRepository->edit($id);
     }
 
     /**

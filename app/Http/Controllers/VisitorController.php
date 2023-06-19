@@ -124,7 +124,7 @@ class VisitorController extends Controller
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
-                    $btn .= '<a href="#" class="btn btn-success bg-success p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                    $btn .= '<a href="#" class="btn btn-success bg-success p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
                         <a href="visitors/'. $row->id .'/edit" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                         if (Auth::user()->can('visitor_delete')) {
                             $btn .= '<a href="'. $row->id .'/delete" data-visitor-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-visitor" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>';

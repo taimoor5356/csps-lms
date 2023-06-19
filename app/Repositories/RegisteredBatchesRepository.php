@@ -33,7 +33,7 @@ class RegisteredBatchesRepository implements RegisteredBatchesRepositoryInterfac
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="registered-years/' . $row->id . '/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="' . $row->id . '" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="registered-years/' . $row->id . '/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="' . $row->id . '" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
                         <a href="registered-years/' . $row->id . '/edit" data-student-id="' . $row->id . '" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                     if (Auth::user()->can('student_delete')) {
                         $btn .= '<a href="registered-years/' . $row->id . '/delete" data-student-id="' . $row->id . '" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';

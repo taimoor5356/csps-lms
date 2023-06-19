@@ -29,4 +29,10 @@ class Student extends Model
     {
         return $this->hasMany(RegisteredBatch::class, 'id', 'batch_no');
     }
+
+    // relation with a single registered batch
+    public function batch()
+    {
+        return $this->hasOne(RegisteredBatch::class, 'id', 'batch_no');
+    }
 }

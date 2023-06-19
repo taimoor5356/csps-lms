@@ -70,11 +70,21 @@ class CreateStudentsTable extends Migration
             $table->string('student_occupation')->nullable();
             $table->string('distinction')->nullable();
             $table->longText('address')->nullable();
-            $table->unsignedBigInteger('whatsapp_group_number', 20)->nullable();
+            $table->longText('whatsapp_group_number')->nullable();
             $table->unsignedBigInteger('contact_res', 20)->nullable();
             $table->string('optional_subjects')->nullable();
             $table->string('rules_and_regulation')->nullable();
             $table->string('declaration')->nullable();
+            
+            // interview profile fields
+            $table->string('written_result_fpsc_serial_no')->nullable();
+            $table->string('written_fpsc_roll_no')->nullable();
+            $table->string('written_exam_preparation_from_csps')->nullable();
+            $table->string('selected_mock_interview')->nullable();
+            $table->string('mock_interview_date_time')->nullable();
+            $table->string('mock_interview_rules_regulations')->nullable();
+            $table->string('interview_performa')->nullable();
+
             $table->date('deleted_at')->nullable();
             $table->timestamps();
         });

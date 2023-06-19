@@ -74,7 +74,7 @@ class CourseController extends Controller
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="#" class="btn btn-success bg-success p-1 view-course-detail" data-course-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="#" class="btn btn-success bg-success p-1 view-course-detail" data-course-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
                         <a href="courses/'. $row->id .'/edit" data-course-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
                         <a href="courses/'. $row->id .'/delete" data-course-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-course" title="Delete"><i class="fa fa-trash-o"></i></a>
                     ';

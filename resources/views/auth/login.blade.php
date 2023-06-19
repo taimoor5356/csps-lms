@@ -115,8 +115,8 @@
                                 @php 
                                     $setting = \App\Models\Setting::first();
                                 @endphp
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->oncampus_descriptions." ".$setting->oncampus_date_times : ""}}</p>
-                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->online_descriptions." ".$setting->online_date_times : ""}}</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->oncampus_description." ".$setting->oncampus_date_time : ""}}</p>
+                                <p class="font-weight-bolder pb-0 mb-0 text-dark">- {{isset($setting) ? $setting->online_description." ".$setting->online_date_time : ""}}</p>
                                 {{-- <p class="font-weight-bolder pb-0 mb-0 text-dark">- Written CSS/PMS-2022 Exam in Feb, 2024 --}}
                                 </p>
                             </div>
@@ -129,15 +129,15 @@
                                             <div class="owl-carousel owl-2">
                                                 <div class="media-29101">
                                                     <a href="#">
-                                                      <img src="{{asset('public/assets/img/dashboard_sliders/3.jpg')}}" alt="Institute Images"
+                                                      <img src="{{asset('public/assets/img/dashboard_slider/3.jpg')}}" alt="Institute Images"
                                                             class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                                 <div class="media-29101">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/teachings.jpg')}}" alt="Institute Images"
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/teaching.jpg')}}" alt="Institute Images"
                                                             class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                                 <div class="media-29101">
-                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/black_oranges.png')}}" alt="Institute Images"
+                                                    <a href="#"><img src="{{asset('public/assets/img/dashboard_slider/black_orange.png')}}" alt="Institute Images"
                                                             class="img-fluid" style="height: 140px !important"></a>
                                                 </div>
                                             </div>

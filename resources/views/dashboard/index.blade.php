@@ -7,7 +7,7 @@
     </style>
 @endsection
 @section('breadcrumbs')
-    @include('layout.breadcrumb', ['institute_name' => 'Institute Name', 'tab_name' => 'Dashboard', 'page_title' => 'Admin Dashboard'])
+    @include('layout.breadcrumb', ['tab_name' => 'Dashboard', 'page_title' => 'Admin Dashboard'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
@@ -147,17 +147,17 @@
                 <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
                     <div class="carousel-inner border-radius-lg h-100">
                         <div class="carousel-item h-100 active"
-                            style="background-image: url('{{ asset('public/assets/img/dashboard_sliders/1.png') }}./'); background-size: cover;">
+                            style="background-image: url('{{ asset('public/assets/img/dashboard_slider/1.png') }}./'); background-size: cover;">
                             <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
                                 <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
                                     <i class="ni ni-camera-compact text-dark opacity-10"></i>
                                 </div>
-                                <h5 class="text-dark mb-1">Institute Images</h5>
-                                <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
+                                <h5 class="text-dark mb-1"></h5>
+                                <p></p>
                             </div>
                         </div>
                         <div class="carousel-item h-100"
-                            style="background-image: url({{ asset('public/assets/img/dashboard_sliders/2.jpg') }}); background-size: cover;">
+                            style="background-image: url({{ asset('public/assets/img/dashboard_slider/2.jpg') }}); background-size: cover;">
                             <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
                                 <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
                                     <i class="ni ni-bulb-61 text-dark opacity-10"></i>
@@ -167,7 +167,7 @@
                             </div>
                         </div>
                         <div class="carousel-item h-100"
-                            style="background-image: url('{{ asset('public/assets/img/dashboard_sliders/3.jpg') }}./'); background-size: cover;">
+                            style="background-image: url('{{ asset('public/assets/img/dashboard_slider/3.jpg') }}./'); background-size: cover;">
                             <div class="carousel-caption d-none d-md-block bottom-0 text-start start-0 ms-5">
                                 <div class="icon icon-shape icon-sm bg-white text-center border-radius-md mb-3">
                                     <i class="ni ni-trophy text-dark opacity-10"></i>

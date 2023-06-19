@@ -120,7 +120,7 @@ class NoticeBoardRepository implements NoticeBoardRepositoryInterface
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="notice-board/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-no-detail" data-no-id="'. $row->id .'" title="View" data-toggle="modal" data-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="notice-board/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-no-detail" data-no-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
                         <a href="notice-board/'. $row->id .'/edit" data-no-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                     if (Auth::user()->can('student_delete')) {
                         $btn .='<a href="notice-board/'. $row->id .'/delete" data-no-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-no" title="Delete"><i class="fa fa-trash-o"></i></a>';

@@ -37,7 +37,7 @@ class RoleController extends Controller
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '
-                        <a href="#" class="btn btn-success bg-success p-1 view-role-detail" data-role-id="'. $row->id .'" title="View Permissions" data-toggle="modal" data-target="#modal-default"><i class="fa fa-key"></i></a>
+                        <a href="#" class="btn btn-success bg-success p-1 view-role-detail" data-role-id="'. $row->id .'" title="View Permissions" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-key"></i></a>
                         <a href="roles/'. $row->id .'/edit" data-role-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit role"><i class="fa fa-pencil"></i></a>
                         <a href="roles/'. $row->id .'/delete" data-role-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-role" title="Delete"><i class="fa fa-trash-o"></i></a>
                     ';
