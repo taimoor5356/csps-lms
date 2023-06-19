@@ -135,8 +135,8 @@
                 <label for="applied_for" class="form-control-label">Applying for *</label>
                 <select name="applied_for" id="applied_for" class="form-control">
                     <option value="">Select applying for</option>
-                    <option value="full_interview_preparation" @isset($student) @if($student->applied_for == 'full_interview_preparation') selected @endif @endisset>Full Interview Preparation</option>
-                    <option value="mock_interview" @isset($student) @if($student->applied_for == 'mock_interview') selected @endif @endisset>Yes</option>
+                    <option value="full_interview_preparation" @isset($student) @if($student->interview_applied_for == 'full_interview_preparation') selected @endif @endisset>Full Interview Preparation</option>
+                    <option value="mock_interview" @isset($student) @if($student->interview_applied_for == 'mock_interview') selected @endif @endisset>Mock Interview</option>
                 </select>
             </div>
         </div>
