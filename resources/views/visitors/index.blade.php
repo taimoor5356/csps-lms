@@ -93,6 +93,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
+                        <a href="#" class="btn btn-primary" id="get-excel-file">Get Excel File</a>
                         @can('visitor_create')
                             <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @endcan
@@ -414,10 +415,11 @@
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
-            dom: 'lBfrtip',
+            // dom: 'lBfrtip',
             buttons: [{
                     extend: 'excel',
                     text: 'Get Excel File',
+                    className: 'buttons-excel',
                     exportOptions: {
                         columns: [5] // Specify the column indices to export (zero-based)
                     }
@@ -480,7 +482,9 @@
             }
         });
         // Data Table Ends
-
+        $(document).on('click', '#get-excel-file', function () {
+            table.button('.buttons-excel').trigger();
+        });
         // Child Row starts
         // Add event listener for opening and closing details
         $(document).on('click', 'td.dt-control', function () {
