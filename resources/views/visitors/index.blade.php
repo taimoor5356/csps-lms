@@ -93,7 +93,6 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="#" class="btn btn-primary" id="export-to-csv">Get CSV</a>
                         @can('visitor_create')
                             <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @endcan
