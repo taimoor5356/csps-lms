@@ -51,6 +51,15 @@
         .child-table>tr>td {
             border: 1px solid lightgrey;
         }
+
+        .buttons-html5 {
+            margin-left: 15px !important;
+            background-color: #1e73be !important;
+            border-radius: 5px !important;
+            color: white;
+            border: 1px solid #1e73be !important;
+            box-shadow: 5px;
+        }
     </style>
     <!-- Styling Here -->
 @endsection
@@ -84,6 +93,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
+                        <a href="#" class="btn btn-primary" id="export-to-csv">Get CSV</a>
                         @can('visitor_create')
                             <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @endcan
@@ -357,6 +367,9 @@
 <!-- Section Modal -->
 @section('page_js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
 <!-- Scripting Here -->
 <script>
     /* Formatting function for row details - modify as you need */
@@ -402,6 +415,15 @@
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
+            dom: 'lBfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    text: 'Get Excel File',
+                    exportOptions: {
+                        columns: [5] // Specify the column indices to export (zero-based)
+                    }
+                }
+            ],
             ajax: {
                 url: "{{ route('visitors') }}"
             },
@@ -578,7 +600,6 @@
                 }
             });
         });
-        // Ends Open Delete visitor Modal
     });
 </script>
 <!-- Scripting Here -->
