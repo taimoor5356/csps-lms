@@ -25,11 +25,11 @@
             <div class="form-group">
                 <label for="fee" class="form-control-label">Select Student *</label>
                 <select class="form-control" name="user_id" id="user_id">
-                    <option value="0" disabled selected>Select Student</option>
+                    <option value="0" selected>Select Student</option>
                     @foreach ($students as $key => $student)
                         @isset($student->user)
                             @if (Auth::user()->hasRole('student'))
-                                <option selected value="{{ $student->user->id }}">{{ $student->user->name }}</option>
+                                <option value="{{ $student->user->id }}">{{ $student->user->name }}</option>
                             @else
                                 <option value="{{ $student->user->id }}">{{ $student->user->name }}</option>
                             @endif
@@ -43,13 +43,13 @@
                 <label for="name" class="form-control-label">Select Course *</label>
                 <select class="form-control" name="course_id" id="course_id">
                     <option value="0" selected disabled>Select Courses</option>
-                    @foreach ($courses as $key => $course)
+                    {{-- @foreach ($courses as $key => $course)
                         @isset($course)
                             @if (!Auth::user()->enrolled_courses->contains('course_id', $course->id))
                                 <option value="{{ $course->id }}">{{ $course->name }} ({{$course->category}})</option>
                             @endif
                         @endisset
-                    @endforeach
+                    @endforeach --}}
                 </select>
             </div>
         </div>

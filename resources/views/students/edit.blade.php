@@ -10,7 +10,7 @@
 <!-- Styling Here -->
 @endsection
 @section('breadcrumbs')
-    @include('layout.breadcrumb', ['tab_name' => 'Students', 'page_title' => 'Edit'])
+    @include('layout.breadcrumb', ['tab_name' => 'Students', 'page_title' => 'Edit (4)'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">

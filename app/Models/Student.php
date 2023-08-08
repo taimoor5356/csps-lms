@@ -35,4 +35,5 @@ class Student extends Model
     {
         return $this->hasOne(RegisteredBatch::class, 'id', 'batch_no');
     }
+
 }

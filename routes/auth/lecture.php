@@ -13,4 +13,5 @@ Route::prefix('lectures')->group(function () {
     Route::get('/trashed', [LectureController::class, 'trashed'])->name('trashed.lectures');
     Route::get('/{id}/restore', [LectureController::class, 'restore'])->name('restore.lecture');
     Route::post('/{id}/permanent-delete', [LectureController::class, 'permanentDelete'])->name('permanent_delete.lecture');
+    Route::post('/fetch-students', [LectureController::class, 'fetchStudents'])->name('fetch_students.lecture');
 });

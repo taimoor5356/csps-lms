@@ -71,6 +71,28 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
+
+        // filter out the courses related to student
+        $(document).on('change', '#user_id', function() {
+            var _this = $(this);
+            $.ajax({
+                url: "{{ route('fetch_user_courses') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    user_id: _this.val()
+                },
+                success: function(response) {
+                    var html = '<option value="0" selected>Select Course</option>';
+                    response.data.forEach(element => {
+                        html += `
+                            <option value="`+element.id+`">`+element.name+`</option>
+                        `;
+                    });
+                    $('#course_id').html(html);
+                }
+            });
+        });
     });
 </script>
 <!-- Scripting Here -->

@@ -198,6 +198,9 @@
                             <a class="nav-link " href="{{ route('enroll-student.create') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Enroll a Student
                             </a>
+                            <a class="nav-link " href="{{ route('lectures') }}">
+                                <i class="fa fa-minus text-dark opacity-10"></i>Lectures
+                            </a>
                         </li>
                     </ul>
                 </div>

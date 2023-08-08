@@ -288,6 +288,7 @@ class StudentRepository implements StudentRepositoryInterface
                 $columnName = ucfirst($columnName);
                 return response()->json(['status' => false, 'msg' => "Duplicate entry for $columnName"]);
             } else {
+                dd($e);
                 return response()->json(['status' => false, 'msg' => "Something went wrong"]);
             }
         }
@@ -408,7 +409,8 @@ class StudentRepository implements StudentRepositoryInterface
                     // $student->user->password = Hash::make($request->password);
                     if ($request->hasFile('photo')) {
                         if ($request->file('photo')->getSize() > 500000) {
-                            return redirect()->back()->with('error', 'Max 500KB photo size allowed');
+                            // return redirect()->back()->with('error', 'Max 500KB photo size allowed');
+                            return response()->json(['status' => false, 'msg' => 'Max 500KB photo size allowed']);
                         }
                         $file = time().'.'.$request->photo->extension();
                         $request->photo->move(public_path('assets/img/students/'), $file);
@@ -450,7 +452,6 @@ class StudentRepository implements StudentRepositoryInterface
                 return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
             }
         } catch (\Exception $e) {
-            dd($e);
             DB::rollback();
             if ($e->getCode() == 23000 && str_contains($e->getMessage(), 'Duplicate entry')) {
                 $pattern = "/Duplicate entry '.*' for key '(.*?)'/";
@@ -460,6 +461,7 @@ class StudentRepository implements StudentRepositoryInterface
                 $columnName = ucfirst($columnName);
                 return response()->json(['status' => false, 'msg' => "Duplicate entry for $columnName"]);
             } else {
+                dd('3');
                 return response()->json(['status' => false, 'msg' => "Something went wrong"]);
             }
         }

@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Interfaces\LectureRepositoryInterface;
+use Carbon\Carbon;
+use App\Models\Course;
+use App\Models\Lecture;
+use App\Models\Student;
+use App\Models\Teacher;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\StudentLectureSchedule;
+use App\Interfaces\LectureRepositoryInterface;
 
 class LectureController extends Controller
 {
@@ -27,7 +34,8 @@ class LectureController extends Controller
         if ($request->ajax()) {
             return $this->lectureRepository->index($request);
         }
-        return view('lectures.index');
+        $courses = Course::get();
+        return view('lectures.index', compact('courses'));
     }
 
     /**
@@ -49,6 +57,7 @@ class LectureController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->lectureRepository->store($request->all());
     }
 
     /**
@@ -60,6 +69,7 @@ class LectureController extends Controller
     public function show($id)
     {
         //
+        return $this->lectureRepository->show($id);
     }
 
     /**
@@ -71,6 +81,9 @@ class LectureController extends Controller
     public function edit($id)
     {
         //
+        $teachers = Teacher::with('user')->get();
+        $students = Student::with('user')->get();
+        return view('lectures.edit', compact('id', 'teachers', 'students'));
     }
 
     /**
@@ -83,6 +96,7 @@ class LectureController extends Controller
     public function update(Request $request, $id)
     {
         //
+        return $this->lectureRepository->update($request->all(), $id);
     }
 
     /**
@@ -94,5 +108,10 @@ class LectureController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fetchStudents(Request $request)
+    {
+        return $this->lectureRepository->fetchStudents($request->all());
     }
 }

@@ -1,9 +1,9 @@
 @php 
     $allCourses = $courses->get();
     $compulsoryCourses = $courses->where('category', 'compulsory')->get();
-    $studentSelectedCourses = json_decode($student->selected_subjects);
-    if (is_null($studentSelectedCourses)) {
-        $studentSelectedCourses = [];
+    $studentSelectedCourses = [];
+    if (isset($student)) {
+        $studentSelectedCourses = json_decode($student->selected_subjects);
     }
 @endphp
 

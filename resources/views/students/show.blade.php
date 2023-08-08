@@ -16,7 +16,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Students</span>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Students (6)</span>
             </li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Student Profile</h6>
@@ -177,6 +177,7 @@
                                                 <td class="text-center">
                                                     @php
                                                         $paid += $student_fee->paid;
+                                                        $discount = $student_fee->discount;
                                                     @endphp
                                                     @if ($paid == 0)
                                                         <span class="text-white bg-danger p-2">UNPAID</span>
@@ -209,9 +210,15 @@
                                             <td colspan="3"></td>
                                         </tr>
                                         <tr>
+                                            <td class="text-center font-weight-bold" colspan="2">Discount</td>
+                                            <td class="text-center font-weight-bold"></td>
+                                            <td class="text-center font-weight-bold">{{$student->discount}}</td>
+                                            <td colspan="3"></td>
+                                        </tr>
+                                        <tr>
                                             <td class="text-center font-weight-bold" colspan="2">Remaining</td>
                                             <td class="text-center font-weight-bold"></td>
-                                            <td class="text-center font-weight-bold">{{$student->total_fee-$paid}}</td>
+                                            <td class="text-center font-weight-bold">{{$student->total_fee-$discount-$paid}}</td>
                                             <td colspan="3"></td>
                                         </tr>
                                     </tfoot>
@@ -219,118 +226,27 @@
                             </div>
                         </div>
                         <div class="tab-pane fade" id="lectures" role="tabpanel" aria-labelledby="lectures-tab">
+                            @php
+                                $courses = \App\Models\Course::whereIn('id', json_decode($student->selected_subjects))->get();
+                            @endphp
+                            @foreach ($courses as $course)
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
                                 <div class="row p-1">
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
+                                        {{$course->name}}
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
+                                        Lecturer Name
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
+                                        {{\Carbon\Carbon::now()->format('Y-m-d')}}
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-danger p-1 text-danger">Up Comming</span>
+                                        <span class="border border-danger rounded p-1 text-danger">Up Comming</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-danger p-1 text-danger">Up Comming</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-danger p-1 text-danger">Up Comming</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-danger p-1 text-danger">Up Comming</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-success p-1 text-success">Completed</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-danger p-1 text-danger">Up Comming</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
-                                <div class="row p-1">
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        English Essay
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Muhammad Shahnawaz Khan
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        30/09/2022
-                                    </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        <span class="border border-success p-1 text-success">Completed</span>
-                                    </div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                         <div class="tab-pane fade" id="results" role="tabpanel" aria-labelledby="results-tab">
                             <div class="row my-2">

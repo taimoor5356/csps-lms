@@ -239,4 +239,23 @@ class EnrollmentController extends Controller
     {
         //
     }
+
+    public function fetchUserCourses(Request $request)
+    {
+        $student = Student::where('user_id', $request->user_id)->first();
+        if (isset($student)) {
+            $courses = Course::whereIn('id', json_decode($student->selected_subjects))->get();
+            return response()->json([
+                'status' => true,
+                'data' => $courses,
+                'msg' => 'Successfull'
+            ]);
+        } else {
+            return response()->json([
+                'status' => false,
+                'data' => [],
+                'msg' => 'Something went wrong'
+            ]);
+        }
+    }
 }

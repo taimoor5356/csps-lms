@@ -15,4 +15,5 @@ interface LectureRepositoryInterface
     public function trashed($request);
     public function restore($id);
     public function getFulfilledLectures();
+    public function fetchStudents($request);
 }

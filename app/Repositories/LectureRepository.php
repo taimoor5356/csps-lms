@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Interfaces\LectureRepositoryInterface;
+use App\Models\Lecture;
+use App\Models\StudentLectureSchedule;
+use App\Models\TeacherLectureSchedule;
 
 class LectureRepository implements LectureRepositoryInterface 
 {
@@ -21,100 +24,195 @@ class LectureRepository implements LectureRepositoryInterface
     {
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('image', function ($row) {
-                $url = URL::to('/');
-                if ($row->user) {
-                    return '    
-                    <div class="d-flex px-2 py-1">
-                        <div>
-                            <img src="' . $url . '/public/assets/img/lectures/' . $row->user->photo . '" class="avatar avatar-lg"
-                                alt="user1">
+            ->addColumn('course_name', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    if ($row->course) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->course->name . '</h6>
+                            </div>
                         </div>
-                    </div>
-                    ';
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('teacher')) {
+                    if ($row->lecture->course) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->course->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('student')) {
+                    if ($row->lecture->course) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->course->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
                 } else {
-                    return '    
-                    <div class="d-flex px-2 py-1">
-                        <div>
-                            <img src="' . $url . '/public/assets/img/lectures/" class="avatar avatar-lg"
-                                alt="user1">
-                        </div>
-                    </div>
-                    ';
+                    return 'No Data';
                 }
             })
-            ->addColumn('name_email', function ($row) {
-                if ($row->user) {
-                    return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->user->name . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->user->email . '</p>
+            ->addColumn('lecturer_name', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    if (isset($row->teachers->teacher)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->teachers->teacher->user->name . '</h6>
+                            </div>
                         </div>
-                    </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('teacher')) {
+                    if (isset($row->lecture->teachers->teacher)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->teachers->teacher->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('student')) {
+                    if (isset($row->lecture->teachers->teacher)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->teachers->teacher->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else {
+                    return 'No Data';
+                }
+            })
+            ->addColumn('student_name', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    if (count($row->students) > 0) {
+                        $html = '';
+                        for ($i = 0; $i < 3; $i++) {
+                            if (isset($row->students[$i])) {
+                                $html .= '
+                                <div class="d-flex px-2 py-1">
+                                    <div class="d-flex flex-column justify-content-center">
+                                        <h6 class="mb-0 text-sm">' . $row->students[$i]->student->user->name . '...</h6>
+                                    </div>
+                                </div>
+                                ';
+                                break;
+                            } else {
+                                return 'No Data';
+                            }
+                        }
+                        return $html;
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('teacher')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('student')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else {
+                    return 'No Data';
+                }
+            })
+            ->addColumn('starting_date', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->start_date . '</h6>
+                            </div>
+                        </div>
+                    ';
+                } else if (Auth::user()->hasRole('teacher')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->start_date . '</h6>
+                            </div>
+                        </div>
+                    ';
+                } else if (Auth::user()->hasRole('student')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->start_date . '</h6>
+                            </div>
+                        </div>
                     ';
                 } else {
                     return 'No Data';
                 }
             })
-            ->addColumn('fathername_occupation', function ($row) {
-                return '
-                <div class="d-flex px-2 py-1">
-                    <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . $row->father_name . '</h6>
-                        <p class="text-sm text-secondary mb-0">' . $row->father_occupation . '</p>
-                    </div>
-                </div>
-                ';
-            })
-            ->addColumn('dob_cnic', function ($row) {
-                return '
-                <div class="d-flex px-2 py-1">
-                    <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . Carbon::parse($row->dob)->format('M d,Y') . '</h6>
-                        <p class="text-sm text-secondary mb-0">' . $row->cnic . '</p>
-                    </div>
-                </div>
-                ';
-            })
-            ->addColumn('domicile', function ($row) {
-                return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->domicile . '</h6>
+            ->addColumn('ending_date', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->end_date . '</h6>
+                            </div>
                         </div>
-                    </div>
-                ';
-            })
-            ->addColumn('degree_university', function ($row) {
-                return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->degree . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->board_university . '</p>
+                    ';
+                } else if (Auth::user()->hasRole('teacher')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->end_date . '</h6>
+                            </div>
                         </div>
-                    </div>
-                ';
-            })
-            ->addColumn('subject_cgpa', function ($row) {
-                $val = '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->major_subjects . '</h6>
-                            <p class="text-sm text-secondary mb-0">';
-                            if ($row->cgpa < 4) {
-                                $val .= number_format($row->cgpa, 2) . 'GGPA';
-                            } else if ($row->cgpa > 40) {
-                                $val .= number_format($row->cgpa, 2) . '%';
-                            }
-                    $val .= '</p>
+                    ';
+                } else if (Auth::user()->hasRole('student')) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->lecture->end_date . '</h6>
+                            </div>
                         </div>
-                    </div>
-                ';
-                return $val;
-            })
-            ->addColumn('distinction', function ($row) {
-                return $row->distinction;
+                    ';
+                } else {
+                    return 'No Data';
+                }
             })
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
@@ -134,19 +232,23 @@ class LectureRepository implements LectureRepositoryInterface
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action'])
+            ->rawColumns(['course_name', 'lecturer_name', 'student_name', 'starting_date', 'ending_date', 'action'])
             ->make(true);
     }
 
     public function index($request) 
     {
         try {
-            $lecturesDetail = Student::with('user')->get();
+            $lecturesDetail = Lecture::with('course', 'teachers.teacher.user', 'students.student.user')->get();
+            if (Auth::user()->hasRole('teacher')) {
+                // $lecturesDetail = TeacherLectureSchedule::with('lecture.course', 'lecture.teachers.teacher.user', 'student.user')->where('teacher_id', Auth::user()->id)->get();
+            }
             if (Auth::user()->hasRole('student')) {
-                $lecturesDetail = Student::with('user')->where('user_id', Auth::user()->id)->get();
+                $lecturesDetail = StudentLectureSchedule::with('lecture.course', 'lecture.teachers.teacher.user', 'student.user')->where('student_id', Auth::user()->student->id)->get();
             }
             return $this->showTableData($lecturesDetail, $trashed = null);
         } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->withError('Something went wrong');
         }
     }
@@ -158,10 +260,8 @@ class LectureRepository implements LectureRepositoryInterface
 
     public function show($id) 
     {
-        $student = Student::with('user')->where('id', $id)->first();
-        if (isset($student)) {
-            return $student;
-        }
+        $lecture = Lecture::with('course', 'teachers', 'students')->where('id', $id)->first();
+        return view('lectures.show', compact('lecture', 'id'));
     }
 
     public function store($request) 
@@ -169,83 +269,11 @@ class LectureRepository implements LectureRepositoryInterface
         try {
             DB::beginTransaction();
             $request = (object)$request;
-            // if ($request->hasFile('photo')) {
-            //     $file = time().'.'.$request->photo->extension();
-            //     $directory = public_path('assets/img/lectures/');
-            //     $imageUpload = $this->uploadImage($request->photo, $file, $directory);
-            //     if ($imageUpload->status == false) {
-            //         return response()->json(['status' => false, 'msg' => 'Max 500kb file size']);
-            //     }
-            // } else {
-            //     return response()->json(['status' => false, 'msg' => 'Picture required']);
-            // }
-            $defaultPassword = '12345678';
-            if ($request->visitor == 'true') {
-                $user = User::where('id', $request->user_id)->first();
-                if (isset($user)) {
-                    $user->name = $request->name;
-                    if ($user->email != $request->email) {
-                        $user->email = $request->email;
-                    }
-                    $user->gender = $request->gender;
-                    $user->password = Hash::make($defaultPassword);
-                    $user->role_id = 3;
-                    // $user->registration_date = Carbon::now();
-                    $user->approved_status = 1;
-                    $user->save();
-                }
-            } else {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'gender' => $request->gender,
-                    'password' => Hash::make($defaultPassword),
-                    'role_id' => 3,
-                    'registration_date' => Carbon::now(),
-                    'approved_status' => 0,
-                    // 'photo' => $file
-                ]);
-            }
-            $student = Student::create([
-                'user_id' => $user->id,
-                'batch_no' => $request->batch_no,
-                'reg_no' => $request->reg_no,
-                'roll_no' => $request->roll_no,
-                'applied_for' => $request->applied_for,
-                'father_name' => $request->father_name,
-                'father_occupation' => $request->father_occupation,
-                'dob' => $request->dob,
-                'cnic' => $request->cnic,
-                'domicile' => $request->domicile,
-                'student_occupation' => $request->student_occupation,
-                'degree' => $request->degree,
-                'major_subjects' => $request->major_subjects,
-                'cgpa' => $request->cgpa,
-                'board_university' => $request->board_university,
-                'distinction' => $request->disctinction,
-                'address' => $request->address,
-                'contact_res' => $request->contact_res,
-                'cell_no' => $request->cell_no,
-                'year' => $request->year,
-                'class_type' => $request->class_type,
-                'fee_type' => $request->fee_type,
-                'mock_exam_evaluation' => $request->mock_exam_evaluation,
-                'installment' => $request->installment,
-                'discount' => $request->discount,
-                'total_fee' => $request->total_fee,
-                'due_date' => $request->due_date,
-                'freeze' => $request->freeze,
-                'leave' => $request->leave,
-                'fee_refund' => $request->fee_refund ? '1' : '0',
-                'notification_sent' => $request->notification_sent ? '1' : '0',
-                'challan_generated' => $request->challan_generated ? '1' : '0',
-                'fee_submit_date' => $request->fee_submit_date
+            $lecture = Lecture::create([
+                'course_id' => $request->course_id,
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date
             ]);
-            $user->assignRole(3);
-            $subject = 'Login Details';
-            if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                $student->notification = $request->notification ? $request->notification : '0';
-            }
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
@@ -256,55 +284,47 @@ class LectureRepository implements LectureRepositoryInterface
 
     public function edit($id)
     {
+        return 'Edit page';
     }
 
     public function update($request, $id) 
     {
         try {
+            $request = (object)$request;
             DB::beginTransaction();
-            $student = Student::with('user')->where('id', $id)->first();
-            if (isset($student)) {
-                $student->applied_for = $request->applied_for;
-                $student->batch_no = $request->batch_no;
-                $student->reg_no = $request->reg_no;
-                $student->user->name = $request->name;
-                $student->user->email = $request->email;
-                $student->user->password = Hash::make($request->password);
-                if ($request->hasFile('photo')) {
-                    if ($request->file('photo')->getSize() > 500000) {
-                        return redirect()->back()->with('error', 'Max 500KB photo size allowed');
-                    }
-                    $file = time().'.'.$request->photo->extension();
-                    $request->photo->move(public_path('assets/img/lectures/'), $file);
-                    $student->user->photo = $file;
-                }
-                $student->father_name = $request->father_name;
-                $student->father_occupation = $request->father_occupation;
-                $student->dob = $request->dob;
-                $student->cnic = $request->cnic;
-                $student->domicile = $request->domicile;
-                $student->student_occupation = $request->student_occupation;
-                $student->address = $request->address;
-                $student->contact_res = $request->contact_res;
-                $student->cell_no = $request->cell_no;
-                $student->roll_no = $request->roll_no;
-                $student->degree = $request->degree;
-                $student->major_subjects = $request->major_subjects;
-                $student->cgpa = $request->cgpa;
-                $student->board_university = $request->board_university;
-                $student->distinction = $request->distinction;
-                $student->save();
-                $student->user->save();
-                $student->user->assignRole($request->role);
-                DB::commit();
-                return response()->json(['status' => true, 'msg' => 'Data Updated Successfully']);
-            } else {
-                DB::rollback();
-                return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
+            if (!empty($request->teacher_id)) {
+                TeacherLectureSchedule::create([
+                    'teacher_id' => $request->teacher_id,
+                    'lecture_id' => $id,
+                    'assigned_date' => Carbon::now()->format('Y-m-d')
+                ]);
             }
+            if (!empty($request->user_id)) {
+                if (!StudentLectureSchedule::where('student_id', $request->user_id)->where('lecture_id', $id)->exists()) {
+                    StudentLectureSchedule::create([
+                        'student_id' => $request->user_id,
+                        'lecture_id' => $id,
+                        'assigned_date' => Carbon::now()->format('Y-m-d')
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'msg' => 'Already assigned'
+                    ]);
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'msg' => 'Successfully updated'
+            ]);
         } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['status' => false, 'msg' => 'Something went wrong']);
+            dd($e);
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'msg' => 'Something went wrong'
+            ]);
         }
     }
 
@@ -355,5 +375,103 @@ class LectureRepository implements LectureRepositoryInterface
     public function getFulfilledLectures() 
     {
         return Student::where('is_fulfilled', true);
+    }
+
+    public function fetchTeachers(Request $request)
+    {
+        
+    }
+
+    public function fetchStudents($request)
+    {
+        $request = (object)$request;
+        $students = StudentLectureSchedule::with('student.user')->where('lecture_id', $request->lecture_id)->get();
+        
+        return DataTables::of($students)
+            ->addIndexColumn()
+            ->addColumn('student_name', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('teacher')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('student')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->user->name . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else {
+                    return 'No Data';
+                }
+            })
+            ->addColumn('roll_no', function ($row) {
+                if (Auth::user()->hasRole('admin')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->roll_no . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('teacher')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->roll_no . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else if (Auth::user()->hasRole('student')) {
+                    if (!empty($row->student->user)) {
+                        return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->student->roll_no . '</h6>
+                            </div>
+                        </div>
+                        ';
+                    } else {
+                        return 'No Data';
+                    }
+                } else {
+                    return 'No Data';
+                }
+            })
+            ->rawColumns(['student_name', 'roll_no'])
+            ->make(true);
     }
 }

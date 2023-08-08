@@ -31,7 +31,7 @@
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
             <li class="breadcrumb-item text-sm text-white" aria-current="page"><a href="{{ route('students') }}"
                     class="text-white">Students</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Edit</span>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Edit (3)</span>
             </li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Students</h6>
