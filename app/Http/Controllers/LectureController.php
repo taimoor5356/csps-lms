@@ -108,6 +108,7 @@ class LectureController extends Controller
     public function destroy($id)
     {
         //
+        return redirect()->back();
     }
 
     public function fetchStudents(Request $request)
