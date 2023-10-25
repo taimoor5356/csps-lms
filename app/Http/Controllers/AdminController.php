@@ -300,17 +300,37 @@ class AdminController extends Controller
     {
         //
         try {
-            $admin = Admin::with('user')->where('id', $id)->first();
-            if (isset($admin)) {
-                if (isset($admin->user)) {
-                    $admin->user->delete();
-                    $admin->delete();
-                    return redirect()->back()->with('success', 'Deleted Successfully');
+            if ($id != 1) {
+                $admin = Admin::with('user')->where('id', $id)->first();
+                if (isset($admin)) {
+                    if (isset($admin->user)) {
+                        $admin->user->delete();
+                        $admin->delete();
+                        return response()->json([
+                            'status' => true,
+                            'msg' => 'Deleted successfully'
+                        ]);
+                        // return redirect()->back()->with('success', 'Deleted Successfully');
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'msg' => 'User doesnot exists'
+                    ]);
+                    // return redirect()->back()->with('error', 'User doesnot exists');
                 }
             } else {
-                return redirect()->back()->with('error', 'User doesnot exists');
+                return response()->json([
+                    'status' => false,
+                    'msg' => 'Cannot delete Admin'
+                ]);
+                // return redirect()->back()->with('error', 'Cannot delete admin');
             }
         } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'msg' => 'Something went wrong'
+            ]);
             return redirect()->back()->with('error', 'Something went wrong');
         }
     }

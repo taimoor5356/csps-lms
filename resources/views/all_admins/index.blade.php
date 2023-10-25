@@ -394,17 +394,28 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post('admins/' + adminId + '/delete', {_token: '{{ csrf_token() }}'},function() {
+                    $.post('admins/' + adminId + '/delete', {_token: '{{ csrf_token() }}'}, function(responseData) {
+                        if (responseData.status == true) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: responseData.msg,
+                                icon: 'success',
+                                timer: 4500,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                            table.draw(false);
+                        } else {
+                            Swal.fire({
+                                title: 'Alert!',
+                                text: responseData.msg,
+                                icon: 'warning',
+                                timer: 4500,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                        }
                     });
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: 'Admin has been deleted.',
-                        icon: 'success',
-                        timer: 4500,
-                        showCancelButton: false,
-                        showConfirmButton: false,
-                    });
-                    table.draw(false);
                 }
             });
         });

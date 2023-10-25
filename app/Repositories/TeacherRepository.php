@@ -133,13 +133,14 @@ class TeacherRepository implements TeacherRepositoryInterface
                 'user_id' => $user->id,
                 'batch_no' => $request->batch_no,
                 'reg_no' => $request->reg_no,
-                'contact_res' => $request->contact_no
+                'cell_no' => $request->contact_no,
+                'class_type' => $request->class_type
             ]);
             $user->assignRole(2);
-            $subject = 'Login Details';
-            if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                $teacher->notification = $request->notification ? $request->notification : '0';
-            }
+            // $subject = 'Login Details';
+            // if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
+            //     $teacher->notification = $request->notification ? $request->notification : '0';
+            // }
             DB::commit();
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
@@ -156,10 +157,11 @@ class TeacherRepository implements TeacherRepositoryInterface
     public function update($request, $id) 
     {
         try {
+            $request = (object)$request;
             DB::beginTransaction();
             $teacher = Teacher::with('user')->where('id', $id)->first();
             if (isset($teacher)) {
-                $teacher->applied_for = $request->applied_for;
+                $teacher->class_type = $request->class_type;
                 $teacher->batch_no = $request->batch_no;
                 $teacher->reg_no = $request->reg_no;
                 $teacher->user->name = $request->name;
@@ -173,21 +175,8 @@ class TeacherRepository implements TeacherRepositoryInterface
                     $request->photo->move(public_path('assets/img/lectures/'), $file);
                     $teacher->user->photo = $file;
                 }
-                $teacher->father_name = $request->father_name;
-                $teacher->father_occupation = $request->father_occupation;
-                $teacher->dob = $request->dob;
-                $teacher->cnic = $request->cnic;
-                $teacher->domicile = $request->domicile;
-                $teacher->student_occupation = $request->student_occupation;
-                $teacher->address = $request->address;
                 $teacher->contact_res = $request->contact_res;
                 $teacher->cell_no = $request->cell_no;
-                $teacher->roll_no = $request->roll_no;
-                $teacher->degree = $request->degree;
-                $teacher->major_subjects = $request->major_subjects;
-                $teacher->cgpa = $request->cgpa;
-                $teacher->board_university = $request->board_university;
-                $teacher->distinction = $request->distinction;
                 $teacher->save();
                 $teacher->user->save();
                 $teacher->user->assignRole($request->role);
@@ -198,6 +187,7 @@ class TeacherRepository implements TeacherRepositoryInterface
                 return response()->json(['status' => false, 'msg' => 'User doesnot exist']);
             }
         } catch (\Exception $e) {
+            dd($e);
             DB::rollback();
             return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }

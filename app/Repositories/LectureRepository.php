@@ -291,7 +291,6 @@ class LectureRepository implements LectureRepositoryInterface
     {
         try {
             $request = (object)$request;
-            DB::beginTransaction();
             if (!empty($request->teacher_id)) {
                 TeacherLectureSchedule::create([
                     'teacher_id' => $request->teacher_id,
@@ -306,21 +305,14 @@ class LectureRepository implements LectureRepositoryInterface
                         'lecture_id' => $id,
                         'assigned_date' => Carbon::now()->format('Y-m-d')
                     ]);
-                } else {
-                    return response()->json([
-                        'status' => false,
-                        'msg' => 'Already assigned'
-                    ]);
                 }
             }
-            DB::commit();
             return response()->json([
                 'status' => true,
                 'msg' => 'Successfully updated'
             ]);
         } catch (\Exception $e) {
             dd($e);
-            DB::rollBack();
             return response()->json([
                 'status' => false,
                 'msg' => 'Something went wrong'

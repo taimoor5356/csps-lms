@@ -19,6 +19,7 @@ class CreateTeachersTable extends Migration
             $table->string('batch_no')->nullable();
             $table->string('reg_no')->unique()->nullable();
             $table->string('applied_for')->nullable()->comment('CSS,PMS,Others');
+            $table->string('class_type')->nullable();
             $table->string('father_name')->nullable();
             $table->string('father_occupation')->nullable();
             $table->date('dob')->nullable();

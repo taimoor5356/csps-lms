@@ -103,6 +103,7 @@ class TeacherController extends Controller
     public function update(Request $request, $id)
     {
         //
+        return $this->teacherRepository->update($request->all(), $id);
     }
 
     /**

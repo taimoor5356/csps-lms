@@ -40,7 +40,7 @@
                 <label for="contact_no" class="form-control-label">Contact No *</label>
                 <input class="form-control contact_no" id="contact_no"
                     name="contact_no" type="number"
-                    value="@isset($teacher->user) {{ $teacher->cell_no }} @endisset"
+                    value="@isset($teacher->user)0{{$teacher->cell_no}}@endisset"
                     onfocus="focused(this)" onfocusout="defocused(this)" placeholder="Contact No">
             </div>
         </div>
