@@ -97,15 +97,15 @@
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
                             <ul class="">
-                                <li><h3>HELP DESK</h3></li>
-                                <li><h3>BASIC ENGLISH CORRECTION DESK</h3></li>
-                                <li><h3>FOUNDATION CLASSES ENGLISH & MATH</h3></li>
-                                <li><h3>LIBRARY</h3></li>
-                                <li><h3>VIRTUAL CLASSES</h3></li>
-                                <li><h3>FREE REVISION SESSIONS</h3></li>
-                                <li><h3>TOPPER BATCH</h3></li>
-                                <li><h3>MPT CLASSES</h3></li>
-                                <li><h3>PAST PAPERS</h3></li>
+                                <li><h3><i class="fa fa-star"></i> DESK</h3></li>
+                                <li><h3><i class="fa fa-star"></i> BASIC ENGLISH CORRECTION DESK</h3></li>
+                                <li><h3><i class="fa fa-star"></i> FOUNDATION CLASSES ENGLISH & MATH</h3></li>
+                                <li><h3><i class="fa fa-star"></i> LIBRARY</h3></li>
+                                <li><h3><i class="fa fa-star"></i> VIRTUAL CLASSES</h3></li>
+                                <li><h3><i class="fa fa-star"></i> FREE REVISION SESSIONS</h3></li>
+                                <li><h3><i class="fa fa-star"></i> TOPPER BATCH</h3></li>
+                                <li><h3><i class="fa fa-star"></i> MPT CLASSES</h3></li>
+                                <li><h3><i class="fa fa-star"></i> PAST PAPERS</h3></li>
                             </ul>
                         </div>
                     </div>
