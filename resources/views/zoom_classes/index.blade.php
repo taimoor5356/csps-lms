@@ -84,11 +84,10 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        {{-- @if (Auth::user()->hasRole('student'))
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Day</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Week</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Month</button>
-                        @endif --}}
+                        @if (Auth::user()->hasRole(['admin', 'student']))
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-zoom-link"><i
+                            class="fa fa-plus"></i> Add New</button>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body pb-2">
@@ -103,22 +102,76 @@
 @section('modal')
 <div class="row">
     <div class="col-md-4">
-        <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default"
+        <div class="modal fade" id="add-new-zoom-link" tabindex="-1" role="dialog" aria-labelledby="add-new-zoom-link"
             aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h6 class="modal-title" id="modal-title-default">Zoom Classes Detail</h6>
-                        <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
-                            aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-footer">
-                        {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
-                        <button type="button" class="close-modal btn btn-danger  ml-auto"
-                            data-bs-dismiss="modal">Close</button>
-                    </div>
+                    <form action="{{ route('store.zoom_classes') }}" method="POST">
+                        @csrf
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Add New Zoom Link</h6>
+                            <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="course_id" class="form-control-label">Select Course</label>
+                                        <select name="course_id" id="course_id" class="form-control" required>
+                                            <option value="" selected disabled>Select Course</option>
+                                            @foreach ($courses as $course)
+                                                <option value="{{ $course->id }}">{{ $course->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Date -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="day" class="form-control-label">Select Date</label>
+                                        <input class="form-control day" id="day" name="day" type="date"
+                                            value="@isset($student->user){{ $student->user->name }}@endisset"
+                                            onfocus="focused(this)" onfocusout="defocused(this)"
+                                            placeholder="Student Name" required>
+                                    </div>
+                                </div>
+                                <!-- Time -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="time" class="form-control-label">Select Time</label>
+                                        <input class="form-control time" id="time" name="time" type="time"
+                                            value="@isset($student->user){{ $student->user->name }}@endisset"
+                                            onfocus="focused(this)" onfocusout="defocused(this)"
+                                            placeholder="Student Name" required>
+                                    </div>
+                                </div>
+                                <!-- Zoom Link -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="link" class="form-control-label">Zoom Link</label>
+                                        <input class="form-control link" id="link" name="link" type="text"
+                                            value="@isset($student->user){{ $student->user->name }}@endisset"
+                                            onfocus="focused(this)" onfocusout="defocused(this)"
+                                            placeholder="Zoom link here" required>
+                                    </div>
+                                </div>
+                                <!-- Submit -->
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="close-modal btn btn-success  ml-auto"
+                                data-bs-dismiss="" value="Save">
+                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                            <button type="button" class="close-modal btn btn-danger  ml-auto"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -144,6 +197,48 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
+        
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
+            responsive: true,
+            processing: true,
+            stateSave: true,
+            // serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('zoom_classes') }}"
+            },
+            columns: [
+                {
+                    data: 'course',
+                    name: 'course'
+                },
+                {
+                    data: 'day_time',
+                    name: 'day_time'
+                },
+                {
+                    data: 'zoom_link',
+                    name: 'zoom_link'
+                },
+                // {
+                //     data: 'action',
+                //     name: 'action',
+                //     orderable: false,
+                //     searchable: false
+                // },
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            }
+        });
+        // Data Table Ends
     });
 </script>
 <!-- Scripting Here -->

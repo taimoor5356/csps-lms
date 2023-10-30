@@ -51,6 +51,21 @@
         .child-table>tr>td {
             border: 1px solid lightgrey;
         }
+
+.rating i {
+    color: #ccc;
+    /* Default star color */
+}
+
+.rating i:hover {
+    color: #ffcc00;
+    /* Hovered star color */
+}
+
+.rating i.active {
+    color: #ffcc00;
+    /* Active star color */
+}
     </style>
     <!-- Styling Here -->
 @endsection
@@ -85,7 +100,10 @@
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('teacher_review._table')
+                    <form action="{{route('store.teacher_review')}}" method="POST">
+                        @csrf
+                        @include('teacher_review._table')
+                    </form>
                 </div>
             </div>
         </div>
@@ -115,7 +133,32 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        // Ends Open Delete Teacher Review Modal
+
+        $(".rating i").on("mouseover", function() {
+            const rating = $(this).data("rating");
+            updateStarsColor(rating);
+        });
+
+        $(".rating i").on("click", function() {
+            const rating = $(this).data("rating");
+            $("#rating").val(rating);
+        });
+
+        $(".rating").on("mouseout", function() {
+            const currentRating = $("#rating").val();
+            updateStarsColor(currentRating);
+        });
+
+        function updateStarsColor(rating) {
+            $(".rating i").each(function() {
+                const currentRating = $(this).data("rating");
+                if (currentRating <= rating) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        }
     });
 </script>
 <!-- Scripting Here -->

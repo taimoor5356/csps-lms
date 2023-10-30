@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 class SuggestionsController extends Controller
 {
     use ImageUpload;
-    private SuggestionsRepositoryInterface $teacherReviewRepository;
+    private SuggestionsRepositoryInterface $suggestions;
 
-    public function __construct(SuggestionsRepositoryInterface $teacherReviewRepository)
+    public function __construct(SuggestionsRepositoryInterface $suggestions)
     {
-        $this->teacherReviewRepository = $teacherReviewRepository;
+        $this->suggestions = $suggestions;
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +25,7 @@ class SuggestionsController extends Controller
     {
         //
         if ($request->ajax()) {
-            return $this->teacherReviewRepository->index($request);
+            return $this->suggestions->index($request);
         }
         return view('suggestions.index');
     }
@@ -49,6 +49,7 @@ class SuggestionsController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->suggestions->store($request->all());
     }
 
     /**

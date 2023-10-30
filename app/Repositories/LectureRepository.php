@@ -111,7 +111,7 @@ class LectureRepository implements LectureRepositoryInterface
                     if (count($row->students) > 0) {
                         $html = '';
                         for ($i = 0; $i < 3; $i++) {
-                            if (isset($row->students[$i])) {
+                            if (isset($row->students[$i]->student)) {
                                 $html .= '
                                 <div class="d-flex px-2 py-1">
                                     <div class="d-flex flex-column justify-content-center">

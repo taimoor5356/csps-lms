@@ -51,6 +51,9 @@
         .child-table>tr>td {
             border: 1px solid lightgrey;
         }
+        ul li {
+            list-style: none;
+        }
     </style>
     <!-- Styling Here -->
 @endsection
@@ -69,7 +72,6 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Student Services</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,17 +86,29 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @if (Auth::user()->hasRole('student'))
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Day</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Week</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Month</button>
-                        @endif
+                        
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <center>
-                        <h4 class="text-danger">Incomplete</h4>
+                        <h4 class="text-primary">Student Services</h4>
                     </center>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center">
+                            <ul class="">
+                                <li><h3>HELP DESK</h3></li>
+                                <li><h3>BASIC ENGLISH CORRECTION DESK</h3></li>
+                                <li><h3>FOUNDATION CLASSES ENGLISH & MATH</h3></li>
+                                <li><h3>LIBRARY</h3></li>
+                                <li><h3>VIRTUAL CLASSES</h3></li>
+                                <li><h3>FREE REVISION SESSIONS</h3></li>
+                                <li><h3>TOPPER BATCH</h3></li>
+                                <li><h3>MPT CLASSES</h3></li>
+                                <li><h3>PAST PAPERS</h3></li>
+                            </ul>
+                        </div>
+                    </div>
                     @include('student_services._table')
                 </div>
             </div>

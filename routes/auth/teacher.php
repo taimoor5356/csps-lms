@@ -9,7 +9,8 @@ use App\Http\Controllers\ZoomClassesController;
 use App\Http\Controllers\ExaminationsController;
 use App\Http\Controllers\DownloadCenterController;
 
-Route::group(['prefix' => 'teachers', 'middleware' => ['role:admin|teacher']], function () {
+// Route::group(['prefix' => 'teachers', 'middleware' => ['role:admin|teacher']], function () {
+Route::group(['prefix' => 'teachers'], function () {
     Route::get('/dashboard', [TeacherController::class, 'dashboard'])->name('teacher_dashboard');
     Route::get('', [TeacherController::class, 'index'])->name('teachers');
     Route::get('/{id}/show', [TeacherController::class, 'show'])->name('show.teacher');

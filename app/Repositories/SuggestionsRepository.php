@@ -6,6 +6,7 @@ use App\Interfaces\SuggestionsRepositoryInterface;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Suggestion;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
@@ -169,87 +170,18 @@ class SuggestionsRepository implements SuggestionsRepositoryInterface
         try {
             DB::beginTransaction();
             $request = (object)$request;
-            // if ($request->hasFile('photo')) {
-            //     $file = time().'.'.$request->photo->extension();
-            //     $directory = public_path('assets/img/lectures/');
-            //     $imageUpload = $this->uploadImage($request->photo, $file, $directory);
-            //     if ($imageUpload->status == false) {
-            //         return response()->json(['status' => false, 'msg' => 'Max 500kb file size']);
-            //     }
-            // } else {
-            //     return response()->json(['status' => false, 'msg' => 'Picture required']);
-            // }
-            $defaultPassword = '12345678';
-            if ($request->visitor == 'true') {
-                $user = User::where('id', $request->user_id)->first();
-                if (isset($user)) {
-                    $user->name = $request->name;
-                    if ($user->email != $request->email) {
-                        $user->email = $request->email;
-                    }
-                    $user->gender = $request->gender;
-                    $user->password = Hash::make($defaultPassword);
-                    $user->role_id = 3;
-                    // $user->registration_date = Carbon::now();
-                    $user->approved_status = 1;
-                    $user->save();
-                }
-            } else {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'gender' => $request->gender,
-                    'password' => Hash::make($defaultPassword),
-                    'role_id' => 3,
-                    'registration_date' => Carbon::now(),
-                    'approved_status' => 0,
-                    // 'photo' => $file
-                ]);
-            }
-            $student = Student::create([
-                'user_id' => $user->id,
-                'batch_no' => $request->batch_no,
-                'reg_no' => $request->reg_no,
-                'roll_no' => $request->roll_no,
-                'applied_for' => $request->applied_for,
-                'father_name' => $request->father_name,
-                'father_occupation' => $request->father_occupation,
-                'dob' => $request->dob,
-                'cnic' => $request->cnic,
-                'domicile' => $request->domicile,
-                'student_occupation' => $request->student_occupation,
-                'degree' => $request->degree,
-                'major_subjects' => $request->major_subjects,
-                'cgpa' => $request->cgpa,
-                'board_university' => $request->board_university,
-                'distinction' => $request->disctinction,
-                'address' => $request->address,
-                'contact_res' => $request->contact_res,
-                'cell_no' => $request->cell_no,
-                'year' => $request->year,
-                'class_type' => $request->class_type,
-                'fee_type' => $request->fee_type,
-                'mock_exam_evaluation' => $request->mock_exam_evaluation,
-                'installment' => $request->installment,
-                'discount' => $request->discount,
-                'total_fee' => $request->total_fee,
-                'due_date' => $request->due_date,
-                'freeze' => $request->freeze,
-                'leave' => $request->leave,
-                'fee_refund' => $request->fee_refund ? '1' : '0',
-                'notification_sent' => $request->notification_sent ? '1' : '0',
-                'challan_generated' => $request->challan_generated ? '1' : '0',
-                'fee_submit_date' => $request->fee_submit_date
-            ]);
-            $user->assignRole(3);
-            $subject = 'Login Details';
-            if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                $student->notification = $request->notification ? $request->notification : '0';
-            }
+            $suggestions = new Suggestion();
+            $suggestions->suggestions = $request->suggestions;
+            $suggestions->administrative_complaints = $request->administrative_complaints;
+            $suggestions->general_complaints = $request->general_complaints;
+            $suggestions->administration_review = $request->administration_review;
+            $suggestions->save();
             DB::commit();
+            return redirect()->back()->withSuccess('Data saved successfully');
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
             DB::rollback();
+            return redirect()->back()->withSuccess('Something went wrong');
             return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }
     }

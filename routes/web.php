@@ -111,4 +111,20 @@ Route::group(['middleware' => ['auth']], function() {
     // Registered Years Routes
     require __DIR__.'/auth/registered_years.php';
 
+    // Mock Schedule Routes
+    require __DIR__.'/auth/mock_schedule.php';
+
+    // Revision Classes Routes
+    require __DIR__.'/auth/revision_classes.php';
+
+    // Revision Classes Routes
+    require __DIR__.'/auth/lecture_schedule.php';
+
+    // Faculty Routes
+    require __DIR__.'/auth/faculty.php';
+
 });
+
+Route::get('/contact-us', function() {
+    return view('contact.index');
+})->name('contact_us');

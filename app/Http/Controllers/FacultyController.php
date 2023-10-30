@@ -49,6 +49,7 @@ class FacultyController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->facultyRepository->store($request->all());
     }
 
     /**

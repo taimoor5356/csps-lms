@@ -3,7 +3,7 @@
         <thead>
         </thead>
         <tbody>
-            @php $data = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];  @endphp
+            {{-- @php $data = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];  @endphp
             @foreach ($data as $key => $d)
                 <tr>
                     <td>{{ $d }}</td>
@@ -29,7 +29,7 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
 </div>

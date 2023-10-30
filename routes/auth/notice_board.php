@@ -9,7 +9,7 @@ Route::prefix('notice-board')->group(function () {
     Route::post('/store', [NoticeBoardController::class, 'store'])->name('store.notice_board');
     Route::get('/{id}/edit', [NoticeBoardController::class, 'edit'])->name('edit.notice_board');
     Route::post('/{id}/update', [NoticeBoardController::class, 'update'])->name('update.notice_board');
-    Route::post('/{id}/delete', [NoticeBoardController::class, 'destroy'])->name('delete.notice_board');
+    Route::get('/{id}/delete', [NoticeBoardController::class, 'destroy'])->name('delete.notice_board');
     Route::get('/trashed', [NoticeBoardController::class, 'trashed'])->name('trashed.notice_board');
     Route::get('/{id}/restore', [NoticeBoardController::class, 'restore'])->name('restore.notice_board');
     Route::post('/{id}/permanent-delete', [NoticeBoardController::class, 'permanentDelete'])->name('permanent_delete.notice_board');

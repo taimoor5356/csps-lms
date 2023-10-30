@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\ZoomClassesRepositoryInterface;
+use App\Models\Course;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,8 @@ class ZoomClassesController extends Controller
         if ($request->ajax()) {
             return $this->zoomClassesRepository->index($request);
         }
-        return view('zoom_classes.index');
+        $courses = Course::get();
+        return view('zoom_classes.index', compact('courses'));
     }
 
     /**
@@ -49,6 +51,7 @@ class ZoomClassesController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->zoomClassesRepository->store($request->all());
     }
 
     /**

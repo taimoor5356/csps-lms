@@ -49,6 +49,7 @@ class DownloadCenterController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->downloadCenterRepository->store($request->all());
     }
 
     /**

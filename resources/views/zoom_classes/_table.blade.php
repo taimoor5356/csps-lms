@@ -1,9 +1,12 @@
 <div class="table-responsive p-3">
     <table class="data-table table table-bordered align-items-center mb-0">
         <thead>
+            <th>Course</th>
+            <th>Day/DateTime</th>
+            <th>Zoom Link</th>
         </thead>
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td class="p-2">English Essay</td>
                 <td class="p-2">
                     <span class="p-2 bg-primary text-white">18/18/2022 - Thursday</span>
@@ -44,7 +47,7 @@
                     <span class="p-2 bg-primary text-white">18/18/2022 - Thursday</span>
                 </td>
                 <td><button class="btn btn-primary text-white">Join</button></td>
-            </tr>
+            </tr> --}}
         </tbody>
     </table>
 </div>

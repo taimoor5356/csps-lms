@@ -1,5 +1,6 @@
 @extends('layout.app')
 @section('content')
+@section('page_number', '(03)')
 @section('style')
 <link href="{{ asset('public/assets/css/select2.min.css') }}" rel="stylesheet" />
 <!-- Styling Here -->

@@ -3,7 +3,7 @@
         <thead>
         </thead>
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td class="p-2">Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
                 <td class="p-2">
                     <span class="p-2 bg-primary text-white">18/18/2022 - Thursday</span>
@@ -38,7 +38,7 @@
                 <td class="p-2">
                     <span class="p-2 bg-primary text-white">18/18/2022 - Thursday</span>
                 </td>
-            </tr>
+            </tr> --}}
         </tbody>
     </table>
 </div>

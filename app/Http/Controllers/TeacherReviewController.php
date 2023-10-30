@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\TeacherReviewRepositoryInterface;
+use App\Models\Course;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 
@@ -27,7 +28,8 @@ class TeacherReviewController extends Controller
         if ($request->ajax()) {
             return $this->teacherReviewRepository->index($request);
         }
-        return view('teacher_review.index');
+        $courses = Course::get();
+        return view('teacher_review.index', compact('courses'));
     }
 
     /**
@@ -49,6 +51,7 @@ class TeacherReviewController extends Controller
     public function store(Request $request)
     {
         //
+        return $this->teacherReviewRepository->store($request->all());
     }
 
     /**

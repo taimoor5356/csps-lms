@@ -1,9 +1,12 @@
 <div class="table-responsive p-3">
     <table class="data-table table table-bordered align-items-center mb-0">
         <thead>
+            <th>Description</th>
+            <th>Upload</th>
+            <th>Download</th>
         </thead>
         <tbody>
-            <tr>
+            {{-- <tr>
                 <td class="p-2">Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
                 <td class="p-2">
                     <button class="btn btn-primary text-white">Download</button>
@@ -38,7 +41,7 @@
                 <td class="p-2">
                     <button class="btn btn-primary text-white">Download</button>
                 </td>
-            </tr>
+            </tr> --}}
         </tbody>
     </table>
 </div>

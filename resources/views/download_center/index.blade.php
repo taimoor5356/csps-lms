@@ -83,6 +83,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="header-buttons ms-auto text-end">
+                        {{-- @role('admin') --}}
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#uploadDownloadModal"><i
+                                class="fa fa-plus"></i> Download/Upload New</button>
+                        {{-- @endrole --}}
+                    </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     @include('download_center._table')
@@ -94,7 +100,58 @@
 @endsection
 <!-- Section Modal -->
 @section('modal')
-
+<div class="row">
+    <div class="col-md-4">
+        <div class="modal fade" id="uploadDownloadModal" tabindex="-1" role="dialog" aria-labelledby="uploadDownloadModal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <form action="{{ route('store.download_center') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="modal-header">
+                            <h6 class="modal-title" id="modal-title-default">Schedule Details</h6>
+                            <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <!-- Name -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="course_id" class="form-control-label">Enter Description</label>
+                                        <textarea name="description" class="form-control" id="" cols="30" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <!-- Upload -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="file" class="form-control-label">Upload File</label>
+                                        <input class="form-control file" id="file" name="file" type="file"
+                                            value="@isset($student->user){{ $student->user->name }}@endisset"
+                                            onfocus="focused(this)" onfocusout="defocused(this)"
+                                            placeholder="Student Name" required>
+                                    </div>
+                                </div>
+                                <!-- Submit -->
+                                <div class="col-md-12">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="submit" class="close-modal btn btn-success  ml-auto"
+                                data-bs-dismiss="" value="Save">
+                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                            <button type="button" class="close-modal btn btn-danger  ml-auto"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 <!-- Section Modal -->
 @section('page_js')
@@ -115,7 +172,42 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
-        // Ends Open Delete Download Center Modal
+        
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('download_center') }}"
+            },
+            columns: [
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'file',
+                    name: 'file'
+                },
+                {
+                    data: 'download',
+                    name: 'download'
+                }
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            },
+            'order': [
+                [1, 'asc']
+            ],
+        });
     });
 </script>
 <!-- Scripting Here -->

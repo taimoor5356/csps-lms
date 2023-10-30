@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\DownloadCenterRepositoryInterface;
+use App\Models\DownloadCenter;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Student;
@@ -21,131 +22,47 @@ class DownloadCenterRepository implements DownloadCenterRepositoryInterface
     {
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('image', function ($row) {
-                $url = URL::to('/');
-                if ($row->user) {
-                    return '    
-                    <div class="d-flex px-2 py-1">
-                        <div>
-                            <img src="' . $url . '/public/assets/img/lectures/' . $row->user->photo . '" class="avatar avatar-lg"
-                                alt="user1">
-                        </div>
-                    </div>
-                    ';
-                } else {
-                    return '    
-                    <div class="d-flex px-2 py-1">
-                        <div>
-                            <img src="' . $url . '/public/assets/img/lectures/" class="avatar avatar-lg"
-                                alt="user1">
-                        </div>
-                    </div>
-                    ';
-                }
-            })
-            ->addColumn('name_email', function ($row) {
-                if ($row->user) {
-                    return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->user->name . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->user->email . '</p>
-                        </div>
-                    </div>
-                    ';
-                } else {
-                    return 'No Data';
-                }
-            })
-            ->addColumn('fathername_occupation', function ($row) {
+            ->addColumn('description', function ($row) {
                 return '
                 <div class="d-flex px-2 py-1">
                     <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . $row->father_name . '</h6>
-                        <p class="text-sm text-secondary mb-0">' . $row->father_occupation . '</p>
+                        <h6 class="mb-0 text-sm">'. $row->description .'</h6>
                     </div>
                 </div>
                 ';
             })
-            ->addColumn('dob_cnic', function ($row) {
-                return '
-                <div class="d-flex px-2 py-1">
-                    <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . Carbon::parse($row->dob)->format('M d,Y') . '</h6>
-                        <p class="text-sm text-secondary mb-0">' . $row->cnic . '</p>
-                    </div>
-                </div>
-                ';
-            })
-            ->addColumn('domicile', function ($row) {
+            ->addColumn('file', function ($row) {
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->domicile . '</h6>
+                            <h6 class="mb-0 text-sm">
+                                '.$row->file.'
+                            </h6>
                         </div>
                     </div>
                 ';
             })
-            ->addColumn('degree_university', function ($row) {
-                return '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->degree . '</h6>
-                            <p class="text-sm text-secondary mb-0">' . $row->board_university . '</p>
-                        </div>
-                    </div>
-                ';
+            ->addColumn('download', function ($row) {
+                $filePath = public_path('assets/download_center/' . $row->file);
+                $fileUrl = asset('public/assets/download_center/' . $row->file);
+            
+                return '<div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">
+                                    <a href="'. $fileUrl . '" class="btn btn-primary" download="' . $row->file . '">Download</a>
+                                </h6>
+                            </div>
+                        </div>';
             })
-            ->addColumn('subject_cgpa', function ($row) {
-                $val = '
-                    <div class="d-flex px-2 py-1">
-                        <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->major_subjects . '</h6>
-                            <p class="text-sm text-secondary mb-0">';
-                            if ($row->cgpa < 4) {
-                                $val .= number_format($row->cgpa, 2) . 'GGPA';
-                            } else if ($row->cgpa > 40) {
-                                $val .= number_format($row->cgpa, 2) . '%';
-                            }
-                    $val .= '</p>
-                        </div>
-                    </div>
-                ';
-                return $val;
-            })
-            ->addColumn('distinction', function ($row) {
-                return $row->distinction;
-            })
-            ->addColumn('action', function ($row) use ($trashed) {
-                $btn = '';
-                if ($trashed == null) {
-                    $btn .= '
-                        <a href="lectures/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="lectures/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
-                    if (Auth::user()->can('student_delete')) {
-                        $btn .='<a href="lectures/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
-                    }
-                } else {
-                    $btn .= '
-                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>';
-                    $btn .='
-                        <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
-                }
-                return $btn;
-            })
-            ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action'])
+            ->rawColumns(['description', 'file', 'download'])
             ->make(true);
     }
 
     public function index($request) 
     {
         try {
-            $lecturesDetail = Student::with('user')->get();
-            if (Auth::user()->hasRole('student')) {
-                $lecturesDetail = Student::with('user')->where('user_id', Auth::user()->id)->get();
-            }
-            return $this->showTableData($lecturesDetail, $trashed = null);
+            $downloadCenter = DownloadCenter::get();
+            return $this->showTableData($downloadCenter, $trashed = null);
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
         }
@@ -169,87 +86,27 @@ class DownloadCenterRepository implements DownloadCenterRepositoryInterface
         try {
             DB::beginTransaction();
             $request = (object)$request;
-            // if ($request->hasFile('photo')) {
-            //     $file = time().'.'.$request->photo->extension();
-            //     $directory = public_path('assets/img/lectures/');
-            //     $imageUpload = $this->uploadImage($request->photo, $file, $directory);
-            //     if ($imageUpload->status == false) {
-            //         return response()->json(['status' => false, 'msg' => 'Max 500kb file size']);
-            //     }
-            // } else {
-            //     return response()->json(['status' => false, 'msg' => 'Picture required']);
-            // }
-            $defaultPassword = '12345678';
-            if ($request->visitor == 'true') {
-                $user = User::where('id', $request->user_id)->first();
-                if (isset($user)) {
-                    $user->name = $request->name;
-                    if ($user->email != $request->email) {
-                        $user->email = $request->email;
+            if (Auth::user()->hasRole(['admin', 'student'])) {
+                $downloadCenter = new DownloadCenter();
+                if (isset($request->file)) {
+                    if ($request->file->getSize() > 500000) {
+                        return redirect()->back()->withSuccess('Max 500KB file size allowed');
                     }
-                    $user->gender = $request->gender;
-                    $user->password = Hash::make($defaultPassword);
-                    $user->role_id = 3;
-                    // $user->registration_date = Carbon::now();
-                    $user->approved_status = 1;
-                    $user->save();
+                    $file = time().'.'.$request->file->extension();
+                    $request->file->move(public_path('assets/download_center/'), $file);
+                    $downloadCenter->file = $file;
                 }
+                $downloadCenter->description = $request->description;
+                $downloadCenter->save();
             } else {
-                $user = User::create([
-                    'name' => $request->name,
-                    'email' => $request->email,
-                    'gender' => $request->gender,
-                    'password' => Hash::make($defaultPassword),
-                    'role_id' => 3,
-                    'registration_date' => Carbon::now(),
-                    'approved_status' => 0,
-                    // 'photo' => $file
-                ]);
-            }
-            $student = Student::create([
-                'user_id' => $user->id,
-                'batch_no' => $request->batch_no,
-                'reg_no' => $request->reg_no,
-                'roll_no' => $request->roll_no,
-                'applied_for' => $request->applied_for,
-                'father_name' => $request->father_name,
-                'father_occupation' => $request->father_occupation,
-                'dob' => $request->dob,
-                'cnic' => $request->cnic,
-                'domicile' => $request->domicile,
-                'student_occupation' => $request->student_occupation,
-                'degree' => $request->degree,
-                'major_subjects' => $request->major_subjects,
-                'cgpa' => $request->cgpa,
-                'board_university' => $request->board_university,
-                'distinction' => $request->disctinction,
-                'address' => $request->address,
-                'contact_res' => $request->contact_res,
-                'cell_no' => $request->cell_no,
-                'year' => $request->year,
-                'class_type' => $request->class_type,
-                'fee_type' => $request->fee_type,
-                'mock_exam_evaluation' => $request->mock_exam_evaluation,
-                'installment' => $request->installment,
-                'discount' => $request->discount,
-                'total_fee' => $request->total_fee,
-                'due_date' => $request->due_date,
-                'freeze' => $request->freeze,
-                'leave' => $request->leave,
-                'fee_refund' => $request->fee_refund ? '1' : '0',
-                'notification_sent' => $request->notification_sent ? '1' : '0',
-                'challan_generated' => $request->challan_generated ? '1' : '0',
-                'fee_submit_date' => $request->fee_submit_date
-            ]);
-            $user->assignRole(3);
-            $subject = 'Login Details';
-            if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                $student->notification = $request->notification ? $request->notification : '0';
+                return redirect()->back()->withError('You do not have permission');
             }
             DB::commit();
+            return redirect()->back()->withSuccess('Data saved successfully');
             return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
         } catch (\Exception $e) {
             DB::rollback();
+            return redirect()->back()->withError('Something went wrong');
             return response()->json(['status' => false, 'msg' => 'Something went wrong']);
         }
     }
@@ -270,13 +127,13 @@ class DownloadCenterRepository implements DownloadCenterRepositoryInterface
                 $student->user->name = $request->name;
                 $student->user->email = $request->email;
                 $student->user->password = Hash::make($request->password);
-                if ($request->hasFile('photo')) {
-                    if ($request->file('photo')->getSize() > 500000) {
-                        return redirect()->back()->with('error', 'Max 500KB photo size allowed');
+                if ($request->hasFile('file')) {
+                    if ($request->file('file')->getSize() > 500000) {
+                        return redirect()->back()->with('error', 'Max 500KB file size allowed');
                     }
-                    $file = time().'.'.$request->photo->extension();
-                    $request->photo->move(public_path('assets/img/lectures/'), $file);
-                    $student->user->photo = $file;
+                    $file = time().'.'.$request->file->extension();
+                    $request->file->move(public_path('assets/img/lectures/'), $file);
+                    $student->user->file = $file;
                 }
                 $student->father_name = $request->father_name;
                 $student->father_occupation = $request->father_occupation;

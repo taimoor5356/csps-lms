@@ -48,8 +48,24 @@
         .shadow-none {
             box-shadow: none !important;
         }
+
         .child-table>tr>td {
             border: 1px solid lightgrey;
+        }
+
+        .rating i {
+            color: #ccc;
+            /* Default star color */
+        }
+
+        .rating i:hover {
+            color: #ffcc00;
+            /* Hovered star color */
+        }
+
+        .rating i.active {
+            color: #ffcc00;
+            /* Active star color */
         }
     </style>
     <!-- Styling Here -->
@@ -71,7 +87,8 @@
                 <div class="card-header pb-0 d-flex">
                     <h6>Suggestions</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
-                        <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast bg-success" id="notification" role="alert" aria-live="assertive"
+                            aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
                                 <span class="success-header"></span>
                                 <div class="close-toast-msg ms-auto text-end cursor-pointer">
@@ -79,13 +96,16 @@
                                 </div>
                             </div>
                             <div class="toast-body text-white text-bold">
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('suggestions._table')
+                    <form action="{{route('store.suggestions')}}" method="POST">
+                        @csrf
+                        @include('suggestions._table')
+                    </form>
                 </div>
             </div>
         </div>
@@ -94,7 +114,6 @@
 @endsection
 <!-- Section Modal -->
 @section('modal')
-
 @endsection
 <!-- Section Modal -->
 @section('page_js')
@@ -106,16 +125,41 @@
             $('.toast .success-header').html('Success');
             $('.toast .toast-header').addClass('bg-success');
             $('.toast .toast-body').addClass('bg-success');
-            $('.toast .toast-body').html("{{session('success')}}");
+            $('.toast .toast-body').html("{{ session('success') }}");
             $('.toast').toast('show');
-        @elseif(session('error'))
+        @elseif (session('error'))
             $('.toast .success-header').html('Error');
             $('.toast .toast-header').addClass('bg-danger');
             $('.toast .toast-body').addClass('bg-danger');
-            $('.toast .toast-body').html("{{session('error')}}");
+            $('.toast .toast-body').html("{{ session('error') }}");
             $('.toast').toast('show');
         @endif
-        // Ends Open Delete Suggestions Modal
+
+        $(".rating i").on("mouseover", function() {
+            const rating = $(this).data("rating");
+            updateStarsColor(rating);
+        });
+
+        $(".rating i").on("click", function() {
+            const rating = $(this).data("rating");
+            $("#rating").val(rating);
+        });
+
+        $(".rating").on("mouseout", function() {
+            const currentRating = $("#rating").val();
+            updateStarsColor(currentRating);
+        });
+
+        function updateStarsColor(rating) {
+            $(".rating i").each(function() {
+                const currentRating = $(this).data("rating");
+                if (currentRating <= rating) {
+                    $(this).addClass("active");
+                } else {
+                    $(this).removeClass("active");
+                }
+            });
+        }
     });
 </script>
 <!-- Scripting Here -->

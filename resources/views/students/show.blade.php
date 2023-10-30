@@ -16,7 +16,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Students (6)</span>
+            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Students</span>
             </li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Student Profile</h6>
@@ -35,10 +35,12 @@
                                 <img src="{{URL::to('/')}}/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
                             </a>
                         </div>
+                        @php 
+                            $setting = \App\Models\Setting::first();
+                        @endphp
                         <div class="col-xl-10 col-lg-10 col-md-10 col-sm-12 col-xs-12">
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias officiis sint omnis at dolores accusantium ullam </p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias officiis sint omnis at dolores accusantium ullam </p>
-                            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Alias officiis sint omnis at dolores accusantium ullam </p>
+                            <p class="font-weight-bolder text-dark">- {{isset($setting) ? $setting->oncampus_description." ".$setting->oncampus_date_time : ""}}</p>
+                            <p class="font-weight-bolder text-dark">- {{isset($setting) ? $setting->online_description." ".$setting->online_date_time : ""}}</p>
                         </div>
                     </div>
                 </div>
