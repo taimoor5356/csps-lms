@@ -11,3 +11,4 @@ interface LectureScheduleRepositoryInterface
     public function edit($request);
     public function update($request, $id);
 }
+//
