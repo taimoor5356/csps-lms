@@ -97,7 +97,7 @@
                     <div class="row">
                         <div class="col-12 d-flex justify-content-center">
                             <ul class="">
-                                <li><h3><i class="fa fa-star"></i> DESK</h3></li>
+                                <li><h3><i class="fa fa-star"></i> HELP DESK</h3></li>
                                 <li><h3><i class="fa fa-star"></i> BASIC ENGLISH CORRECTION DESK</h3></li>
                                 <li><h3><i class="fa fa-star"></i> FOUNDATION CLASSES ENGLISH & MATH</h3></li>
                                 <li><h3><i class="fa fa-star"></i> LIBRARY</h3></li>
