@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 // testing
 Route::get('/testing-github', function() {
-    return 'Testing Github';
+    return 'Testing private Github';
 });
 
 // visitor Route
