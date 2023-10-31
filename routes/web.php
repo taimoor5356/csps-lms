@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// testing
+Route::get('/testing-github', function() {
+    return 'Testing Github';
+});
+
 // visitor Route
 require __DIR__.'/visitor.php';
 
