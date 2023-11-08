@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TestApiController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // testing
-Route::get('/testing-github', function() {
-    return 'Testing private Github';
-});
+Route::get('/get-gpt', [TestApiController::class, 'get_gpt']);
+Route::post('/post-gpt', [TestApiController::class, 'post_gpt'])->name('post_gpt');
 
 // visitor Route
 require __DIR__.'/visitor.php';
