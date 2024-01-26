@@ -411,7 +411,7 @@
             responsive: true,
             processing: true,
             stateSave: true,
-            // serverSide: true,
+            serverSide: true,
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
@@ -421,12 +421,13 @@
                     text: 'Get Excel File',
                     className: 'buttons-excel',
                     exportOptions: {
-                        columns: [5] // Specify the column indices to export (zero-based)
+                        columns: [0,2,3,4,5] // Specify the column indices to export (zero-based)
                     }
                 }
             ],
             ajax: {
-                url: "{{ route('visitors') }}"
+                url: "{{ route('visitors') }}",
+
             },
             columns: [
                 {
@@ -441,27 +442,33 @@
                 },
                 {
                     data: 'name_email',
-                    name: 'name_email'
+                    name: 'name_email',
+                    orderable: false
                 },
                 {
                     data: 'degree_university',
-                    name: 'degree_university'
+                    name: 'degree_university',
+                    orderable: false
                 },
                 {
                     data: 'domicile',
-                    name: 'domicile'
+                    name: 'domicile',
+                    orderable: false
                 },
                 {
                     data: 'cell_no',
-                    name: 'cell_no'
+                    name: 'cell_no',
+                    orderable: false
                 },
                 {
                     data: 'applied_for',
-                    name: 'applied_for'
+                    name: 'applied_for',
+                    orderable: false
                 },
                 {
                     data: 'class_type',
-                    name: 'class_type'
+                    name: 'class_type',
+                    orderable: false
                 },
                 {
                     data: 'action',
@@ -469,9 +476,6 @@
                     orderable: false,
                     searchable: false
                 },
-            ],
-            order: [
-        	    [0, "desc"]
             ],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");

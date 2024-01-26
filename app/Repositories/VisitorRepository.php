@@ -19,13 +19,30 @@ use App\Interfaces\VisitorRepositoryInterface;
 class VisitorRepository implements VisitorRepositoryInterface 
 {
     // showTableData for index() and trashed()
-    public function showTableData($data, $trashed)
+    public function showTableData($request, $data, $trashed)
     {
-        return DataTables::of($data)
+        $searchValue = $request->search['value'];
+        // Apply global search
+        if (!empty($searchValue)) {
+            $data = $data->where(function ($query) use ($searchValue) {
+                $query->whereHas('user', function ($subQuery) use ($searchValue) {
+                    $subQuery->where('name', 'LIKE', "%$searchValue%")
+                        ->orWhere('email', 'LIKE', "%$searchValue%");
+                })
+                ->orWhere('degree', 'LIKE', "%$searchValue%")
+                ->orWhere('domicile', 'LIKE', "%$searchValue%")
+                ->orWhere('cell_no', 'LIKE', "%$searchValue%");
+            });
+        }
+        $totalRecords = $data->count(); // Get the total number of records for pagination
+        $visitors = $data->skip($request->start)
+            ->take($request->length)
+            ->get();
+        return DataTables::of($visitors)
             ->addIndexColumn()
             ->addColumn('date', function ($row) {
                 if ($row) {
-                    return !is_null($row->date) ? $row->date : Carbon::parse($row->created_at)->format('M d, Y');
+                    return Carbon::parse($row->created_at)->format('Y-m-d');
                 } else {
                     return '';
                 }
@@ -132,17 +149,20 @@ class VisitorRepository implements VisitorRepositoryInterface
                 return $btn;
             })
             ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'cell_no', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action', 'applied_for', 'class_type'])
+            ->setTotalRecords($totalRecords)
+            ->setFilteredRecords($totalRecords) // For simplicity, same as totalRecords
+            ->skipPaging()
             ->make(true);
     }
 
     public function index($request) 
     {
         try {
-            $visitorsDetail = Visitor::with('user')->orderBy('created_at', 'desc');
+            $visitorsDetail = Visitor::withoutGlobalScopes()->with('user')->orderBy('id', 'desc');
             if (Auth::user()->hasRole('visitor')) {
-                $visitorsDetail = Visitor::with('user')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
+                $visitorsDetail = Visitor::withoutGlobalScopes()->with('user')->where('user_id', Auth::user()->id)->orderBy('id', 'desc');
             }
-            return $this->showTableData($visitorsDetail, $trashed = null);
+            return $this->showTableData($request, $visitorsDetail, $trashed = null);
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
         }
