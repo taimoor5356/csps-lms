@@ -410,11 +410,12 @@
         var table = $('.data-table').DataTable({
             responsive: true,
             processing: true,
-            stateSave: true,
+            // stateSave: true,
             serverSide: true,
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
+            "lengthMenu": [ [10, 25, 50, 500, 1000], [10, 25, 50, 500, 1000] ],
             // dom: 'lBfrtip',
             buttons: [{
                     extend: 'excel',
