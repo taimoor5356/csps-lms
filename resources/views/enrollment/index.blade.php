@@ -85,9 +85,10 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('enroll-student.create') }}" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i> Add New</a>
+                        <a href="{{ route('enrollment.create', ['students']) }}" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i> Students</a>
+                        <a href="{{ route('enrollment.create', ['teachers']) }}" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i> Teachers</a>
                         @can('enrollment_delete')
-                        <a href="{{ route('trashed.enrollments') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
+                        <!-- <a href="{{ route('trashed.enrollments') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a> -->
                         @endcan
                     </div>
                 </div>
@@ -140,12 +141,12 @@
                     searchable: false
                 },
                 {
-                    data: 'student_name',
-                    name: 'student_name'
+                    data: 'user_name',
+                    name: 'user_name'
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'course_name',
+                    name: 'course_name'
                 },
                 {
                     data: 'category',

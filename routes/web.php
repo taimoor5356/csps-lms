@@ -61,6 +61,9 @@ Route::group(['middleware' => ['auth']], function() {
     
     // Lectures Routes
     require __DIR__.'/auth/lecture.php';
+    
+    // Lesson Plan Routes
+    require __DIR__.'/auth/lesson_plan.php';
 
     // Notice board Routes
     require __DIR__.'/auth/notice_board.php';
@@ -107,11 +110,17 @@ Route::group(['middleware' => ['auth']], function() {
     // Expenses Routes
     require __DIR__.'/auth/expense.php';
 
+    // Revenue Routes
+    require __DIR__.'/auth/revenue.php';
+
     // Registered Number Routes
     require __DIR__.'/auth/registered_numbers.php';
 
     // Registered Batches Routes
     require __DIR__.'/auth/registered_batches.php';
+
+    // Assignements Routes
+    require __DIR__.'/auth/assignments.php';
 
     // Registered Years Routes
     require __DIR__.'/auth/registered_years.php';
@@ -127,6 +136,15 @@ Route::group(['middleware' => ['auth']], function() {
 
     // Faculty Routes
     require __DIR__.'/auth/faculty.php';
+
+    // Shifts Routes
+    require __DIR__.'/auth/shifts.php';
+
+    // Shifts Routes
+    require __DIR__.'/auth/days.php';
+
+    // Inventory Routes
+    require __DIR__.'/auth/inventory.php';
 
 });
 

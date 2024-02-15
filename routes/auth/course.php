@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\LectureController;
 
 Route::prefix('courses')->group(function () {
     Route::get('', [CourseController::class, 'index'])->name('courses');
@@ -13,4 +14,7 @@ Route::prefix('courses')->group(function () {
     Route::get('/trashed', [CourseController::class, 'trashed'])->name('trashed.courses');
     Route::get('/{id}/restore', [CourseController::class, 'restore'])->name('restore.course');
     Route::post('/{id}/permanent-delete', [CourseController::class, 'permanentDelete'])->name('permanent_delete.course');
+
+    // Lectures
+    Route::get('/{course_id}/lectures', [LectureController::class, 'index'])->name('lectures');
 });

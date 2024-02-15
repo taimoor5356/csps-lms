@@ -64,14 +64,7 @@
     <!-- Styling Here -->
 @endsection
 @section('breadcrumbs')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
-                    class="text-light">Visitors</span></li>
-        </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Visitors</h6>
-    </nav>
+    @include('layout.breadcrumb', ['institute_name' => 'CSPs', 'tab_name' => 'Users', 'page_title' => 'Visitors'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
@@ -94,9 +87,7 @@
                     </div>
                     <div class="header-buttons ms-auto text-end">
                         <a href="#" class="btn btn-primary" id="get-excel-file">Get Excel File</a>
-                        @can('visitor_create')
-                            <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endcan
+                        <a href="{{ route('create.visitor') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         @can('visitor_delete')
                             <a href="{{ route('trashed.visitor') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                         @endcan
@@ -410,7 +401,7 @@
         var table = $('.data-table').DataTable({
             responsive: true,
             processing: true,
-            // stateSave: true,
+            stateSave: true,
             serverSide: true,
             bDestroy: true,
             scrollX: true,
@@ -478,6 +469,7 @@
                     searchable: false
                 },
             ],
+            order:[[0,"desc"]],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
                 $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(

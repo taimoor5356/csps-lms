@@ -393,6 +393,14 @@
                     name: 'category'
                 },
                 {
+                    data: 'total_students',
+                    name: 'total_students'
+                },
+                {
+                    data: 'total_teachers',
+                    name: 'total_teachers'
+                },
+                {
                     data: 'fee',
                     name: 'fee'
                 },

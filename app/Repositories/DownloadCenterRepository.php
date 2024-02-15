@@ -86,7 +86,7 @@ class DownloadCenterRepository implements DownloadCenterRepositoryInterface
         try {
             DB::beginTransaction();
             $request = (object)$request;
-            if (Auth::user()->hasRole(['admin', 'student'])) {
+            if (Auth::user()->hasRole(['admin', 'teacher', 'student'])) {
                 $downloadCenter = new DownloadCenter();
                 if (isset($request->file)) {
                     if ($request->file->getSize() > 500000) {

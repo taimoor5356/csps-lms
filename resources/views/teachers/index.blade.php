@@ -55,21 +55,22 @@
     <!-- Styling Here -->
 @endsection
 @section('breadcrumbs')
-    <nav aria-label="breadcrumb">
+    <!-- <nav aria-label="breadcrumb">
         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span
                     class="text-light">Teacher</span></li>
         </ol>
         <h6 class="font-weight-bolder text-white mb-0">Teacher</h6>
-    </nav>
+    </nav> -->
+    @include('layout.breadcrumb', ['institute_name' => 'CSPs', 'tab_name' => 'Users', 'page_title' => 'Teachers'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Teacher</h6>
+                    <h6>All Teachers</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
                             <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
@@ -84,18 +85,19 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @can('teacher_create')
+                        @role('admin')
                             <a href="{{ route('create.teacher') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endcan
-                        @can('teacher_delete')
+                        @endrole
+                        @role('admin')
                             <a href="{{ route('trashed.teachers') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
-                        @endcan
+                        @endrole
                         @if (Auth::user()->hasRole('teacher'))
                             <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
                         @endif
                     </div>
                 </div>
-                <div class="card-body pb-2">
+                <div class="card-body px-0 pt-0 pb-2">
+                    <small class="mx-3 text-danger">* Scroll right if unable to see Actions</small>
                     @include('teachers._table')
                 </div>
             </div>
@@ -152,8 +154,8 @@
         var table = $('.data-table').DataTable({
             responsive: true,
             processing: true,
-            stateSave: true,
-            // serverSide: true,
+            // stateSave: true,
+            serverSide: true,
             bDestroy: true,
             scrollX: true,
             autoWidth: false,

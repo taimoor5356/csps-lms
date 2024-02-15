@@ -33,7 +33,7 @@ class ZoomClassesRepository implements ZoomClassesRepositoryInterface
                 return '
                     <div class="d-flex px-2 py-1">
                         <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">' . $row->day . ' | ' . $row->time . '</h6>
+                            <h6 class="mb-0 text-sm">' . $row->day . ' / ' . $row->time . '</h6>
                         </div>
                     </div>
                 ';

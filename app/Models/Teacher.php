@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Teacher extends Model
 {
     use HasFactory, SoftDeletes;
+    
     protected $guarded = ['id'];
 
     // relation with user

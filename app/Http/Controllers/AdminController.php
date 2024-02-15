@@ -10,6 +10,9 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Models\Attendance;
+use App\Models\FeePlan;
+use App\Models\Student;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 
@@ -23,7 +26,29 @@ class AdminController extends Controller
 
     public function dashboard(Request $request)
     {
-        return view('dashboard.index');
+        //
+        $totalStudents = Student::query()->count();
+        $todayPresentStudents = Attendance::query()->where('attendance', 'present')->whereDate('created_at', Carbon::now())->count();
+        $todayAbsentStudents = Attendance::query()->where('attendance', 'absent')->whereDate('created_at', Carbon::now())->count();
+        $totalFeeAwaitingStudents = FeePlan::query()->where('paid_status', 0)->groupBy('student_id')->get();
+        $monthlyFees = DB::table(DB::raw("(SELECT 1 as month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) as months"))
+                        ->leftJoin(DB::raw('(SELECT MONTH(created_at) as month, SUM(paid) as total_fee FROM fee_plans WHERE paid_status = 1 GROUP BY MONTH(created_at)) as fee_data'), 'months.month', '=', 'fee_data.month')
+                        ->selectRaw('COALESCE(total_fee, 0) as total_fee, DATE_FORMAT(CONCAT("2022-", months.month, "-01"), "%b") as month_name')
+                        ->orderBy('months.month')
+                        ->get();
+        $monthlyExpenses = DB::table(DB::raw("(SELECT 1 as month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) as months"))
+                        ->leftJoin(DB::raw('(SELECT MONTH(created_at) as month, SUM(amount) as total_expenses FROM expenses GROUP BY MONTH(created_at)) as expense_data'), 'months.month', '=', 'expense_data.month')
+                        ->selectRaw('COALESCE(total_expenses, 0) as total_expenses, DATE_FORMAT(CONCAT("2022-", months.month, "-01"), "%b") as month_name')
+                        ->orderBy('months.month')
+                        ->get();
+        //
+        $total_students = $totalStudents;
+        $today_present_students = $todayPresentStudents;
+        $today_absent_students = $todayAbsentStudents;
+        $total_fee_awaiting_students = $totalFeeAwaitingStudents;
+        $revenue = $monthlyFees;
+        $expenses = $monthlyExpenses;
+        return view('dashboard.index', compact('expenses', 'total_students', 'today_present_students', 'today_absent_students', 'total_fee_awaiting_students', 'revenue'));
     }
 
     // showTableData for index() and trashed()

@@ -1,34 +1,43 @@
 <div class="table-responsive p-3">
-    <table class="data-table table align-items-center mb-0 table-bordered">
+    <table class="data-table table cell-border align-items-center mb-0">
         <thead>
             <tr>
-                {{-- <th class="text-uppercase text-dark text-xs font-weight-bolder">
-                    Show/Hide
-                </th> --}}
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
-                    Days
+                    Date
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
-                    Subject Name / Time
+                    Time From
                 </th>
-                <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
-                    Subject Name / Time
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Time To
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Monday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Tuesday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Wednesday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Thursday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Friday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Saturday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Sunday
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder">
+                    Action
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($groupedLectureSchedule as $schedule)
-                <tr>
-                    <td>{{\Carbon\Carbon::parse($schedule->day)->format('l, d M')}}</td>
-                    @php 
-                        $data = \App\Models\LectureSchedule::where('day', $schedule->day)->get();
-                    @endphp
-                    @foreach ($data as $d)
-                        <td><span class="bg-primary rounded p-1 text-white">{{$d->course->name}} / {{$d->time}}</span></td>
-                    @endforeach
-                </tr>
-                <tr></tr>
-            @endforeach
         </tbody>
     </table>
 </div>

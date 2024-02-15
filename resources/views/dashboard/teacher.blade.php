@@ -7,14 +7,7 @@
     </style>
 @endsection
 @section('breadcrumbs')
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="text-light" href="javascript:;">CSPs</a></li>
-            <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Dashboard</span>
-            </li>
-        </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Teacher Dashboard</h6>
-    </nav>
+    @include('layout.breadcrumb', ['institute_name' => 'CSPs', 'tab_name' => 'Teacher Dashboard', 'page_title' => 'Teacher Dashboard'])
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
@@ -39,7 +32,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Students</p>
                                 <h5 class="font-weight-bolder">
-                                    
+                                    {{\App\Models\StudentLectureSchedule::where('teacher_id', Auth::user()->id)->distinct('student_id')->count()}}
                                 </h5>
                                 {{-- <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+55%</span>
@@ -62,9 +55,9 @@
                     <div class="row">
                         <div class="col-8">
                             <div class="numbers">
-                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Lectures</p>
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Courses</p>
                                 <h5 class="font-weight-bolder">
-                                    
+                                {{ \App\Models\Enrollment::where('user_id', Auth::user()->id)->distinct('course_id')->count() }}
                                 </h5>
                                 {{-- <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+50%</span>
@@ -89,7 +82,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Delivered Lects</p>
                                 <h5 class="font-weight-bolder">
-                                    1500
+                                {{ \App\Models\TeacherAttendance::where('teacher_id', Auth::user()->teacher->id)->distinct('created_at')->count() }}
                                 </h5>
                                 {{-- <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">45%</span>
@@ -114,7 +107,7 @@
                             <div class="numbers">
                                 <p class="text-sm mb-0 text-uppercase font-weight-bold">Assignments</p>
                                 <h5 class="font-weight-bolder">
-                                    
+                                {{\App\Models\Assignment::where('teacher_id', Auth::user()->teacher->id)->distinct('course_id')->count()}}
                                 </h5>
                                 {{-- <p class="mb-0">
                                     <span class="text-success text-sm font-weight-bolder">+5%</span>
@@ -146,18 +139,18 @@
                             </a>
                             <span class="m-4">
                                 <h4 style="font-weight: bold">
-                                    Wajeeh Armaghan Asghar
+                                    {{Auth::user()->name}}
                                 </h4>
                                 <h5>
-                                    Accounting and Auditing
+                                    <!-- Accounting and Auditing -->
                                 </h5>
                             </span>
                         </div>
                         <div class="col-12">
-                            <h4>IQRA UNIVERSITY, ISLAMABAD</h4>
-                            <h6>MS ACCOUNTING & AUDITING</h6>
-                            <h6>+92-312-3456789</h6>
-                            <h6>mymail@gmail.com</h6>
+                            <h4>{{Auth::user()->teacher->board_university}}</h4>
+                            <h6>{{Auth::user()->teacher->distinction}}</h6>
+                            <h6>+92{{Auth::user()->teacher->cell_no}}</h6>
+                            <h6>{{Auth::user()->email}}</h6>
                         </div>
                     </div>
                 </div>
@@ -171,33 +164,20 @@
                             NOTIFICATION
                         </h4>
                         <hr>
+                        @php $notifications = \App\Models\NoticeBoard::get(); @endphp
                         <div class="col-12">
                             <table class="table data-table">
                                 <thead>
-                                    <th></th>
-                                    <th></th>
+                                    <th>Notification</th>
+                                    <th>Date</th>
                                 </thead>
                                 <tbody>
+                                    @foreach($notifications as $notification)
                                     <tr>
-                                        <td class="text-xs">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td><input type="checkbox" name="" id=""></td>
+                                        <td class="text-xs">{{$notification->notice}}</td>
+                                        <td class="text-xs">{{\Carbon\Carbon::parse($notification->created_at)->format('d-m-Y h:i:s A')}}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="text-xs">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-xs">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-xs">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-xs">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</td>
-                                        <td><input type="checkbox" name="" id=""></td>
-                                    </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

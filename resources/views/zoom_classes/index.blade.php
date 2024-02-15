@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @if (Auth::user()->hasRole(['admin', 'student']))
+                        @if (Auth::user()->hasRole(['admin', 'teacher', 'student']))
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-zoom-link"><i
                             class="fa fa-plus"></i> Add New</button>
                         @endif

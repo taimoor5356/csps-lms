@@ -15,6 +15,15 @@ class CreateLessonPlansTable extends Migration
     {
         Schema::create('lesson_plans', function (Blueprint $table) {
             $table->id();
+            $table->integer('course_id');
+            $table->string('date')->nullable();
+            $table->string('from')->nullable();
+            $table->string('to')->nullable();
+            $table->string('day')->nullable();
+            $table->string('topic')->nullable();
+            $table->string('room_no')->nullable();
+            $table->string('batch_id')->nullable();
+            $table->string('deleted_at')->nullable();
             $table->timestamps();
         });
     }

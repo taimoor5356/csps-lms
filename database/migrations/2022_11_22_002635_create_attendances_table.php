@@ -15,6 +15,11 @@ class CreateAttendancesTable extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
+            $table->bigInteger('course_id')->nullable();
+            $table->bigInteger('batch_id')->nullable();
+            $table->enum('attendance', ['present', 'absent', 'late', 'half_day', 'leave'])->nullable();
+            $table->string('deleted_at')->nullable();
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@
             <li class="breadcrumb-item text-sm text-white active" aria-current="page"><span class="text-light">Lecture
                     Schedule</span></li>
         </ol>
-        <h6 class="font-weight-bolder text-white mb-0">Lecture Schedule</h6>
+        <h6 class="font-weight-bolder text-white mb-0">Lecture Schedules</h6>
     </nav>
 @endsection
 <div class="container-fluid py-4">
@@ -22,7 +22,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Lecture Schedule</h6>
+                    <h6>Lecture Schedule (@isset($lecture){{$lecture->lecture_name}}@endisset)</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive"
                             aria-atomic="true">
@@ -60,10 +60,10 @@
             aria-hidden="true">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <form action="{{ route('store.lecture_schedule') }}" method="POST">
+                    <form id="lecture-schedule-form" method="POST">
                         @csrf
                         <div class="modal-header">
-                            <h6 class="modal-title" id="modal-title-default">Schedule Details</h6>
+                            <h6 class="modal-title" id="modal-title-default">Lecture Schedule Details</h6>
                             <button type="button" class="close-modal btn btn-danger" data-bs-dismiss="modal"
                                 aria-label="Close">
                                 <span aria-hidden="true">×</span>
@@ -71,22 +71,10 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <!-- Name -->
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label for="course_id" class="form-control-label">Select Course</label>
-                                        <select name="course_id" id="course_id" class="form-control" required>
-                                            <option value="" selected disabled>Select Course</option>
-                                            @foreach ($courses as $course)
-                                                <option value="{{ $course->id }}">{{ $course->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
                                 <!-- Date -->
                                 <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="day" class="form-control-label">Select Date</label>
+                                        <label for="day" class="form-control-label">Select Day</label>
                                         <input class="form-control day" id="day" name="day" type="date"
                                             value="@isset($student->user){{ $student->user->name }}@endisset"
                                             onfocus="focused(this)" onfocusout="defocused(this)"
@@ -110,8 +98,7 @@
                         </div>
                         <div class="modal-footer">
                             <input type="submit" class="close-modal btn btn-success  ml-auto"
-                                data-bs-dismiss="" value="Save">
-                            {{-- <button type="button" class="btn btn-primary">Save changes</button> --}}
+                                data-bs-dismiss="modal" value="Save">
                             <button type="button" class="close-modal btn btn-danger  ml-auto"
                                 data-bs-dismiss="modal">Close</button>
                         </div>
@@ -143,38 +130,73 @@
         @endif
 
         // Data Table Starts
-        // var table = $('.data-table').DataTable({
-        //     responsive: true,
-        //     processing: true,
-        //     stateSave: true,
-        //     // serverSide: true,
-        //     bDestroy: true,
-        //     scrollX: true,
-        //     autoWidth: false,
-        //     ajax: {
-        //         url: "{{ url('store.lecture_schedule') }}"
-        //     },
-        //     columns: [{
-        //             data: 'days',
-        //             name: 'days'
-        //         },
-        //         {
-        //             data: 'schedule_from',
-        //             name: 'schedule_from'
-        //         },
-        //         {
-        //             data: 'schedule_to',
-        //             name: 'schedule_to'
-        //         },
-        //     ],
-        //     initComplete: function(settings, json) {
-        //         $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
-        //         $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
-        //             "custom-pagination");
-        //         $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
-        //             "text-color");
-        //     }
-        // });
+
+        var table = $('.data-table').DataTable({
+            responsive: true,
+            processing: true,
+            stateSave: true,
+            // serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('lecture_schedules', [$lecture->id]) }}"
+            },
+            columns: [{
+                    data: 'date',
+                    name: 'date'
+                },
+                {
+                    data: 'time_from',
+                    name: 'time_from'
+                },
+                {
+                    data: 'time_to',
+                    name: 'time_to'
+                },
+                {
+                    data: 'monday_lecture',
+                    name: 'monday_lecture'
+                },
+                {
+                    data: 'tuesday_lecture',
+                    name: 'tuesday_lecture'
+                },
+                {
+                    data: 'wednesday_lecture',
+                    name: 'wednesday_lecture'
+                },
+                {
+                    data: 'thursday_lecture',
+                    name: 'thursday_lecture'
+                },
+                {
+                    data: 'friday_lecture',
+                    name: 'friday_lecture'
+                },
+                {
+                    data: 'saturday_lecture',
+                    name: 'saturday_lecture'
+                },
+                {
+                    data: 'sunday_lecture',
+                    name: 'sunday_lecture'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions'
+                },
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            }
+        });
+
+        // Data Table Ends
     });
 </script>
 <!-- Scripting Here -->

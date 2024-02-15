@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Interfaces\LectureScheduleRepositoryInterface;
 use App\Models\Course;
+use App\Models\Lecture;
 use App\Models\LectureSchedule;
 
 class LectureScheduleRepository implements LectureScheduleRepositoryInterface
@@ -81,43 +82,35 @@ class LectureScheduleRepository implements LectureScheduleRepositoryInterface
 
     public function show($id)
     {
+        return view('lecture_schedule.index');
     }
 
-    public function store($request)
+    public function store($request, $courseId)
     {
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             $request = (object)$request;
-            $day = $request->day;
-            $day = Carbon::parse($day)->format('Y-m-d');
-            $prevLectureSchedule = LectureSchedule::query();
-            $courseLimit = $prevLectureSchedule->where('day', $day);
-            if (!$courseLimit->where('course_limit', 2)->exists()) {
-                // if (Auth::user()->hasRole('admin')) {
-                    $prevLectureSchedule = LectureSchedule::where('day', $day);
-
-                    $lectureSchedule = new LectureSchedule();
-                    $lectureSchedule->day = $day;
-                    $lectureSchedule->course_id = $request->course_id;
-                    $lectureSchedule->time = $request->time;
-                    $lectureSchedule->course_limit = !is_null($prevLectureSchedule->first()) ? $prevLectureSchedule->first()->course_limit + 1 : 1;
-                    $lectureSchedule->created_by = '1';
-                    $lectureSchedule->save();
-                    DB::commit();
-                    return redirect()->back()->withSuccess('Data Saved Successfully');
-                    return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
-                // } else {
-                    // return response()->json(['status' => false, 'msg' => 'You donot have permission to perform this action']);
-                // }
-            } else {
-                return redirect()->back()->withError('Already scheduled 2 courses');
-                return response()->json([
-                    'status' => false,
-                    'msg' => 'Limit exceeded'
-                ]);
-            }
+            $lecture = new Lecture();
+            $lecture->course_id = $courseId;
+            $lecture->lecture_name = $request->lecture_name;
+            $lecture->save();
+            $prevLectureSchedule = new LectureSchedule();
+            $prevLectureSchedule->lecture_id = $lecture->id;
+            $prevLectureSchedule->day = $request->day;
+            $prevLectureSchedule->time_from = $request->time_from;
+            $prevLectureSchedule->time_to = $request->time_to;
+            $prevLectureSchedule->save();
+            DB::commit();
+            return response()->json([
+                'status' => true,
+                'msg' => 'Lecture added successfully'
+            ]);
         } catch (\Exception $e) {
-            return redirect()->back()->withError('Something went wrong');
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                'msg' => 'Something went wrong'
+            ]);
             dd($e);
             return redirect()->back()->withError('Something went wrong');
             // DB::rollback();

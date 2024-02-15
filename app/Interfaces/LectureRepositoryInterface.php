@@ -5,7 +5,7 @@ namespace App\Interfaces;
 interface LectureRepositoryInterface 
 {
     public function showTableData($data, $trashed);
-    public function index($request);
+    public function index($request, $courseId);
     public function create();
     public function show($id);
     public function destroy($id);

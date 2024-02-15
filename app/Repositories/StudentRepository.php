@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Null_;
 use App\Interfaces\StudentRepositoryInterface;
+use Spatie\Permission\Models\Role;
 
 class StudentRepository implements StudentRepositoryInterface 
 {
@@ -123,19 +124,32 @@ class StudentRepository implements StudentRepositoryInterface
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
-                    $btn .= '
-                        <a href="students/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#view-student-details"><i class="fa fa-eye"></i></a>
-                        <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
+                    $enrollmentsUrl = route('enrollments.students', [$row->user_id]);
+                    $attendancesUrl = route('attendances', ['students', $row->user_id]);
+                    $btn .='
+                    <a href="#" class="btn btn-secondary bg-secondary px-2 py-1" title="More" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right border border-default">
+                        <!-- Your dropdown menu items go here -->
+                        <a class="dropdown-item" href="students/'.$row->id.'/show">View Detail</a>
+                        <a class="dropdown-item" href="students/'. $row->id .'/edit">Edit</a>
+                        <a class="dropdown-item" href="'.$enrollmentsUrl.'">View Enrolled Courses</a>
+                        <a class="dropdown-item" href="'.$attendancesUrl.'">View Attendance</a>';
+                    // $btn .= '
+                    //     <a href="students/'.$row->id.'/show" class="btn btn-success bg-success px-2 py-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#view-student-details"><i class="fa fa-eye"></i></a>
+                    //     <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary px-2 py-1" title="Edit"><i class="fa fa-pencil"></i></a>';
                     if (Auth::user()->can('student_delete')) {
-                        $btn .='<a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
+                        $btn .='<a class="dropdown-item bg-danger text-white" href="students/'. $row->id .'/delete">Delete</a>';
                     }
                 } else {
-                    $btn .= '
-                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>';
-                    $btn .='
-                        <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                    // $btn .= '
+                    //     <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success px-2 py-1" title="Restore"><i class="fa fa-undo"></i></a>';
+                    // $btn .='
+                    //     <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger px-2 py-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
+                    // ';
                 }
+                $btn .='</div>';
                 return $btn;
             })
             ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action'])
@@ -187,7 +201,7 @@ class StudentRepository implements StudentRepositoryInterface
                         }
                         $user->gender = $request->gender;
                         $user->password = Hash::make($defaultPassword);
-                        $user->role_id = 3;
+                        $user->role_id = Role::where('name', 'student')->first()->id;
                         $user->approval_date = Carbon::now();
                         $user->approved_status = 1;
                         $user->save();
@@ -198,7 +212,7 @@ class StudentRepository implements StudentRepositoryInterface
                         'email' => $request->email,
                         'gender' => $request->gender,
                         'password' => Hash::make($defaultPassword),
-                        'role_id' => 3,
+                        'role_id' => Role::where('name', 'student')->first()->id,
                         'registration_date' => Carbon::now(),
                         'approval_date' => Carbon::now(),
                         'approved_status' => 1,
@@ -269,10 +283,10 @@ class StudentRepository implements StudentRepositoryInterface
                 }
                 $user->assignRole(3);
                 $subject = 'Login Details';
-                if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
-                    $student->email_notification_sent = 1;
-                    $student->save();
-                }
+                // if (Mail::to($request->email)->send(new \App\Mail\Mail($subject))) {
+                //     $student->email_notification_sent = 1;
+                //     $student->save();
+                // }
                 DB::commit();
                 return response()->json(['status' => true, 'msg' => 'Data Saved Successfully']);
             } else {

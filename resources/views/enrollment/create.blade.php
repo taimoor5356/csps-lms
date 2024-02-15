@@ -93,6 +93,26 @@
                 }
             });
         });
+        $(document).on('change', '#course_id', function() {
+            var _this = $(this);
+            $.ajax({
+                url: "{{ route('fetch_course_teachers') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    course_id: _this.val()
+                },
+                success: function(response) {
+                    var html = '<option value="0" selected>Select Teacher</option>';
+                    response.data.forEach(element => {
+                        html += `
+                            <option value="`+element.user.id+`">`+element.user.name+`</option>
+                        `;
+                    });
+                    $('#teacher_id').html(html);
+                }
+            });
+        });
     });
 </script>
 <!-- Scripting Here -->

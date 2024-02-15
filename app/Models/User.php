@@ -78,6 +78,12 @@ class User extends Authenticatable
     // relation with attendance
     public function attendance()
     {
-        return $this->hasOne(Attendance::class, 'user_id', 'id');
+        return $this->hasMany(Attendance::class, 'user_id', 'id');
+    }
+
+    // relation with attendance
+    public function feeplan()
+    {
+        return $this->hasOne(feeplan::class, 'user_id', 'id');
     }
 }

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
 
 class FacultyRepository implements FacultyRepositoryInterface 
 {
@@ -138,7 +139,7 @@ class FacultyRepository implements FacultyRepositoryInterface
                     }
                     $user->gender = $request->gender;
                     $user->password = Hash::make($defaultPassword);
-                    $user->role_id = 3;
+                    $user->role_id = Role::where('name', 'teacher')->first()->id;
                     // $user->registration_date = Carbon::now();
                     $user->approved_status = 1;
                     $user->save();
@@ -149,7 +150,7 @@ class FacultyRepository implements FacultyRepositoryInterface
                     'email' => $request->email,
                     'gender' => $request->gender,
                     'password' => Hash::make($defaultPassword),
-                    'role_id' => 3,
+                    'role_id' => Role::where('name', 'teacher')->first()->id,
                     'registration_date' => Carbon::now(),
                     'approved_status' => 0,
                     // 'photo' => $file

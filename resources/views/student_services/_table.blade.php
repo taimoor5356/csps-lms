@@ -1,5 +1,5 @@
 <div class="table-responsive p-3">
-    <table class="data-table table table-bordered align-items-center mb-0">
+    <table class="data-table table cell-border table-bordered align-items-center mb-0">
         <thead>
         </thead>
         <tbody>

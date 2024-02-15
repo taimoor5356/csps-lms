@@ -23,4 +23,9 @@ class Enrollment extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+    
+    public function teacher_lecture_schedule()
+    {
+        return $this->hasOne(TeacherLectureSchedule::class, 'course_id', 'course_id');
+    }
 }

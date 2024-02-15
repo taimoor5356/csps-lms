@@ -21,4 +21,9 @@ class RegisteredBatch extends Model
     {
         return $this->hasMany(RegisteredNumber::class, 'registered_batch_id', 'id');
     }
+
+    public function attendance()
+    {
+        return $this->hasMany(Attendance::class, 'batch_id', 'id');
+    }
 }

@@ -120,9 +120,11 @@
                                     <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none"
                                         style="float: right"></div>
                                 </button>
+                                @if(!auth()->user())
                                 <p>
-                                    <a href="/lms/login">Login Here</a>
+                                    <a href="{{route('login')}}">Login Here</a>
                                 </p>
+                                @endif
                             </div>
                         </div>
                     </form>

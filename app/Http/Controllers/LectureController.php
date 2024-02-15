@@ -28,14 +28,14 @@ class LectureController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $courseId)
     {
         //
         if ($request->ajax()) {
-            return $this->lectureRepository->index($request);
+            return $this->lectureRepository->index($request, $courseId);
         }
-        $courses = Course::get();
-        return view('lectures.index', compact('courses'));
+        $courses = Course::where('id', $courseId);
+        return view('lectures.index', compact('courses', 'courseId'));
     }
 
     /**

@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Visitor extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $guarded = [];
+
+    protected $guarded = ['id'];
 
     public function user() {
         return $this->belongsTo(User::class, 'user_id', 'id');

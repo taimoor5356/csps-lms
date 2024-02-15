@@ -12,13 +12,28 @@ class StudentLectureSchedule extends Model
 
     protected $guarded = ['id'];
 
-    public function lecture()
+    public function scopeTeacherStudent($query, $teacherId = null, $studentId = null, $courseId = null, $dataType = null)
     {
-        return $this->belongsTo(Lecture::class, 'lecture_id', 'id');
+        if ($dataType == 'teacher_students') {
+            $query->where('teacher_id', $teacherId)->groupBy('student_id');
+        } else if ($dataType == 'teacher_specific_course_students') {
+            $query->where('teacher_id', $teacherId)->where('course_id', $courseId)->groupBy('student_id');
+        }
+        return $query;
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id', 'id');
     }
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id', 'user_id');
+        return $this->belongsTo(User::class, 'student_id', 'id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
     }
 }

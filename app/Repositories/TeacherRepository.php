@@ -11,13 +11,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
+use Spatie\Permission\Models\Role;
 
 class TeacherRepository implements TeacherRepositoryInterface 
 {
-    public function showTableData($data, $trashed)
+    public function showTableData($request, $data, $trashed)
     {
-        return DataTables::of($data)
+        $searchValue = $request->search['value'];
+        // Apply global search
+        if (!empty($searchValue)) {
+            $data = $data->where(function ($query) use ($searchValue) {
+                $query->whereHas('user', function ($subQuery) use ($searchValue) {
+                    $subQuery->where('name', 'LIKE', "%$searchValue%")
+                        ->orWhere('email', 'LIKE', "%$searchValue%");
+                });
+            });
+        }
+        $totalRecords = $data->count(); // Get the total number of records for pagination
+        $teachers = $data->skip($request->start)
+            ->take($request->length)
+            ->get();
+        return DataTables::of($teachers)
             ->addIndexColumn()
             ->addColumn('image', function ($row) {
                 $url = URL::to('/');
@@ -59,7 +73,7 @@ class TeacherRepository implements TeacherRepositoryInterface
                 return '
                 <div class="d-flex px-2 py-1">
                     <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">' . Carbon::parse($row->dob)->format('M d,Y') . '</h6>
+                        <h6 class="mb-0 text-sm">' . (!empty($row->dob) ? (Carbon::parse($row->dob)->format('M d,Y')) : '') . '</h6>
                         <p class="text-sm text-secondary mb-0">' . $row->cnic . '</p>
                     </div>
                 </div>
@@ -68,33 +82,46 @@ class TeacherRepository implements TeacherRepositoryInterface
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
-                    $btn .= '
-                        <a href="teachers/'.$row->id.'/show" class="btn btn-success bg-success p-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="teachers/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
-                    if (Auth::user()->can('student_delete')) {
-                        $btn .='<a href="teachers/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
+                    $enrollmentsUrl = route('enrollments.teachers', [$row->user_id]);
+                    $attendancesUrl = route('attendances', ['teachers', $row->user_id]);
+                    $btn .='
+                    <a href="#" class="btn btn-secondary bg-secondary px-2 py-1" title="More" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right border border-default">
+                        <!-- Your dropdown menu items go here -->
+                        <a class="dropdown-item" href="teachers/'.$row->id.'/show">View Detail</a>
+                        <a class="dropdown-item" href="teachers/'. $row->id .'/edit">Edit</a>
+                        <a class="dropdown-item" href="'.$enrollmentsUrl.'">View Enrolled Courses</a>
+                        <a class="dropdown-item" href="'.$attendancesUrl.'">View Attendance</a>';
+                    if (Auth::user()->can('teacher_delete')) {
+                        $btn .='<a class="dropdown-item bg-danger text-white" href="teachers/'. $row->id .'/delete">Delete</a>';
                     }
                 } else {
-                    $btn .= '
-                        <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>';
-                    $btn .='
-                        <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                    // $btn .= '
+                    //     <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success px-2 py-1" title="Restore"><i class="fa fa-undo"></i></a>';
+                    // $btn .='
+                    //     <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger px-2 py-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
+                    // ';
                 }
+                $btn .='</div>';
                 return $btn;
             })
             ->rawColumns(['image', 'name_email', 'dob_cnic', 'action'])
+            ->setTotalRecords($totalRecords)
+            ->setFilteredRecords($totalRecords) // For simplicity, same as totalRecords
+            ->skipPaging()
             ->make(true);
     }
 
     public function index($request) 
     {
         try {
-            $teacherDetail = Teacher::with('user')->get();
+            $teacherDetail = Teacher::withoutGlobalScopes()->with('user');
             if (Auth::user()->hasRole('teacher')) {
-                $teacherDetail = Teacher::with('user')->where('user_id', Auth::user()->id)->get();
+                $teacherDetail = Teacher::withoutGlobalScopes()->with('user')->where('user_id', Auth::user()->id);
             }
-            return $this->showTableData($teacherDetail, $trashed = null);
+            return $this->showTableData($request, $teacherDetail, $trashed = null);
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
         }
@@ -124,7 +151,7 @@ class TeacherRepository implements TeacherRepositoryInterface
                 'email' => $request->email,
                 'gender' => $request->gender,
                 'password' => Hash::make($defaultPassword),
-                'role_id' => 2,
+                'role_id' => Role::where('name', 'teacher')->first()->id,
                 'registration_date' => Carbon::now(),
                 'approved_status' => 0,
                 // 'photo' => $file

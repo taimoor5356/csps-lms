@@ -10,6 +10,8 @@ class TeacherLectureSchedule extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'teacher_lecture_schedules';
+
     protected $guarded = ['id'];
 
     public function lecture()
@@ -19,6 +21,16 @@ class TeacherLectureSchedule extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'teacher_id', 'user_id');
+        return $this->belongsTo(Teacher::class, 'teacher_id', 'id');
+    }
+
+    public function students_lecture_schedule()
+    {
+        return $this->hasMany(StudentLectureSchedule::class, 'teacher_lecture_schedule_id', 'id');
+    }
+
+    public function course_shift()
+    {
+        return $this->belongsTo(CourseShift::class, 'course_shift_id', 'id');
     }
 }

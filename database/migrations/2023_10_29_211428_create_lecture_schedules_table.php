@@ -15,10 +15,10 @@ class CreateLectureSchedulesTable extends Migration
     {
         Schema::create('lecture_schedules', function (Blueprint $table) {
             $table->id();
-            $table->string('day')->nullable();
-            $table->string('time')->nullable();
             $table->string('course_id')->nullable();
-            $table->enum('course_limit', ['1', '2'])->nullable();
+            $table->string('day_id')->nullable();
+            $table->string('time_from')->nullable();
+            $table->string('time_to')->nullable();
             $table->string('created_by')->nullable();
             $table->timestamps();
         });

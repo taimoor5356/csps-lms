@@ -70,5 +70,45 @@
         </div>
     </div>
 </div>
+<!-- <div class="row">
+    <div class=" col-md-4">
+        <div class="form-group">
+            <label for="shift" class="form-control-label">Select Shift *</label>
+            <br>
+            <input class="shift mx-1" id="first_shift" name="first_shift" type="checkbox" @isset($course) @if(\App\Models\CourseShift::where('course_id', $course->id)->where('shift_id', 1)->exists()) checked @endif @endisset
+                value="1" onfocus="focused(this)"
+                onfocusout="defocused(this)"> First Shift
+                <br>
+        <div class="form-group">
+            <label for="day" class="form-control-label">Select Days *</label>
+            <br>
+            @foreach(\App\Models\Day::get() as $day)
+            <input class="day mx-1" name="first_shift_day[]" type="checkbox" @isset($course) @if(\App\Models\CourseShift::where('course_id', $course->id)->where('shift_id', 1)->where('day_id', $day->id)->exists()) checked @endif @endisset
+                value="{{$day->id}}" onfocus="focused(this)"
+                onfocusout="defocused(this)"> {{$day->name}}
+                <br>
+            @endforeach
+        </div>
+        </div>
+    </div>
+    <div class="offset-4 col-md-4">
+        <label for="shift" class="form-control-label">Select Shift *</label>
+        <br>
+        <input class="shift mx-1" id="second_shift" name="second_shift" type="checkbox" @isset($course) @if(\App\Models\CourseShift::where('course_id', $course->id)->where('shift_id', 2)->exists()) checked @endif @endisset
+            value="2" onfocus="focused(this)"
+            onfocusout="defocused(this)"> Second Shift
+            <br>
+        <div class="form-group">
+            <label for="day" class="form-control-label">Select Days *</label>
+            <br>
+            @foreach(\App\Models\Day::get() as $day)
+            <input class="day mx-1" name="second_shift_day[]" type="checkbox" @isset($course) @if(\App\Models\CourseShift::where('course_id', $course->id)->where('shift_id', 2)->where('day_id', $day->id)->exists()) checked @endif @endisset
+                value="{{$day->id}}" onfocus="focused(this)"
+                onfocusout="defocused(this)"> {{$day->name}}
+                <br>
+            @endforeach
+        </div>
+    </div>
+</div> -->
 </div>
 <hr class="horizontal dark">

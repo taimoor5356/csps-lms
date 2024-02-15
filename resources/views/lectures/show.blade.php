@@ -70,7 +70,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>Lecture Details ({{$lecture->course->name}})</h6>
+                    <h6>Lecture Details (@isset($lecture->course){{$lecture->course->name}}@endisset)</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive"
                             aria-atomic="true">
@@ -119,58 +119,52 @@
             $('.toast .toast-body').html("{{ session('error') }}");
             $('.toast').toast('show');
         @endif
-        // Data Table Starts
-        var table = $('.lecturer-data-table').DataTable({
-            responsive: true,
-            processing: true,
-            stateSave: true,
-            // serverSide: true,
-            bDestroy: true,
-            scrollX: true,
-            autoWidth: false,
-            ajax: {
-                url: "{{ route('lectures') }}"
-            },
-            columns: [
-                {
-                    data: 'lecturer_name',
-                    name: 'lecturer_name'
-                }
-            ],
-            initComplete: function(settings, json) {
-                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
-                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
-                    "custom-pagination");
-                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
-                    "text-color");
-            }
-        });
         
-        var table = $('.students-data-table').DataTable({
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
             responsive: true,
             processing: true,
-            stateSave: true,
-            // serverSide: true,
+            // stateSave: true,
+            serverSide: true,
             bDestroy: true,
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('fetch_students.lecture') }}",
-                method: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    lecture_id: {{$id}}
-                }
+                url: "{{ route('expenses') }}",
             },
             columns: [
                 {
-                    data: 'student_name',
-                    name: 'student_name'
+                    data: 'name',
+                    name: 'name'
                 },
                 {
-                    data: 'roll_no',
-                    name: 'roll_no'
-                }
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'invoice_number',
+                    name: 'invoice_number'
+                },
+                {
+                    data: 'date',
+                    name: 'date'
+                },
+                {
+                    data: 'expense_head',
+                    name: 'expense_head'
+                },
+                {
+                    data: 'amount',
+                    name: 'amount',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
             ],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");

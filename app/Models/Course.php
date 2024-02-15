@@ -13,9 +13,19 @@ class Course extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
-
-    public function user()
+    
+    public function lectures()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->hasMany(Lecture::class, 'course_id', 'id');
+    }
+    
+    public function shifts()
+    {
+        return $this->hasMany(CourseShift::class, 'course_id', 'id');
+    }
+    
+    public function teacher_lecture_schedule()
+    {
+        return $this->hasOne(TeacherLectureSchedule::class, 'course_id', 'id');
     }
 }

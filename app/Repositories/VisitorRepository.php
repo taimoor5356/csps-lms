@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Interfaces\VisitorRepositoryInterface;
+use Spatie\Permission\Models\Role;
 
 class VisitorRepository implements VisitorRepositoryInterface 
 {
@@ -203,7 +204,7 @@ class VisitorRepository implements VisitorRepositoryInterface
                 'email' => strtolower(substr($request->name, 0, 1).rand(1, 1000).'@examplecsps.com'),
                 'gender' => $request->gender,
                 'password' => Hash::make($defaultPassword),
-                'role_id' => 5,
+                'role_id' => Role::where('name', 'visitor')->first()->id,
                 'registration_date' => Carbon::now(),
                 'approved_status' => 0,
                 // 'photo' => $file

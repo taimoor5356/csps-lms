@@ -70,7 +70,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex">
-                    <h6>All Lectures</h6>
+                    <h6>All Lectures (@isset($courses){{$courses->first()->name}}@endisset)</h6>
                     <div class="alert-messages w-50 ms-auto text-center">
                         <div class="toast bg-success" id="notification" role="alert" aria-live="assertive"
                             aria-atomic="true">
@@ -86,13 +86,12 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @if (Auth::user()->hasRole(['admin']))
-                            <button type="button" class="btn btn-primary" data-bs-target="#modal-default"
+                        @role ('admin')
+                            <button type="button" class="btn btn-primary" data-bs-target="#add-course-lecture-modal"
                             data-bs-toggle="modal"><i class="fa fa-plus"></i> Add New</button>
-                            {{-- <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Day</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Week</button>
-                            <button type="button" class="btn btn-primary"><i class="fa fa-calendar"></i> Month</button> --}}
-                        @endif
+                            <button type="button" class="btn btn-primary" data-bs-target="#add-course-lecture-modal"
+                            data-bs-toggle="modal"><i class="fa fa-plus"></i> Schedules</button>
+                        @endrole
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -107,9 +106,9 @@
 @section('modal')
 <div class="row">
     <div class="col-md-4">
-        <div class="modal fade" id="modal-default" tabindex="-1" role="dialog" aria-labelledby="modal-default"
+        <div class="modal fade" id="add-course-lecture-modal" tabindex="-1" role="dialog" aria-labelledby="add-course-lecture-modal"
             aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <form id="lecture-form" method="POST">
                         @csrf
@@ -122,22 +121,29 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
+                                <div class="col-md-12">
+                                    <label for="lecture_name">Lecture Name</label>
+                                    <input type="text" class="form-control" name="lecture_name" id="lecture_name" placeholder="Enter Lecture Name">
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4">
-                                    <label for="course_id">Course Name</label>
-                                    <select name="course_id" id="course_id" class="form-control">
-                                        <option value="">Select Course</option>
-                                        @foreach ($courses as $course)
-                                            <option value="{{ $course->id }}">{{ $course->name }}</option>
-                                        @endforeach
+                                    <label for="lecture_name">Select Day</label>
+                                    <select class="form-control" name="day" id="day">
+                                        <option value="monday">Monday</option>
+                                        <option value="tuesday">Tuesday</option>
+                                        <option value="wednesday">Wednesday</option>
+                                        <option value="thursday">Thursday</option>
+                                        <option value="friday">Friday</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="start_date">Expected Start Date</label>
-                                    <input type="date" class="form-control" name="start_date" id="start_date">
+                                    <label for="time_from">Time From</label>
+                                    <input type="time" class="form-control" name="time_from" id="time_from" placeholder="Enter Time From">
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="end_date">Expected End Date</label>
-                                    <input type="date" class="form-control" name="end_date" id="end_date">
+                                    <label for="time_to">Time To</label>
+                                    <input type="time" class="form-control" name="time_to" id="time_to" placeholder="Enter Time To">
                                 </div>
                             </div>
                         </div>
@@ -145,8 +151,8 @@
                             <button class="btn btn-success px-4 text-white" type="submit" id="save" data-bs-dismiss="modal">
                                 <i class="fa fa-save"></i> Save &nbsp;<div class="loader mt-1 d-none" style="float: right"></div>
                             </button>
-                            <button type="button" class="close-modal btn btn-danger  ml-auto"
-                                data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="close-modal btn btn-danger ml-auto" data-bs-dismiss="modal"
+                               >Close</button>
                         </div>
                     </form>
                 </div>
@@ -174,6 +180,7 @@
             $('.toast .toast-body').html("{{ session('error') }}");
             $('.toast').toast('show');
         @endif
+        
         // Data Table Starts
         var table = $('.data-table').DataTable({
             responsive: true,
@@ -184,28 +191,12 @@
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('lectures') }}"
+                url: "{{route('lectures', [$courseId])}}",
             },
             columns: [
                 {
-                    data: 'course_name',
-                    name: 'course_name'
-                },
-                {
-                    data: 'lecturer_name',
-                    name: 'lecturer_name'
-                },
-                {
-                    data: 'student_name',
-                    name: 'student_name'
-                },
-                {
-                    data: 'starting_date',
-                    name: 'starting_date'
-                },
-                {
-                    data: 'ending_date',
-                    name: 'ending_date'
+                    data: 'lecture_name',
+                    name: 'lecture_name'
                 },
                 {
                     data: 'action',
@@ -228,7 +219,7 @@
             e.preventDefault();
             var formData = new FormData(this);
             $.ajax({
-                url: "{{ route('store.lecture') }}",
+                url: "{{route('store_lecture_schedules', [$courses->first()->id])}}",
                 method: 'POST',
                 contentType: false,
                 processData: false,
@@ -249,7 +240,7 @@
                     }
                 }
             });
-            window.location.reload();
+            // window.location.reload();
         });
     });
 </script>

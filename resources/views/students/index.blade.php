@@ -84,7 +84,7 @@
                             <a href="{{ route('trashed.students') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                         @endrole
                         @if (Auth::user()->hasRole('student'))
-                            <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
+                            <a href="{{ route('enrollments.students', [Auth::user()->id]) }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
                         @endif
                     </div>
                 </div>
