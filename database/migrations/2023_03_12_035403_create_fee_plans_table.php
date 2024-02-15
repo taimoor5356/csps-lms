@@ -23,6 +23,8 @@ class CreateFeePlansTable extends Migration
             $table->float('discount', 8,2)->nullable();
             $table->string('discount_reason')->nullable();
             $table->bigInteger('total_fee')->default(0);
+            $table->bigInteger('paid')->default(0);
+            $table->bigInteger('total_paid')->default(0);
             $table->date('due_date')->nullable();
             $table->date('freeze')->nullable();
             $table->date('leave')->nullable();
