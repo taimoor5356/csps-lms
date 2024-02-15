@@ -198,9 +198,9 @@
                             <a class="nav-link {{ (request()->is('courses') ? 'active' : '') }}" href="{{ route('courses') }}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Manage Courses
                             </a>
-                            <a class="nav-link {{ (request()->is('lessons') ? 'active' : '') }}" href="{{route('lesson_plans')}}">
+                            <!-- <a class="nav-link {{ (request()->is('lessons') ? 'active' : '') }}" href="{{route('lesson_plans')}}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Lesson Plans
-                            </a>
+                            </a> -->
                             <a class="nav-link {{ (request()->is('assignments') ? 'active' : '') }}" href="{{route('assignments')}}">
                                 <i class="fa fa-minus text-dark opacity-10"></i>Assignments
                             </a>
