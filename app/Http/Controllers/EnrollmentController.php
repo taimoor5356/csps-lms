@@ -143,7 +143,7 @@ class EnrollmentController extends Controller
                 }
             })
             ->addColumn('date', function ($row) {
-                if (isset($row)) {
+                if (isset($row->teacher_lecture_schedule)) {
                     return ($row->teacher_lecture_schedule->status == 'completed') ? $row->updated_at->format('Y-m-d') : '';
                 } else {
                     return '';
