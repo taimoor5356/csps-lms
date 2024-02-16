@@ -30,7 +30,7 @@ class AdminController extends Controller
         $totalStudents = Student::query()->count();
         $todayPresentStudents = Attendance::query()->where('attendance', 'present')->whereDate('created_at', Carbon::now())->count();
         $todayAbsentStudents = Attendance::query()->where('attendance', 'absent')->whereDate('created_at', Carbon::now())->count();
-        $totalFeeAwaitingStudents = FeePlan::query()->where('paid_status', 0)->groupBy('student_id')->get();
+        $totalFeeAwaitingStudents = FeePlan::query()->where('paid_status', 0)->groupBy('student_id')->count();
         $monthlyFees = DB::table(DB::raw("(SELECT 1 as month UNION SELECT 2 UNION SELECT 3 UNION SELECT 4 UNION SELECT 5 UNION SELECT 6 UNION SELECT 7 UNION SELECT 8 UNION SELECT 9 UNION SELECT 10 UNION SELECT 11 UNION SELECT 12) as months"))
                         ->leftJoin(DB::raw('(SELECT MONTH(created_at) as month, SUM(paid) as total_fee FROM fee_plans WHERE paid_status = 1 GROUP BY MONTH(created_at)) as fee_data'), 'months.month', '=', 'fee_data.month')
                         ->selectRaw('COALESCE(total_fee, 0) as total_fee, DATE_FORMAT(CONCAT("2022-", months.month, "-01"), "%b") as month_name')
