@@ -94,6 +94,18 @@
         -webkit-animation: spin 1s linear infinite; /* Safari */
         animation: spin 1s linear infinite;
     }
+    .navbar-vertical .navbar-nav .nav-link[data-bs-toggle="collapse"]:after {
+      color: black;
+    }
+    .navbar-vertical .navbar-nav .nav-link[data-bs-toggle="collapse"][aria-expanded="true"]:after {
+      color: black;
+    }
+    .navbar-vertical .navbar-nav .nav-link[data-bs-toggle="collapsed"]:after {
+      color: black;
+    }
+    .navbar-vertical .navbar-nav .nav-link[data-bs-toggle="collapsed"][aria-expanded="true"]:after {
+      color: black;
+    }
     /* Safari */
     @-webkit-keyframes spin {
     0% { -webkit-transform: rotate(0deg); }
@@ -182,6 +194,7 @@
     @include('layout.header')
     <!-- End Navbar -->
     @yield('content')
+    
     @include('layout.footer')
   </main>
   @include('layout.configure')

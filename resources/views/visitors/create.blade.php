@@ -105,7 +105,7 @@
                         <div class="col-md-6 col-lg-6 col-xl-6 d-flex justify-content-end my-0 py-0">
                             <button type="button" class="btn btn-success"
                                 onclick="location.href='{{ asset('public/assets/prospectus/csps_lms_prospectus.pdf') }}'"
-                                target="_blank" download>Download Prospectus</button>
+                                download>Download Prospectus</button>
                         </div>
                     </div>
                 </div>

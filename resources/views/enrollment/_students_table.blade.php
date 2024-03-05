@@ -9,6 +9,9 @@
                     Student Name
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
+                    Teacher Name
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
                     Course Name
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
@@ -21,11 +24,13 @@
                     Marks
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
-                    Date
+                    Completion Date
                 </th>
+                @can('enrollment_update')
                 <th class="text-uppercase text-dark text-xs font-weight-bolder">
                     Actions
                 </th>
+                @endcan
             </tr>
         </thead>
         <tbody>

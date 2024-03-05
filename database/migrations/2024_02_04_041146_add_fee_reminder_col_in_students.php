@@ -15,7 +15,7 @@ class AddFeeReminderColInStudents extends Migration
     {
         Schema::table('students', function (Blueprint $table) {
             //
-            $table->tinyInteger('fee_reminder')->default(0)->nullable()->after('total_paid');
+            // $table->tinyInteger('fee_reminder')->default(0)->nullable()->after('total_paid');
         });
     }
 

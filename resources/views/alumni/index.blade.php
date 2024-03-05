@@ -130,7 +130,10 @@
             scrollX: true,
             autoWidth: false,
             ajax: {
-                url: "{{ route('alumni') }}"
+                url: "{{ route('students') }}",
+                data: function (d) {
+                    d.alumni_data = true;
+                }
             },
             columns: [
                 // {
@@ -150,8 +153,8 @@
                     name: 'name_email'
                 },
                 {
-                    data: 'registration_number',
-                    name: 'registration_number'
+                    data: 'roll_no',
+                    name: 'roll_no'
                 },
                 // {
                 //     data: 'dob_cnic',

@@ -1,7 +1,7 @@
 <table class="data-table table cell-border align-items-center mb-0">
     <thead>
-        <th>Name</th>
-        <th>Book</th>
+        <th>Student Name</th>
+        <th>Course Name</th>
         <th>Batch</th>
         <th>Assignment</th>
         <th>Date/Time</th>

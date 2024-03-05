@@ -77,16 +77,65 @@
                             </div>
                         </div>
                     </div>
-                    @role('admin')
                     <div class="header-buttons ms-auto text-end">
+                        @can('attendance_create')
                         <a href="{{ route('attendances', ['teachers']) }}" class="btn btn-primary">Teachers</a>
                         <a href="{{ route('attendances', ['staff']) }}" class="btn btn-primary">Staff</a>
+                        @endcan
                     </div>
-                    @endrole
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
+                    @can('attendance_create')
+                    <div class="row px-3">
+                        <div class="col-md-3">
+                            <label for="course_id">Select Course</label>
+                            <select name="course_id" class="form-control" id="course_id">
+                                <option value="" selected>Select Course</option>
+                                @php  
+                                    $courses = \App\Models\Course::query();
+                                    if (!empty($userId)) {
+                                        $studentEnrolledCourseIds = \App\Models\Enrollment::where('user_id', $userId)->pluck('course_id');
+                                        $courses = $courses->whereIn('id', $studentEnrolledCourseIds);
+                                    }
+                                    $courses = $courses->get();
+                                @endphp
+                                @foreach ($courses as $course)
+                                    <option value="{{$course->id}}">{{$course->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="batch_id">Select Batch</label>
+                            <select name="batch_id" class="form-control" id="batch_id">
+                                <option value="" selected>Select Batch</option>
+                                @php  
+                                    $batches = \App\Models\RegisteredBatch::query()->with('registeredYear');
+                                    $batches = $batches->get();
+                                @endphp
+                                @foreach ($batches as $batch)
+                                    <option value="{{$batch->id}}">{{$batch->batch}} ({{$batch->registeredYear->registered_year}})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @if(!empty($userId))
+                        <div class="col-md-3">
+                            <label for="date_from">Date From</label>
+                            <input type="date" class="form-control" name="date_from" id="date_from">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="date_to">Date to</label>
+                            <input type="date" class="form-control" name="date_to" id="date_to">
+                        </div>
+                        @endif
+                    </div>
+                    <hr>
+                    @endcan
+                    <div class="row">
+                        <div class="col-12">
                     <small class="mx-3 text-danger">* Scroll right if unable to see Actions</small>
                     @include('attendance._table')
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,8 +177,20 @@
             autoWidth: false,
             ajax: {
                 url: "{{ route('attendances', ['students', $userId]) }}",
+                data: function (d) {
+                    d.course_id = $('#course_id').val();
+                    d.date_from = $('#date_from').val();
+                    d.date_to = $('#date_to').val();
+                    d.batch_id = $('#batch_id').val();
+                }
             },
             columns: [
+                @if(!empty($userId))
+                {
+                    data: 'date_time',
+                    name: 'date_time'
+                },
+                @endif
                 {
                     data: 'name',
                     name: 'name'
@@ -142,24 +203,24 @@
                     data: 'batch_no',
                     name: 'batch_no'
                 },
-                @if(Auth::user()->hasRole('teacher'))
+                @role('teacher')
                 {
                     data: 'attendance',
                     name: 'attendance'
                 },
-                @endif
-                @if(Auth::user()->hasRole('admin'))
+                @endrole
                 {
                     data: 'course',
                     name: 'course'
                 },
+                @can('attendance_create')
                 {
                     data: 'action',
                     name: 'action',
                     orderable: false,
                     searchable: false
                 },
-                @endif
+                @endcan
             ],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
@@ -176,12 +237,18 @@
             var userId = _this.attr('data-user-id');
             var attendance = _this.attr('data-attendance');
             var batchId = _this.attr('data-batch-id');
+            var courseId = _this.closest('tr').find('.course_id').val();
+            if (courseId == null || courseId == '') {
+                alert('Course ID is required');
+                return false;
+            }
             var url = "{{route('mark_attendance')}}";
             var data = {
                 '_token':'{{csrf_token()}}',
                 'user_id':userId,
                 'batch_id':batchId,
                 'attendance':attendance,
+                'course_id':courseId,
             };
             $.post(url, data, function(response) {
                 if (response.status == true) {
@@ -191,6 +258,11 @@
                     alert(response.msg);
                 }
             });
+        });
+
+        $(document).on('change', '#course_id, #date_from, #date_to, #batch_id', function () {
+            var _this = $(this);
+            table.draw(false);
         });
     });
 </script>

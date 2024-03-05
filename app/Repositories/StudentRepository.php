@@ -18,13 +18,20 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Null_;
 use App\Interfaces\StudentRepositoryInterface;
+use App\Models\StudentLectureSchedule;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Events\UserRegistered;
+use App\Jobs\SendRegistrationEmail;
 
 class StudentRepository implements StudentRepositoryInterface 
 {
-    public function showTableData($data, $trashed)
+    public function showTableData($request, $data, $trashed)
     {
-        return DataTables::of($data)
+        if (!empty($request->alumni_data)) {
+            $data = $data->whereYear('created_at', Carbon::now()->subYears(1))->where('exam_status', 'passed');
+        }
+        return DataTables::of($data->get())
             ->addIndexColumn()
             ->addColumn('image', function ($row) {
                 $url = URL::to('/');
@@ -126,22 +133,28 @@ class StudentRepository implements StudentRepositoryInterface
                 if ($trashed == null) {
                     $enrollmentsUrl = route('enrollments.students', [$row->user_id]);
                     $attendancesUrl = route('attendances', ['students', $row->user_id]);
-                    $btn .='
-                    <a href="#" class="btn btn-secondary bg-secondary px-2 py-1" title="More" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-bars"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right border border-default">
-                        <!-- Your dropdown menu items go here -->
-                        <a class="dropdown-item" href="students/'.$row->id.'/show">View Detail</a>
-                        <a class="dropdown-item" href="students/'. $row->id .'/edit">Edit</a>
-                        <a class="dropdown-item" href="'.$enrollmentsUrl.'">View Enrolled Courses</a>
-                        <a class="dropdown-item" href="'.$attendancesUrl.'">View Attendance</a>';
-                    // $btn .= '
-                    //     <a href="students/'.$row->id.'/show" class="btn btn-success bg-success px-2 py-1 -view-student-detail" data-student-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#view-student-details"><i class="fa fa-eye"></i></a>
-                    //     <a href="students/'. $row->id .'/edit" data-student-id="'. $row->id .'" class="btn btn-primary bg-primary px-2 py-1" title="Edit"><i class="fa fa-pencil"></i></a>';
-                    if (Auth::user()->can('student_delete')) {
-                        $btn .='<a class="dropdown-item bg-danger text-white" href="students/'. $row->id .'/delete">Delete</a>';
+                    $passedStatusUrl = route('exam_passed_status', [$row->id]);
+                    $assignmentsUrl = route('assignments', ['students', $row->id]);
+                    $btn = '';
+                if ($trashed == null) {
+                    $btn .= '<a href="students/'.$row->id.'/show" class="btn btn-primary bg-primary p-1 view-visitor-detail" data-visitor-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
+                        <a href="students/'. $row->id .'/edit" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
+                        <a href="'.$enrollmentsUrl.'" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="View Enrolled Courses"><i class="fa fa-book"></i></a>
+                        <a href="'.$attendancesUrl.'" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="View Attendance"><i class="fa fa-clock"></i></a>
+                        <a href="'.$assignmentsUrl.'" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="View Assignments"><i class="fa fa-file"></i></a>
+                        ';
+                        if ((!Auth::user()->hasRole('student')) && (!Auth::user()->hasRole('teacher'))) {
+                            $btn .='<a href="'.$passedStatusUrl.'" data-visitor-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-check"></i></a> ';
+                        }
+                        if (Auth::user()->can('student_delete')) {
+                            $btn .= ' <a href="students/'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-student" title="Delete"><i class="fa fa-trash-o"></i></a>';
+                        }
+                } else {
+                    $btn .= '<a href="'. $row->id .'/restore" data-visitor-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>';
+                    if (Auth::user()->can('visitor_delete')) {
+                        $btn .= '<a href="'. $row->id .'/delete" data-visitor-id="'. $row->id .'" class="mx-1 btn btn-danger bg-danger p-1 delete-visitor" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>';
                     }
+                }
                 } else {
                     // $btn .= '
                     //     <a href="'. $row->id .'/restore" data-student-id="'. $row->id .'" class="btn btn-success bg-success px-2 py-1" title="Restore"><i class="fa fa-undo"></i></a>';
@@ -149,7 +162,7 @@ class StudentRepository implements StudentRepositoryInterface
                     //     <a href="'. $row->id .'/delete" data-student-id="'. $row->id .'" class="btn btn-danger bg-danger px-2 py-1 delete-student" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
                     // ';
                 }
-                $btn .='</div>';
+                $btn .='';
                 return $btn;
             })
             ->rawColumns(['image', 'name_email', 'fathername_occupation', 'domicile', 'dob_cnic', 'degree_university', 'subject_cgpa', 'action'])
@@ -159,11 +172,11 @@ class StudentRepository implements StudentRepositoryInterface
     public function index($request) 
     {
         try {
-            $studentsDetail = Student::with('user')->get();
+            $studentsDetail = Student::with('user');
             if (Auth::user()->hasRole('student')) {
-                $studentsDetail = Student::with('user')->where('user_id', Auth::user()->id)->get();
+                $studentsDetail = Student::with('user')->where('user_id', Auth::user()->id);
             }
-            return $this->showTableData($studentsDetail, $trashed = null);
+            return $this->showTableData($request, $studentsDetail, $trashed = null);
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
         }
@@ -179,8 +192,9 @@ class StudentRepository implements StudentRepositoryInterface
         $student = Student::with('user')->where('id', $id)->first();
         $compulsorySubjects = Course::where('category', 'compulsory')->get();
         $optionalSubjects = Course::where('category', 'optional')->get();
+        $studentSelectedSubjects = StudentLectureSchedule::where('student_id', $student->user_id)->pluck('course_id');
         if (isset($student)) {
-            return ['student' => $student, 'compulsorySubjects' => $compulsorySubjects, 'optionalSubjects' => $optionalSubjects];
+            return ['student' => $student, 'compulsorySubjects' => $compulsorySubjects, 'optionalSubjects' => $optionalSubjects, 'studentSelectedSubjects' => $studentSelectedSubjects];
         }
     }
 
@@ -360,6 +374,7 @@ class StudentRepository implements StudentRepositoryInterface
                 $student->user->name = $request->name;
                 $student->user->email = $request->email;
                 $student->user->gender = $request->gender;
+                $student->user->role_id = 3;
                 $studentTotalPaidFee = $student->total_paid;
                 $fullyPaid = 0;
                 if (Auth::user()->hasRole('admin')) {
@@ -430,6 +445,7 @@ class StudentRepository implements StudentRepositoryInterface
                         $request->photo->move(public_path('assets/img/students/'), $file);
                         $student->user->photo = $file;
                     }
+                    $student->form_updated = 'true';
                     $student->father_name = $request->father_name;
                     $student->father_occupation = $request->father_occupation;
                     $student->dob = $request->dob;
@@ -458,7 +474,8 @@ class StudentRepository implements StudentRepositoryInterface
                 }
                 $student->save();
                 $student->user->save();
-                $student->user->assignRole(3);
+                $student->user->assignRole('student');
+                SendRegistrationEmail::dispatch($student->user);
                 DB::commit();
                 return response()->json(['status' => true, 'msg' => 'Data Updated Successfully']);
             } else {

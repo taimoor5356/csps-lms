@@ -36,7 +36,7 @@ Route::get('/logout', function() {
 
 Auth::routes();
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth', 'force.logout']], function() {
 
     // Dashboard Routes
     require __DIR__.'/auth/dashboard.php';

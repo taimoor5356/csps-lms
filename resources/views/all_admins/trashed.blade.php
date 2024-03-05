@@ -21,8 +21,32 @@
 @endsection
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-12">
-            <h1 class="text-white">Under Construction</h1>
+    <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex">
+                    <h6>All Admins</h6>
+                    <div class="alert-messages w-50 ms-auto text-center">
+                        <div class="toast bg-success" id="notification" role="alert" aria-live="assertive" aria-atomic="true">
+                            <div class="toast-header text-bold text-white py-0 bg-success border-bottom border-white">
+                                <span class="success-header"></span>
+                                <div class="close-toast-msg ms-auto text-end cursor-pointer">
+                                    X
+                                </div>
+                            </div>
+                            <div class="toast-body text-white text-bold">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="header-buttons ms-auto text-end">
+                        <a href="{{ route('create.admin') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
+                        <a href="{{ route('trashed.admins') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
+                    </div>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    @include('all_admins._table')
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -30,6 +54,7 @@
 @section('modal')
 @endsection
 @section('page_js')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Scripting Here -->
 <script>
     $(document).ready(function() {
@@ -47,6 +72,91 @@
             $('.toast').toast('show');
         @endif
     });
+        // Data Table Starts
+        var table = $('.data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            bDestroy: true,
+            scrollX: true,
+            autoWidth: false,
+            ajax: {
+                url: "{{ route('trashed.admins') }}"
+            },
+            columns: [
+                {
+                    data: 'image',
+                    name: 'image',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'name_email',
+                    name: 'name_email'
+                },
+                {
+                    data: 'role',
+                    name: 'role'
+                },
+                {
+                    data: 'dob_cnic',
+                    name: 'dob_cnic'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            initComplete: function(settings, json) {
+                $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");
+                $('body').find('.dataTables_paginate.paging_simple_numbers').addClass(
+                    "custom-pagination");
+                $('body').find('.dataTables_wrapper .custom-pagination .paginate_button').addClass(
+                    "text-color");
+            }
+        });
+        // Data Table Ends
+
+        // Open Delete admin Modal
+        $(document).on('click', '.delete-admin', function(e) {
+            e.preventDefault();
+            var adminId = $(this).attr('data-admin-id');
+            Swal.fire({
+                title: 'Are you sure to delete permanently?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(adminId + '/permanent-delete', {_token: '{{ csrf_token() }}'}, function(responseData) {
+                        if (responseData.status == true) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: responseData.msg,
+                                icon: 'success',
+                                timer: 4500,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                            table.draw(false);
+                        } else {
+                            Swal.fire({
+                                title: 'Alert!',
+                                text: responseData.msg,
+                                icon: 'warning',
+                                timer: 4500,
+                                showCancelButton: false,
+                                showConfirmButton: false,
+                            });
+                        }
+                    });
+                }
+            });
+        });
+        // Ends Open Delete admin Modal
 </script>
 <!-- Scripting Here -->
 @endsection

@@ -31,7 +31,7 @@
                 <div class="card-body pt-0 pb-2">
                     <div class="row">
                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                            <a class="navbar-brand m-0 text-center" href="#" target="_blank">
+                            <a class="navbar-brand m-0 text-center" href="#">
                                 <img src="{{URL::to('/')}}/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
                             </a>
                         </div>
@@ -49,7 +49,7 @@
         <div class="col-3">
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-center">
-                    <a class="navbar-brand m-0 text-center" href="#" target="_blank">
+                    <a class="navbar-brand m-0 text-center" href="#">
                         <img src="{{URL::to('/')}}/public/assets/img/students/@isset($student){{ $student->user->photo }}@endisset" height="100" width="100" class="student-photo" alt="student-photo">
                     </a>
                 </div>
@@ -142,12 +142,12 @@
                                 <h6>Compulsory Subjects</h6>
                                 <hr>
                                 @foreach ($compulsorySubjects as $cSubject)
-                                    <p><span  class="@isset($student) @if(in_array($cSubject->id, json_decode($student->selected_subjects))) text-dark @else text-light @endif @endisset">{{$cSubject->name}}</span><span style="float: right">{{$cSubject->marks}} marks</span></p>
+                                    <p><span  class="@isset($student) @if(in_array($cSubject->id, json_decode($studentSelectedSubjects))) text-dark @else text-light @endif @endisset">{{$cSubject->name}}</span><span style="float: right">{{$cSubject->marks}} marks</span></p>
                                 @endforeach
                                 <h6>Optional Subjects</h6>
                                 <hr>
                                 @foreach ($optionalSubjects as $oSubject)
-                                    <p><span  class="@isset($student) @if(in_array($oSubject->id, json_decode($student->selected_subjects))) text-dark @else text-light @endif @endisset">{{$oSubject->name}}</span><span style="float: right">{{$oSubject->marks}} marks</span></p>
+                                    <p><span  class="@isset($student) @if(in_array($oSubject->id, json_decode($studentSelectedSubjects))) text-dark @else text-light @endif @endisset">{{$oSubject->name}}</span><span style="float: right">{{$oSubject->marks}} marks</span></p>
                                 @endforeach
                             </div>
                         </div>
@@ -229,23 +229,24 @@
                         </div>
                         <div class="tab-pane fade" id="lectures" role="tabpanel" aria-labelledby="lectures-tab">
                             @php
-                                $courses = \App\Models\Course::whereIn('id', json_decode($student->selected_subjects))->get();
+                                $courses = \App\Models\StudentLectureSchedule::with('course', 'teacher')->where('student_id', $student->user_id)->get();
                             @endphp
                             @foreach ($courses as $course)
-                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-primary my-2 py-1" style="border-radius: 5px">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 bg-white border border-light text-black my-2 py-1" style="border-radius: 5px">
                                 <div class="row p-1">
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        {{$course->name}}
+                                        {{$course->course->name}}
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        Lecturer Name
+                                        {{$course->teacher->name}}
                                     </div>
                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-                                        {{\Carbon\Carbon::now()->format('Y-m-d')}}
+                                        @php $day = \App\Models\TeacherLectureSchedule::with('day')->where('course_id', $course->course_id)->where('teacher_id', $course->teacher_id)->first(); @endphp
+                                        @isset($day){{\Carbon\Carbon::parse($day->day->name)->format('D')}}@endisset
                                     </div>
-                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+                                    <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
                                         <span class="border border-danger rounded p-1 text-danger">Up Comming</span>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             @endforeach

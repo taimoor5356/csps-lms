@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('create.course') }}" class="btn btn-primary" target="_blank"><i class="fa fa-user-plus"></i> Add New</a>
+                        <a href="{{ route('create.course') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         <a href="{{ route('trashed.courses') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                     </div>
                 </div>

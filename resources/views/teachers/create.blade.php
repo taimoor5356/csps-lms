@@ -36,10 +36,10 @@
                 <div class="card-body">
                     <form method="POST" enctype="multipart/form-data" id="teacher-form">
                         @csrf
-                        @role('admin')
+                        @can('teacher_create')
                             @include('teachers._form')
                             <input type="hidden" name="visitor" value="false">
-                        @endrole
+                        @endcan
                         <div class="row">
                             <div class="col-12 sm-auto text-center">
                                 <button class="btn btn-success px-4" type="submit" id="save">

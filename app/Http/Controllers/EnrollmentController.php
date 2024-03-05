@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
 use App\Models\CourseShift;
+use App\Models\LectureSchedule;
 use App\Models\StudentLectureSchedule;
 use App\Models\Teacher;
 use App\Models\TeacherLectureSchedule;
@@ -49,15 +50,23 @@ class EnrollmentController extends Controller
                     return '';
                 }
             })
-            ->addColumn('user_name', function ($row) {
-                if (isset($row->user)) {
+            ->addColumn('student_name', function ($row) {
+                if (isset($row->student)) {
                     return '
                     <div class="">
                         <div class="">
-                            <h6 class="mb-0 text-sm">' . $row->user->name . '</h6>
+                            <h6 class="mb-0 text-sm">' . $row->student->name . '</h6>
                         </div>
                     </div>
                     ';
+                } else {
+                    return '';
+                }
+            })
+            ->addColumn('teacher_name', function ($row) {
+                if (isset($row->teacher)) {
+                    $teacherLectureScheduleURL = route('enrollments.teachers', [$row->teacher->id]);
+                    return '<a href="'.$teacherLectureScheduleURL.'" class="mb-0 text-primary">' . $row->teacher->name . '</a>';
                 } else {
                     return '';
                 }
@@ -75,13 +84,26 @@ class EnrollmentController extends Controller
                     return '';
                 }
             })
+            ->addColumn('time', function ($row) {
+                if (!empty($row->time_from) && !empty($row->time_to)) {
+                    return '
+                    <div class="">
+                        <div class="">
+                            <h6 class="mb-0 text-sm">'.(isset($row->day) ? ucfirst($row->day->name) : '').' | ' . Carbon::parse($row->time_from)->format('h:i A') . ' - ' . Carbon::parse($row->time_to)->format('h:i A') . '</h6>
+                        </div>
+                    </div>
+                    ';
+                } else {
+                    return '';
+                }
+            })
             ->addColumn('status', function ($row) {
-                if (isset($row->teacher_lecture_schedule)) {
-                    if ($row->teacher_lecture_schedule->status == 'completed') {
+                if (isset($row)) {
+                    if ($row->status == 'completed') {
                         return '
                         <div class="">
                             <div class="">
-                                <h6 class="text-sm text-capitalize bg-success text-white rounded text-center p-1">' . $row->teacher_lecture_schedule->status . '</h6>
+                                <h6 class="text-sm text-capitalize bg-success text-white rounded text-center p-1">' . $row->status . '</h6>
                             </div>
                         </div>
                         ';
@@ -89,7 +111,7 @@ class EnrollmentController extends Controller
                     return '
                     <div class="">
                         <div class="">
-                            <h6 class="text-sm text-capitalize bg-danger text-white rounded text-center p-1">' . $row->teacher_lecture_schedule->status . '</h6>
+                            <h6 class="text-sm text-capitalize bg-danger text-white rounded text-center p-1">' . $row->status . '</h6>
                         </div>
                     </div>
                     ';
@@ -143,17 +165,17 @@ class EnrollmentController extends Controller
                 }
             })
             ->addColumn('date', function ($row) {
-                if (isset($row->teacher_lecture_schedule)) {
-                    return ($row->teacher_lecture_schedule->status == 'completed') ? $row->updated_at->format('Y-m-d') : '';
+                if (isset($row)) {
+                    return ($row->status == 'completed') ? $row->updated_at->format('Y-m-d') : '<h6 class="text-sm text-capitalize bg-danger text-white rounded text-center p-1">Not completed</h6>';
                 } else {
-                    return '';
+                    return '<h6 class="text-sm text-capitalize bg-danger text-white rounded text-center p-1">Not completed</h6>';
                 }
             })
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if (Auth::user()->hasanyrole('admin|manager')) {
                     if ($trashed == null) {
-                        if ($row->user->hasRole('teacher')) {
+                        if (isset($row->user) && $row->user->hasRole('teacher')) {
                             // $lectureDetailsURL = route('teacher_lecture_details', [$row->course_id, $row->user_id]);
                             // $btn .= '
                             //     <a href="'.$lectureDetailsURL.'" data-enrollment-id="' . $row->id . '" class="btn btn-success bg-success p-1" title="Completed"><i class="fa fa-eye"></i></a>
@@ -179,7 +201,7 @@ class EnrollmentController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['image', 'user_name', 'course_name', 'status', 'category', 'fee', 'marks', 'action'])
+            ->rawColumns(['image', 'student_name', 'teacher_name', 'course_name', 'status', 'time', 'category', 'fee', 'marks', 'date', 'action'])
             ->make(true);
     }
 
@@ -192,15 +214,16 @@ class EnrollmentController extends Controller
             } else {
                 $studentUserIds = Student::query()->pluck('user_id');
             }
-            $studentEnrollments = Enrollment::whereIn('user_id', $studentUserIds)->get();
+            $studentEnrollments = StudentLectureSchedule::with('course', 'student', 'teacher')->whereIn('student_id', $studentUserIds)->get();
             if (Auth::user()->hasRole('student')) {
-                $studentEnrollments = Enrollment::where('user_id', Auth::user()->id)->get();
+                $studentEnrollments = StudentLectureSchedule::with('course', 'student', 'teacher')->where('student_id', Auth::user()->id)->get();
             }
             if ($request->ajax()) {
                 return $this->showTableData($studentEnrollments, $trashed = null);
             }
             return view('enrollment.students', compact('userId'));
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->withError('Something went wrong');
         }
     }
@@ -214,15 +237,16 @@ class EnrollmentController extends Controller
             } else {
                 $teacherUserIds = Teacher::query()->pluck('user_id');
             }
-            $teacherEnrollments = Enrollment::with('course', 'teacher_lecture_schedule')->whereIn('user_id', $teacherUserIds)->get();
+            $teacherEnrollments = TeacherLectureSchedule::with('course', 'teacher', 'day')->groupBy('course_id', 'teacher_id')->whereIn('teacher_id', $teacherUserIds)->get();
             if (Auth::user()->hasRole('teacher')) {
-                $teacherEnrollments = Enrollment::with('course', 'teacher_lecture_schedule')->where('user_id', Auth::user()->id)->get();
+                $teacherEnrollments = TeacherLectureSchedule::with('course', 'teacher', 'day')->groupBy('course_id', 'teacher_id')->where('teacher_id', Auth::user()->id)->get();
             }
             if ($request->ajax()) {
                 return $this->showTableData($teacherEnrollments, $trashed = null);
             }
             return view('enrollment.teachers', compact('userId'));
-        } catch (\Throwable $th) {
+        } catch (\Exception $e) {
+            dd($e);
             return redirect()->back()->withError('Something went wrong');
         }
     }
@@ -288,51 +312,45 @@ class EnrollmentController extends Controller
                     ]);
                     // $checkCourses->forceDelete();
                 }
-            }
-            
-            if ($userType->hasRole('teacher')) {
-                $checkCourses = TeacherLectureSchedule::where('teacher_id', $request->user_id)->where('course_id', $request->course_id);
-                if (!$checkCourses->exists()) {
-                    TeacherLectureSchedule::create([
-                        'teacher_id' => $request->teacher_id,
+                $checkLectureScheduleCourses = LectureSchedule::where('student_id', $request->student_id)->where('course_id', $request->course_id);
+                if (!$checkLectureScheduleCourses->exists()) {
+                    LectureSchedule::create([
+                        'student_id' => $request->student_id,
                         'course_id' => $request->course_id,
-                        'student_id' => !empty($request->student_id) ? $request->student_id : null,
+                        'teacher_id' => $request->teacher_id,
+                        'time_from' => $request->time_from,
+                        'time_to' => $request->time_to
                     ]);
                     // $checkCourses->forceDelete();
                 }
             }
-            DB::commit();
-            return redirect()->back()->withInput()->with('success', 'Data Saved Successfully');
-            if ($userType->hasRole('student')) {
-                $checkCourses = StudentLectureSchedule::where('student_id', $request->user_id)->where('course_id', $request->course_id);
-                if ($checkCourses->exists()) {
-                    $checkCourses->forceDelete();
-                }
-                $firstShift = $request->first_shift;
-                if (!empty($firstShift)) {
-                    $shiftId = 1;
-                    $this->courseShifts($userId, $courseId, $shiftId, $firstShiftDays, 'student');
-                }
-                $secondShift = $request->second_shift;
-                if (!empty($secondShift)) {
-                    $shiftId = 2;
-                    $this->courseShifts($userId, $courseId, $shiftId, $secondShiftDays, 'student');
-                }
-            }
+            
             if ($userType->hasRole('teacher')) {
+                if (TeacherLectureSchedule::where('day_id', $request->day_id)->where('time_from', $request->time_from)->where('time_to', $request->time_to)->exists()) {
+                    return redirect()->back()->with('error', 'Time slot already booked for this teacher');
+                }
                 $checkCourses = TeacherLectureSchedule::where('teacher_id', $request->user_id)->where('course_id', $request->course_id);
-                if ($checkCourses->exists()) {
-                    $checkCourses->forceDelete();
+                if (!$checkCourses->exists()) {
+                    TeacherLectureSchedule::create([
+                        'teacher_id' => $request->user_id,
+                        'course_id' => $request->course_id,
+                        'time_from' => $request->time_from,
+                        'time_to' => $request->time_to,
+                        'day_id' => $request->day_id
+                    ]);
+                    // $checkCourses->forceDelete();
                 }
-                $firstShift = $request->first_shift;
-                if (!empty($firstShift)) {
-                    $shiftId = 1;
-                    $this->courseShifts($userId, $courseId, $shiftId, $firstShiftDays, 'teacher');
-                }
-                $secondShift = $request->second_shift;
-                if (!empty($secondShift)) {
-                    $shiftId = 2;
-                    $this->courseShifts($userId, $courseId, $shiftId, $secondShiftDays, 'teacher');
+                $checkLectureScheduleCourses = LectureSchedule::where('teacher_id', $request->user_id)->where('course_id', $request->course_id);
+                if (!$checkLectureScheduleCourses->exists()) {
+                    LectureSchedule::create([
+                        'student_id' => $request->student_id,
+                        'course_id' => $request->course_id,
+                        'teacher_id' => $request->user_id,
+                        'time_from' => $request->time_from,
+                        'time_to' => $request->time_to,
+                        'day_id' => $request->day_id
+                    ]);
+                    // $checkCourses->forceDelete();
                 }
             }
             DB::commit();
@@ -442,7 +460,7 @@ class EnrollmentController extends Controller
         try {
             if (Auth::user()->hasRole('admin')) {
                 $teacherIds = Teacher::query()->pluck('user_id');
-                $enrolledTeachers = Enrollment::with('user')->where('course_id', $request->course_id)->groupBy('course_id')->whereIn('user_id', $teacherIds)->get();
+                $enrolledTeachers = TeacherLectureSchedule::with('teacher')->where('course_id', $request->course_id)->whereIn('teacher_id', $teacherIds)->get();
             } else {
                 $enrolledTeachers = Teacher::get();
             }

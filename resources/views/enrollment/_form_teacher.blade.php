@@ -21,7 +21,7 @@
 <hr class="horizontal dark">
 <p class="text-uppercase text-sm">Enrollment Details</p>
     <div class="row">
-        <div class=" col-md-6">
+        <div class=" col-md-3">
             <div class="form-group">
                 <label for="user_id" class="form-control-label">Select Teacher *</label>
                 <select class="form-control" name="user_id" id="user_id">
@@ -38,7 +38,7 @@
                 </select>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
             <div class="form-group">
                 <label for="name" class="form-control-label">Select Course *</label>
                 <select class="form-control" name="course_id" id="course_id">
@@ -51,6 +51,29 @@
                         @endisset
                     @endforeach --}}
                 </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="day_id" class="form-control-label">Select Day *</label>
+                <select class="form-control" name="day_id" id="day_id">
+                    <option value="" selected disabled>Select Days</option>
+                    @foreach (\App\Models\Day::get() as $key => $day)
+                        <option value="{{$day->id}}">{{$day->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="time_from">Time From</label>
+                <input type="time" class="form-control" name="time_from">
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label for="time_to">Time To</label>
+                <input type="time" class="form-control" name="time_to">
             </div>
         </div>
     </div>

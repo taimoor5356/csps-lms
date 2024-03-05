@@ -47,11 +47,11 @@ class InventoryController extends Controller
                         $url = route('edit.student', [$row->student_id]);
                         if ((intval($row->total_fee) - intval($row->discount)) > $row->student->total_paid) {
                             $btn .= '
-                                <a href="'.$url.'" class="btn btn-primary bg-primary p-1" target="_blank">Collect</a>
+                                <a href="'.$url.'" class="btn btn-primary bg-primary p-1">Collect</a>
                                 <button type="button" class="btn btn-warning bg-warning p-1 send-fee-reminder" data-student-id="'.$row->student_id.'">Send Reminder</button>';
                         } else {
                             $btn .= '
-                                <a href="'.$url.'" class="btn btn-primary bg-primary p-1" target="_blank">Collect</a>';
+                                <a href="'.$url.'" class="btn btn-primary bg-primary p-1">Collect</a>';
                         }
                     }
                     return $btn;

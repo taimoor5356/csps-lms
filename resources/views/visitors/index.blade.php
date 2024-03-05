@@ -97,7 +97,53 @@
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
-                    @include('visitors._table')
+                    <div class="row px-4">
+                        <div class="col-md-2">
+                            <label for="class_type">Class Type</label>
+                            <select name="class_type" class="form-control" id="class_type">
+                                <option value="" selected disabled>Select Class Type</option>
+                                <option value="">All</option>
+                                <option value="online">Online</option>
+                                <option value="campus">On Campus</option>
+                                <option value="others">Examination</option>
+                                <option value="interview">Interview</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="source">Source</label>
+                            <select name="source" class="form-control" id="source">
+                                <option value="" selected disabled>Select Source</option>
+                                <option value="all">All</option>
+                                <option value="office_visitor">Online</option>
+                                <option value="call">Call</option>
+                                <option value="whatsapp">WhatsApp</option>
+                                <option value="online_visitor">Online Visitor</option>
+                                <option value="quick_response">Quick Response</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_from">Date From</label>
+                            <input type="date" name="date_from" class="form-control" id="date_from">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="date_to">Date To</label>
+                            <input type="date" name="date_to" class="form-control" id="date_to">
+                        </div>
+                        <div class="col-md-2">
+                            <label for="status">Status</label>
+                            <select name="status" class="form-control" id="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="deactive">Deactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-12">
+                            @include('visitors._table')
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -419,7 +465,13 @@
             ],
             ajax: {
                 url: "{{ route('visitors') }}",
-
+                data: function (d) {
+                    d.class_type = $('#class_type').val();
+                    d.source = $('#source').val();
+                    d.date_from = $('#date_from').val();
+                    d.date_to = $('#date_to').val();
+                    d.status = $('#status').val();
+                },
             },
             columns: [
                 {
@@ -599,6 +651,11 @@
                     table.draw(false);
                 }
             });
+        });
+
+        // Filters
+        $(document).on('change', '#class_type, #source, #date_from, #date_to, #status', function () {
+            table.draw(false);
         });
     });
 </script>

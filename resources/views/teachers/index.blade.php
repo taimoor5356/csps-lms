@@ -85,15 +85,15 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        @role('admin')
+                        @can('teacher_create')
                             <a href="{{ route('create.teacher') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
-                        @endrole
-                        @role('admin')
+                        @endcan
+                        @can('teacher_delete')
                             <a href="{{ route('trashed.teachers') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
-                        @endrole
-                        @if (Auth::user()->hasRole('teacher'))
-                            <a href="{{ route('enrollments') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
-                        @endif
+                        @endcan
+                        @can ('courses_view')
+                            <a href="{{ route('enrollments.teachers') }}" class="btn btn-primary"><i class="fa fa-eye"></i> View Courses</a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">

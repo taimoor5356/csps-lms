@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Interfaces\NoticeBoardRepositoryInterface;
+use App\Models\Student;
+use App\Models\Teacher;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 
@@ -157,6 +159,29 @@ class NoticeBoardController extends Controller
             return view('enrollment.index');
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
+        }
+    }
+
+    public function fetchRoleUsers(Request $request)
+    {
+        try {
+            $role = $request->role;
+            $users = [];
+            if ($role == 'teacher') {
+                $users = Teacher::with('user')->get();
+            } else if($role == 'student') {
+                $users = Student::with('user')->get();
+            }
+            return response()->json([
+                'status' => true,
+                'users' => $users
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'users' => []
+            ]);
         }
     }
 }

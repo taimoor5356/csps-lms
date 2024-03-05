@@ -25,6 +25,9 @@ class StudentController extends Controller
 
     public function dashboard(Request $request)
     {
+        if (Auth::user()->hasRole('student') && Auth::user()->student->form_updated == 'false') {
+            return redirect()->route('edit.student', Auth::user()->student->id);
+        }
         return view('dashboard.student');
     }
     /**
@@ -37,6 +40,9 @@ class StudentController extends Controller
         //
         if ($request->ajax()) {
             return $this->studentRepository->index($request);
+        }
+        if (Auth::user()->hasRole('student') && Auth::user()->student->form_updated == 'false') {
+            return redirect()->route('edit.student', Auth::user()->student->id);
         }
         return view('students.index');
     }
@@ -160,6 +166,20 @@ class StudentController extends Controller
             return view('enrollment.index');
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
+        }
+    }
+
+    public function examPassedStatus(Request $request, $id)
+    {
+        try {
+            $student = Student::where('id', $id)->first();
+            if (isset($student)) {
+                $student->exam_status = 'passed';
+                $student->save();
+            }
+            return redirect()->back()->with('success', 'Status updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Something went wrong');
         }
     }
 }

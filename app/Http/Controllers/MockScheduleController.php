@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Interfaces\MockScheduleRepositoryInterface;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\MockSchedule;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MockScheduleController extends Controller
 {
@@ -24,7 +26,12 @@ class MockScheduleController extends Controller
     public function index(Request $request)
     {
         //
-        $groupedMockSchedule = MockSchedule::with('course')->groupBy('day')->orderBy('day')->get();
+        if (Auth::user()->hasRole('student') || Auth::user()->hasRole('teacher')) {
+            $enrolledCoursesIds = Enrollment::where('user_id', Auth::user()->id)->distinct('course_id')->pluck('course_id');
+            $groupedMockSchedule = MockSchedule::with('course')->whereIn('course_id', $enrolledCoursesIds)->groupBy('day')->orderBy('day')->get();
+        } else {
+            $groupedMockSchedule = MockSchedule::with('course')->groupBy('day')->orderBy('day')->get();
+        }
         $courses = Course::get();
         return view('mock_schedule.index', compact('groupedMockSchedule', 'courses'));
     }

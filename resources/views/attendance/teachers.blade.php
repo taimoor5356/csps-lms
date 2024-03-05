@@ -77,10 +77,12 @@
                             </div>
                         </div>
                     </div>
+                    @can('attendance_create')
                     <div class="header-buttons ms-auto text-end">
                         <a href="{{ route('attendances', ['students']) }}" class="btn btn-primary">Students</a>
                         <a href="{{ route('attendances', ['staff']) }}" class="btn btn-primary">Staff</a>
                     </div>
+                    @endcan
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <small class="mx-3 text-danger">* Scroll right if unable to see Actions</small>
@@ -129,9 +131,14 @@
             },
             columns: [
                 {
+                    data: 'date_time',
+                    name: 'date_time'
+                },
+                {
                     data: 'name',
                     name: 'name'
                 },
+                @if($userType == 'students')
                 {
                     data: 'reg_number',
                     name: 'reg_number'
@@ -140,6 +147,7 @@
                     data: 'batch_no',
                     name: 'batch_no'
                 },
+                @endif
                 {
                     data: 'course',
                     name: 'course'
@@ -166,12 +174,18 @@
             var userId = _this.attr('data-user-id');
             var attendance = _this.attr('data-attendance');
             var batchId = _this.attr('data-batch-id');
+            var courseId = _this.closest('tr').find('.course_id').val();
+            if (courseId == null || courseId == '') {
+                alert('Course ID is required');
+                return false;
+            }
             var url = "{{route('mark_attendance')}}";
             var data = {
                 '_token':'{{csrf_token()}}',
                 'user_id':userId,
                 'batch_id':batchId,
                 'attendance':attendance,
+                'course_id':courseId,
             };
             $.post(url, data, function(response) {
                 if (response.status == true) {

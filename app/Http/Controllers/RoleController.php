@@ -28,7 +28,7 @@ class RoleController extends Controller
                 return '
                 <div class="">
                     <div class="">
-                        <h6 class="mb-0 text-sm">' . ucwords($row->name) . '</h6>
+                        <h6 class="mb-0 text-sm">' . ucwords(str_replace('_', ' ', $row->name)) . '</h6>
                     </div>
                 </div>
             ';
@@ -38,7 +38,7 @@ class RoleController extends Controller
                 if ($trashed == null) {
                     $btn .= '
                         <a href="#" class="btn btn-success bg-success p-1 view-role-detail" data-role-id="'. $row->id .'" title="View Permissions" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-key"></i></a>
-                        <a href="roles/'. $row->id .'/edit" data-role-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit role"><i class="fa fa-pencil"></i></a>
+                        <a href="roles/'. $row->id .'/edit" data-role-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit role"><i class="fa fa-pencil"></i></a>
                         <a href="roles/'. $row->id .'/delete" data-role-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-role" title="Delete"><i class="fa fa-trash-o"></i></a>
                     ';
                 } else {
@@ -92,14 +92,15 @@ class RoleController extends Controller
         //
         try {
             DB::beginTransaction();
+            $role = strtolower($request->name);
+            $role = str_replace(' ', '_', $role);
             $roles = Role::create([
-                'name' => strtolower($request->name),
+                'name' => strtolower($role),
                 'guard_name' => 'web',
             ]);
             DB::commit();
             return redirect()->back()->with('success', 'Successfully Saved');
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             return redirect()->back()->with('error', 'Something went wrong');
         }

@@ -13,11 +13,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\FeePlan;
 use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::user()->hasRole('student') || Auth::user()->hasRole('teacher')) {
+                return redirect()->route('logout');
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      *
@@ -119,16 +131,29 @@ class AdminController extends Controller
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
-                    $btn .= '
-                        <a href="#" class="btn btn-success bg-success p-1 view-admin-detail" data-admin-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>
-                        <a href="admins/'. $row->id .'/edit" data-admin-id="'. $row->id .'" target="_blank" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>
-                        <a href="admins/'. $row->id .'/delete" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                    if (Auth::user()->can('admin_view')) {
+                        $btn .= '
+                            <a href="#" class="btn btn-success bg-success p-1 view-admin-detail" data-admin-id="'. $row->id .'" title="View" data-toggle="modal" data-bs-target="#modal-default"><i class="fa fa-eye"></i></a>';
+                    }
+                    if (Auth::user()->can('admin_update')) {
+                        $btn .= ' <a href="admins/'. $row->id .'/edit" data-admin-id="'. $row->id .'" class="btn btn-primary bg-primary p-1" title="Edit"><i class="fa fa-pencil"></i></a>';
+                    }
+                    if (Auth::user()->can('admin_delete')) {
+                        $btn .= ' <a href="admins/'. $row->id .'/delete" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Delete"><i class="fa fa-trash-o"></i> </a> ';
+                        if (isset($row->user)) {
+                            if ($row->user->approved_status == 1) {
+                                $btn .= '</a> </a> <a href="admins/'. $row->id .'/block" class="btn btn-danger bg-danger p-1" title="Block"><i class="fa fa-lock"></i></a>
+                                ';
+                            } else {
+                                $btn .= '<a href="admins/'. $row->id .'/approve" class="btn btn-success bg-success p-1" title="Approve"><i class="fa fa-unlock"></i></a> ';
+                            }
+                        }
+                    }
                 } else {
-                    $btn .= '
-                        <a href="'. $row->id .'/restore" data-admin-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a>
-                        <a href="'. $row->id .'/delete" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
-                    ';
+                    if (Auth::user()->can('admin_delete')) {
+                        $btn .= ' <a href="admins/'. $row->id .'/restore" data-admin-id="'. $row->id .'" class="btn btn-success bg-success p-1" title="Restore"><i class="fa fa-undo"></i></a> <a href="#" data-admin-id="'. $row->id .'" class="btn btn-danger bg-danger p-1 delete-admin" title="Permanent Delete"><i class="fa fa-trash-o"></i></a>
+                        ';
+                    }
                 }
                 return $btn;
             })
@@ -181,22 +206,26 @@ class AdminController extends Controller
                 }
                 $file = time().'.'.$request->photo->extension();
                 $request->photo->move(public_path('assets/img/admins/'), $file);
-            } else {
-                // return redirect()->back()->with('error', 'Profile Photo Required');
             }
+            $password = '12345678';
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($password),
                 'role_id' => $request->role,
                 'registration_date' => Carbon::now()->format('Y-m-d'),
                 'approved_status' => 0,
                 'photo' => $file
             ]);
+            $randomString = Str::random(20, '0123456789');
+            $regNo = 'csps_'.$randomString;
+            if (Admin::where('reg_no', $regNo)->exists()) {
+                return redirect()->back()->with('error', 'Registration number already exists');
+            }
             $admin = Admin::create([
                 'user_id' => $user->id,
                 'batch_no' => $request->batch_no,
-                'reg_no' => $request->reg_no,
+                'reg_no' => $regNo,
                 'applied_for' => $request->applied_for,
                 'father_name' => $request->father_name,
                 'father_occupation' => $request->father_occupation,
@@ -215,7 +244,7 @@ class AdminController extends Controller
             ]);
             $user->assignRole($request->role);
             DB::commit();
-            return redirect()->back()->with('success', 'Successfully Saved');
+            return redirect()->route('admins')->with('success', 'Successfully Saved');
         } catch (\Exception $e) {
             dd($e);
             DB::rollback();
@@ -232,7 +261,7 @@ class AdminController extends Controller
     public function show($id)
     {
         //
-        $admin = Admin::with('user')->where('id', $id)->first();
+        $admin = Admin::with(['user', 'batch'])->where('id', $id)->first();
         if (isset($admin)) {
             return $admin;
         }
@@ -248,9 +277,10 @@ class AdminController extends Controller
     {
         //
         try {
+            $roles = Role::get();
             $admin = Admin::with('user')->where('id', $id)->first();
             if (isset($admin)) {
-                return view('all_admins.edit', compact('admin', 'id'));
+                return view('all_admins.edit', compact('admin', 'id', 'roles'));
             } else {
                 return redirect()->back()->with('error', 'User doesnot exists');
             }
@@ -273,10 +303,11 @@ class AdminController extends Controller
             DB::beginTransaction();
             $admin = Admin::with('user')->where('id', $id)->first();
             if (isset($admin)) {
-                $admin->applied_for = $request->applied_for;
                 $admin->batch_no = $request->batch_no;
-                $admin->reg_no = $request->reg_no;
                 $admin->user->name = $request->name;
+                if (User::where('id', '!=', $admin->user->id)->where('email', $request->email)->exists()) {
+                    return redirect()->back()->with('error', 'Email already exists');
+                }
                 $admin->user->email = $request->email;
                 $admin->user->password = Hash::make($request->password);
                 if ($request->hasFile('photo')) {
@@ -288,22 +319,19 @@ class AdminController extends Controller
                     $admin->user->photo = $file;
                 }
                 $admin->father_name = $request->father_name;
-                $admin->father_occupation = $request->father_occupation;
                 $admin->dob = $request->dob;
                 $admin->cnic = $request->cnic;
                 $admin->domicile = $request->domicile;
-                $admin->admin_occupation = $request->admin_occupation;
                 $admin->address = $request->address;
                 $admin->contact_res = $request->contact_res;
                 $admin->cell_no = $request->cell_no;
-                $admin->degree = $request->degree;
-                $admin->major_subjects = $request->major_subjects;
-                $admin->cgpa = $request->cgpa;
-                $admin->board_university = $request->board_university;
-                $admin->distinction = $request->distinction;
+                if ($admin->user->role_id != 1 && $request->role != 1) {
+                    $admin->user->role_id = $request->role;
+                    $admin->user->syncRoles([]);
+                    $admin->user->assignRole($request->role);
+                }
                 $admin->save();
                 $admin->user->save();
-                $admin->user->assignRole(3);
                 DB::commit();
                 return redirect()->back()->with('success', 'Updated Successfully');
             } else {
@@ -367,7 +395,7 @@ class AdminController extends Controller
     public function trashed(Request $request)
     {
         //
-        $trashedadmins = User::with(['admin' => fn($q) => $q->onlyTrashed()])->onlyTrashed()->get();
+        $trashedadmins = Admin::with(['user' => fn($q) => $q->onlyTrashed()->whereNotIn('role_id', [1, 2, 3, 4])])->onlyTrashed()->get();
         try {
             if ($request->ajax()) {
                 return $this->showTableData($trashedadmins, $trashed = 'trashed');
@@ -403,5 +431,66 @@ class AdminController extends Controller
     public function permanentDelete(Request $request, $id)
     {
         //
+        try {
+            if ($id != 1) {
+                $admin = Admin::with(['user' => fn($q) => $q->onlyTrashed()->whereNotIn('role_id', [1, 2, 3, 4])])->onlyTrashed()->where('id', $id)->first();
+                if (isset($admin)) {
+                    if (isset($admin->user)) {
+                        $admin->user->forceDelete();
+                        $admin->forceDelete();
+                        return response()->json([
+                            'status' => true,
+                            'msg' => 'Deleted successfully'
+                        ]);
+                        // return redirect()->back()->with('success', 'Deleted Successfully');
+                    }
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'msg' => 'User doesnot exists'
+                    ]);
+                    // return redirect()->back()->with('error', 'User doesnot exists');
+                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'msg' => 'Cannot delete Admin'
+                ]);
+                // return redirect()->back()->with('error', 'Cannot delete admin');
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'msg' => 'Something went wrong'
+            ]);
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
+    }
+
+    public function userApproval($id)
+    {
+        $admin = Admin::with('user')->where('id', $id)->first();
+        if (isset($admin)) {
+            $admin->user->approved_status = 1;
+            $admin->user->save();
+            return redirect()->back()->with('success', 'Updated successfully');
+        }
+    }
+
+    public function userBlock(Request $request, $id)
+    {
+        $admin = Admin::with(['user' => fn($q) => $q->where('id', '!=', 1)])->where('id', $id)->first();
+        if (isset($admin->user)) {
+            if ($admin->user->id != 1) {
+                $admin->user->approved_status = 0;
+                $admin->user->save();
+                $admin->user->force_logout = true; // Set the flag to log the user out
+                return redirect()->back()->with('success', 'Updated successfully');
+            } else {
+                return redirect()->back()->with('error', 'Not allowed for Admin');
+            }
+        } else {
+            return redirect()->back()->with('error', 'Not allowed for Admin');
+        }
     }
 }

@@ -35,6 +35,19 @@ class VisitorRepository implements VisitorRepositoryInterface
                 ->orWhere('cell_no', 'LIKE', "%$searchValue%");
             });
         }
+        if (!empty($request->class_type)) {
+            $data = $data->where('class_type', $request->class_type)->orWhere('applied_for', $request->class_type);
+        }
+        if (!empty($request->source)) {
+        }
+        if (!empty($request->date_from)) {
+            $data = $data->whereDate('created_at', '>=', $request->date_from);
+        }
+        if (!empty($request->date_to)) {
+            $data = $data->whereDate('created_at', '<=', $request->date_to);
+        }
+        if (!empty($request->status)) {
+        }
         $totalRecords = $data->count(); // Get the total number of records for pagination
         $visitors = $data->skip($request->start)
             ->take($request->length)

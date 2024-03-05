@@ -37,10 +37,10 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        {{-- @role('admin') --}}
+                        @can('enrollment_create')
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-revision-class"><i
                                 class="fa fa-plus"></i> Add New</button>
-                        {{-- @endrole --}}
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">

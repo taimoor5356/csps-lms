@@ -134,7 +134,7 @@
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="col-12 d-flex">
-                            <a class="navbar-brand m-0 text-center" href="#" target="_blank">
+                            <a class="navbar-brand m-0 text-center" href="#">
                                 <img src="http://localhost/csps-lms/public/assets/img/students/user-profile.jpg" height="200" width="200" class="student-photo" alt="student-photo">
                             </a>
                             <span class="m-4">

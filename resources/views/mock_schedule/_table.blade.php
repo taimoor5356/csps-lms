@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{\Carbon\Carbon::parse($schedule->day)->format('l, d M')}}</td>
                     @php 
-                        $data = \App\Models\MockSchedule::where('day', $schedule->day)->get();
+                        $data = \App\Models\MockSchedule::where('day', $schedule->day)->orderBy('time', 'ASC')->get();
                     @endphp
                     @foreach ($data as $d)
                         <td><span class="bg-primary rounded p-1 text-white">{{$d->course->name}} / {{$d->time}}</span></td>

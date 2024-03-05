@@ -18,4 +18,9 @@ class Admin extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function batch()
+    {
+        return $this->belongsTo(RegisteredBatch::class, 'batch_no', 'id');
+    }
 }

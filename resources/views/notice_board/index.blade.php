@@ -84,10 +84,10 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        {{-- @role('admin') --}}
+                        @can('attendance_create')
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-to-noticeboard"><i
                                 class="fa fa-plus"></i> Add New</button>
-                        {{-- @endrole --}}
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -117,11 +117,24 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <!-- Name -->
-                                <div class="col-md-12">
+                                <!-- Role -->
+                                <div class="col-md-6">
                                     <div class="form-group mb-3">
-                                        <label for="course_id" class="form-control-label">Add Notice</label>
-                                        <textarea name="notice" class="form-control" id="" cols="30" rows="5"></textarea>
+                                        <label for="role" class="form-control-label">Select Role</label>
+                                        <select name="role" class="form-control" id="role">
+                                            <option value="" selected disabled>Select Role</option>
+                                            <option value="teacher">Teacher</option>
+                                            <option value="student">Student</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- User List -->
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="user_id" class="form-control-label">Select User</label>
+                                        <select name="user_id" class="form-control" id="user_id">
+                                            <option value="" selected disabled>Select User</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <!-- Date -->
@@ -142,6 +155,13 @@
                                             value="@isset($student->user){{ $student->user->name }}@endisset"
                                             onfocus="focused(this)" onfocusout="defocused(this)"
                                             placeholder="Student Name" required>
+                                    </div>
+                                </div>
+                                <!-- Name -->
+                                <div class="col-md-12">
+                                    <div class="form-group mb-3">
+                                        <label for="course_id" class="form-control-label">Add Notice</label>
+                                        <textarea name="notice" class="form-control" id="" cols="30" rows="5"></textarea>
                                     </div>
                                 </div>
                                 <!-- Submit -->
@@ -205,6 +225,14 @@
                     name: 'day_time'
                 },
                 {
+                    data: 'role',
+                    name: 'role'
+                },
+                {
+                    data: 'user_name',
+                    name: 'user_name'
+                },
+                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -220,6 +248,25 @@
             }
         });
         // Data Table Ends
+
+        $(document).on('change', '#role', function () {
+            var _this = $(this);
+            $.ajax({
+                url: "{{route('fetch_role_users')}}",
+                method: "POST",
+                data: {
+                    _token: "{{csrf_token()}}",
+                    role: _this.val()
+                },
+                success: function (response) {
+                    var _html = '<option value="" selected disabled>Select User</option>';
+                    response.users.forEach(ele => {
+                        _html += '<option value="'+ele.user.id+'">'+ele.user.name+'</option>';
+                    });
+                    $('#user_id').html(_html);
+                }
+            });
+        });
     });
 </script>
 <!-- Scripting Here -->

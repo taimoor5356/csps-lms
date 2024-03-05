@@ -67,6 +67,12 @@
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
         @endif
+        function validateNumberInput(input) {
+            // Enforce max length for the input value
+            if (input.value.length > 13 || input.value.length < 13) {
+                input.value = input.value.slice(0, 13);
+            }
+        }
     });
 </script>
 <!-- Scripting Here -->

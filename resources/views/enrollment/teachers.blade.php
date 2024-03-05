@@ -86,7 +86,7 @@
                     </div>
                     <div class="header-buttons ms-auto text-end">
                         @can('enrollment_delete')
-                        <a href="{{ route('enrollment.create', ['teachers']) }}" class="btn btn-primary" target="_blank"><i class="fa fa-plus"></i> Add New</a>
+                        <a href="{{ route('enrollment.create', ['teachers']) }}" class="btn btn-primary"><i class="fa fa-plus"></i> Add New</a>
                         <!-- <a href="{{ route('trashed.enrollments') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a> -->
                         @endcan
                     </div>
@@ -144,8 +144,16 @@
                     name: 'course_name'
                 },
                 {
+                    data: 'teacher_name',
+                    name: 'teacher_name'
+                },
+                {
                     data: 'status',
                     name: 'status'
+                },
+                {
+                    data: 'time',
+                    name: 'time'
                 },
                 {
                     data: 'category',

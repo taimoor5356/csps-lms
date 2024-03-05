@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Interfaces\RevisionClassesRepositoryInterface;
 use App\Models\Course;
+use App\Models\Enrollment;
 use App\Models\RevisionClass;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RevisionClassController extends Controller
 {
@@ -24,7 +26,12 @@ class RevisionClassController extends Controller
     public function index(Request $request)
     {
         //
-        $groupedRevisionClasses = RevisionClass::with('course')->groupBy('day')->orderBy('day')->get();
+        if (Auth::user()->hasRole('student') || Auth::user()->hasRole('teacher')) {
+            $enrolledCoursesIds = Enrollment::where('user_id', Auth::user()->id)->distinct('course_id')->pluck('course_id');
+            $groupedRevisionClasses = RevisionClass::with('course')->whereIn('course_id', $enrolledCoursesIds)->groupBy('day')->orderBy('day')->get();
+        } else {
+            $groupedRevisionClasses = RevisionClass::with('course')->groupBy('day')->orderBy('day')->get();
+        }
         $courses = Course::get();
         return view('revision_classes.index', compact('groupedRevisionClasses', 'courses'));
     }

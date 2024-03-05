@@ -1,6 +1,11 @@
 <div class="table-responsive p-3">
-    <table class="data-table table cell-border table-bordered align-items-center mb-0">
+    <table class="data-table table cell-border align-items-center mb-0">
         <thead>
+            <th>Notice</th>
+            <th>Date | Time</th>
+            <th>User Type</th>
+            <th>User Name</th>
+            <th>Action</th>
         </thead>
         <tbody>
             {{-- <tr>

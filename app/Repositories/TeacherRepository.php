@@ -93,7 +93,7 @@ class TeacherRepository implements TeacherRepositoryInterface
                         <a class="dropdown-item" href="teachers/'.$row->id.'/show">View Detail</a>
                         <a class="dropdown-item" href="teachers/'. $row->id .'/edit">Edit</a>
                         <a class="dropdown-item" href="'.$enrollmentsUrl.'">View Enrolled Courses</a>
-                        <a class="dropdown-item" href="'.$attendancesUrl.'">View Attendance</a>';
+                        <a class="dropdown-item" href="'.$attendancesUrl.'">View Students Attendance</a>';
                     if (Auth::user()->can('teacher_delete')) {
                         $btn .='<a class="dropdown-item bg-danger text-white" href="teachers/'. $row->id .'/delete">Delete</a>';
                     }

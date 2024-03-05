@@ -4,7 +4,7 @@ namespace App\Interfaces;
 
 interface StudentRepositoryInterface 
 {
-    public function showTableData($data, $trashed);
+    public function showTableData($request, $data, $trashed);
     public function index($request);
     public function create();
     public function show($id);

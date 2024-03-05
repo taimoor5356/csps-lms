@@ -40,11 +40,31 @@ class NoticeBoardRepository implements NoticeBoardRepositoryInterface
                     </div>
                 ';
             })
+            ->addColumn('role', function ($row) {
+                return '
+                    <div class="d-flex px-2 py-1">
+                        <div class="d-flex flex-column justify-content-center">
+                            <h6 class="mb-0 text-sm">' . $row->role . '</h6>
+                        </div>
+                    </div>
+                ';
+            })
+            ->addColumn('user_name', function ($row) {
+                if (isset($row->user)) {
+                    return '
+                        <div class="d-flex px-2 py-1">
+                            <div class="d-flex flex-column justify-content-center">
+                                <h6 class="mb-0 text-sm">' . $row->user->name . '</h6>
+                            </div>
+                        </div>
+                    ';
+                }
+            })
             ->addColumn('action', function ($row) use ($trashed) {
                 $btn = '';
                 if ($trashed == null) {
                     $btn .= '';
-                    if (Auth::user()->hasRole(['admin', 'student'])) {
+                    if (Auth::user()->hasRole(['admin', 'student', 'front_desk_admin'])) {
                         $btn .= '<a href="notice-board/' . $row->id . '/delete" data-no-id="' . $row->id . '" class="mx-1 btn btn-danger bg-danger p-1 delete-no" title="Delete"><i class="fa fa-trash-o"></i></a>';
                     }
                 } else {
@@ -56,14 +76,14 @@ class NoticeBoardRepository implements NoticeBoardRepositoryInterface
                 }
                 return $btn;
             })
-            ->rawColumns(['notice', 'day_time', 'action'])
+            ->rawColumns(['notice', 'day_time', 'role', 'user_name', 'action'])
             ->make(true);
     }
 
     public function index($request)
     {
         try {
-            $notice_boardDetail = NoticeBoard::get();
+            $notice_boardDetail = NoticeBoard::with('user')->get();
             return $this->showTableData($notice_boardDetail, $trashed = null);
         } catch (\Exception $e) {
             return redirect()->back()->withError('Something went wrong');
@@ -83,11 +103,13 @@ class NoticeBoardRepository implements NoticeBoardRepositoryInterface
         try {
             DB::beginTransaction();
             $request = (object)$request;
-            if (Auth::user()->hasRole(['admin', 'student'])) {
+            if (Auth::user()->hasRole(['admin', 'student', 'front_desk_admin'])) {
                 $notice = new NoticeBoard();
                 $notice->notice = $request->notice;
                 $notice->day = $request->day;
                 $notice->time = $request->time;
+                $notice->role = $request->role;
+                $notice->user_id = $request->user_id;
                 $notice->save();
             } else {
                 return redirect()->back()->withError('You do not have permissions');

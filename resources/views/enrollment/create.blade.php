@@ -93,6 +93,13 @@
                 }
             });
         });
+        // Convert 24-hour time to 12-hour time with AM/PM
+        function convertTo12HourFormat(time) {
+            const [hours, minutes] = time.split(':');
+            const twelveHourTime = ((hours % 12) || 12) + ':' + minutes;
+            const amPm = hours < 12 ? 'AM' : 'PM';
+            return twelveHourTime + ' ' + amPm;
+        }
         $(document).on('change', '#course_id', function() {
             var _this = $(this);
             $.ajax({
@@ -106,7 +113,7 @@
                     var html = '<option value="0" selected>Select Teacher</option>';
                     response.data.forEach(element => {
                         html += `
-                            <option value="`+element.user.id+`">`+element.user.name+`</option>
+                            <option value="`+element.teacher.id+`">`+element.teacher.name+` (0`+convertTo12HourFormat(element.time_from)+` - 0`+convertTo12HourFormat(element.time_to)+`)</option>
                         `;
                     });
                     $('#teacher_id').html(html);

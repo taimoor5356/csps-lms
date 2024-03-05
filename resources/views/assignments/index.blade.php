@@ -22,7 +22,7 @@
     <div class="row mt-4">
         <div class="col-lg-12 mb-lg-0 mb-4">
             <div class="card z-index-2 h-100">
-                <!-- <div class="card-header bg-transparent">
+                <div class="card-header bg-transparent">
                     <div class="row">
                         <div class="col-3">
                             <select name="subject" id="subject" class="form-control subject" placeholder="Subject">
@@ -40,11 +40,11 @@
                             </select>
                         </div>
                         <div class="col-3 d-flex justify-content-end">
-                            <a href="#" class="btn btn-primary">Create New Assignment</a>
+                            <button class="btn btn-primary create-new-assignment" data-bs-toggle="modal" data-bs-target="#new-assignment">Create New Assignment</button>
                         </div>
                     </div>
                     <hr>
-                </div> -->
+                </div>
                 <div class="card-body p-3">
                     <div class="row">
                         <div class="col-12">
@@ -56,6 +56,93 @@
         </div>
     </div>
 </div>
+@endsection
+<!-- Section Modal -->
+@section('modal')
+<div class="row">
+    <div class="col-md-4">
+        <form action="{{route('assignments.store')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal fade" id="new-assignment" tabindex="-1" role="dialog" aria-labelledby="new-assignment" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h6 class="modal-title text-dark" id="modal-title-default">Add New Assignment</h6>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="student_id">Select Student</label>
+                                    <select name="student_id" id="student_id" class="form-control">
+                                        <option value="" selected disabled>Select Student</option>
+                                        @php 
+                                            if(Auth::user()->hasRole('student')) {
+                                                $students = \App\Models\User::where('role_id', 3)->where('id', Auth::user()->id)->get();
+                                            } else {
+                                                $students = \App\Models\User::where('role_id', 3)->get();
+                                            }
+                                        @endphp
+                                        @foreach($students as $student)
+                                        <option value="{{$student->id}}" @if(Auth::user()->hasRole('student')) ? selected : '' @endif>{{$student->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="course_id">Select Course</label>
+                                    <select name="course_id" id="course_id" class="form-control">
+                                        <option value="" selected disabled>Select Course</option>
+                                        @php 
+                                            if(Auth::user()->hasRole('student')) {
+                                                $studentCourses = \App\Models\StudentLectureSchedule::where('student_id', Auth::user()->id)->pluck('course_id');
+                                                $courses = \App\Models\Course::whereIn('id', $studentCourses)->get();
+                                            } else {
+                                                $courses = \App\Models\Course::get();
+                                            }
+                                        @endphp
+                                        @foreach($courses as $course)
+                                        <option value="{{$course->id}}">{{$course->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="teacher_id">Select Teacher</label>
+                                    <select name="teacher_id" id="teacher_id" class="form-control">
+                                        <option value="" selected disabled>Select Teacher</option>
+                                        @php 
+                                            if(Auth::user()->hasRole('student')) {
+                                                $studentCourses = \App\Models\StudentLectureSchedule::where('student_id', Auth::user()->id)->pluck('course_id');
+                                                $teacherCourses = \App\Models\TeacherLectureSchedule::whereIn('course_id', $studentCourses)->pluck('teacher_id');
+                                                $teachers = \App\Models\Teacher::with('user')->whereIn('user_id', $teacherCourses)->get();
+                                            } else {
+                                                $teachers = \App\Models\Teacher::with('user')->get();
+                                            }
+                                        @endphp
+                                        @foreach($teachers as $teacher)
+                                        <option value="{{$teacher->user_id}}">{{$teacher->user->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="image">Upload Assignment</label>
+                                    <input type="file" name="image" class="form-control" id="image">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="short_msg">Short Message</label>
+                                    <input type="text" name="short_msg" class="form-control" id="short_msg" placeholder="Enter short message">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-start">
+                            <button class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endsection
+<!-- Section Modal -->
 @section('page_js')
 <script>
     $(document).ready(function() {
@@ -108,8 +195,7 @@
                     data: 'status',
                     name: 'status'
                 },
-                @role('admin')
-                {
+                @role('admin') {
                     data: 'action',
                     name: 'action',
                     orderable: false,
@@ -127,5 +213,4 @@
         });
     });
 </script>
-@endsection
 @endsection

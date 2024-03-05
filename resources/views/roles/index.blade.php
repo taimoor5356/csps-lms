@@ -86,7 +86,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('create.role') }}" class="btn btn-primary" target="_blank"><i
+                        <a href="{{ route('create.role') }}" class="btn btn-primary"><i
                                 class="fa fa-plus"></i> Add New</a>
                         <a href="#" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                     </div>

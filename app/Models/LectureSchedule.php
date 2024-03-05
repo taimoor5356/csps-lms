@@ -11,13 +11,18 @@ class LectureSchedule extends Model
 
     protected $guarded = ['id'];
 
-    public function lecture()
-    {
-        return $this->belongsTo(Lecture::class, 'lecture_id', 'id');
-    }
-
     public function course()
     {
         return $this->belongsTo(Course::class, 'course_id', 'id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'student_id', 'id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
     }
 }

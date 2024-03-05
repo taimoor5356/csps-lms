@@ -9,7 +9,13 @@
                     Course Name
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
+                    Teacher Name
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
                     Status
+                </th>
+                <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
+                    Day | Time
                 </th>
                 <th class="text-uppercase text-dark text-xs font-weight-bolder ps-2">
                     Category

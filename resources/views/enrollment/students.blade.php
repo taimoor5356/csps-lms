@@ -85,7 +85,9 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
+                        @can('enrollment_create')
                         <a href="{{ route('enrollment.create', ['students']) }}" class="btn btn-primary"><i class="fa fa-plus"></i>  Add New</a>
+                        @endcan
                         @can('enrollment_delete')
                         <!-- <a href="{{ route('trashed.enrollments') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a> -->
                         @endcan
@@ -140,8 +142,12 @@
                     searchable: false
                 },
                 {
-                    data: 'user_name',
-                    name: 'user_name'
+                    data: 'student_name',
+                    name: 'student_name'
+                },
+                {
+                    data: 'teacher_name',
+                    name: 'teacher_name'
                 },
                 {
                     data: 'course_name',
@@ -163,12 +169,14 @@
                     data: 'date',
                     name: 'date'
                 },
+                @can('enrollment_update')
                 {
                     data: 'action',
                     name: 'action',
                     orderable: false,
                     searchable: false
                 },
+                @endcan
             ],
             initComplete: function(settings, json) {
                 $('body').find('.dataTables_scrollBody').addClass("custom-scrollbar");

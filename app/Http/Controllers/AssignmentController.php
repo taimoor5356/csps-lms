@@ -9,6 +9,7 @@ use App\Models\Teacher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 
@@ -24,10 +25,7 @@ class AssignmentController extends Controller
         //
         try {
             if (Auth::user()->hasRole('student')) {
-                $student = Student::where('user_id', Auth::user()->id)->first();
-                if (isset($student)) {
-                    $assignments = Assignment::with('student', 'teacher')->where('student_id', $student->id);
-                }
+                $assignments = Assignment::with('student', 'teacher')->where('student_id', Auth::user()->id);
             } else if (Auth::user()->hasRole('teacher')) {
                 $teacher = Teacher::where('user_id', Auth::user()->id)->first();
                 if (isset($teacher)) {
@@ -53,8 +51,8 @@ class AssignmentController extends Controller
                 return DataTables::of($data->get())
                     ->addIndexColumn()
                     ->editColumn('name', function ($row) {
-                        if (isset($row->student->user)) {
-                            return $row->student->user->name;
+                        if (isset($row->student)) {
+                            return $row->student->name;
                         }
                     })
                     ->editColumn('course_name', function ($row) {
@@ -63,8 +61,8 @@ class AssignmentController extends Controller
                         }
                     })
                     ->editColumn('batch_no', function ($row) {
-                        if (isset($row->student->batch)) {
-                            return $row->student->batch->batch;
+                        if (isset($row->student->student->batch)) {
+                            return $row->student->student->batch->batch;
                         }
                     })
                     ->editColumn('assignment', function ($row) {
@@ -106,17 +104,14 @@ class AssignmentController extends Controller
     public function downloadAssignment($id)
     {
         $assignment = Assignment::where('id', $id)->first();
-
         if (isset($assignment)) {
-            $filePath = storage_path('files/' . $assignment->image);
-
+            $filePath = public_path('assets/img/assignments/' . $assignment->image);
             if (file_exists($filePath)) {
                 $headers = [
                     'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
                     'Pragma' => 'no-cache',
                     'Expires' => 'Sat, 01 Jan 2000 00:00:00 GMT',
                 ];
-
                 return response()->download($filePath, $assignment->image, $headers);
             } else {
                 return redirect()->back()->with('error', 'Something went wrong');
@@ -161,6 +156,29 @@ class AssignmentController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            DB::beginTransaction();
+            $assignment = Assignment::create([
+                'course_id' => $request->course_id,
+                'student_id' => $request->student_id,
+                'teacher_id' => $request->teacher_id,
+                'short_msg' => $request->short_msg
+            ]);
+            if ($request->hasFile('image')) {
+                if ($request->file('image')->getSize() > 500000) {
+                    return redirect()->back()->with('error', 'Max 500KB photo size allowed');
+                }
+                $file = time().'.'.$request->image->extension();
+                $request->image->move(public_path('assets/img/assignments/'), $file);
+                $assignment->image = $file;
+                $assignment->save();
+            }
+            DB::commit();
+            return redirect()->back()->with('success', 'Successfully created');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**

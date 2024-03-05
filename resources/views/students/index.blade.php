@@ -343,6 +343,34 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" id="student-registration-alert" tabindex="-1" role="dialog" aria-labelledby="student-registration-alert"
+            aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title text-danger" id="modal-title-default">Alert</h6>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="main-body text-center">
+                                <h4>It is mandatory to fill out your registration form and update all your information.</h4>
+                                <div class="row my-4">
+                                    <div class="col-12">
+                                        @role('student')
+                                        <a href="{{route('edit.student', Auth::user()->student->id)}}" class="btn btn-primary">Open your registration form</a>
+                                        @endrole
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 <!-- Section Modal -->
 @section('page_js')
@@ -382,6 +410,9 @@
             $('.toast .toast-body').addClass('bg-danger');
             $('.toast .toast-body').html("{{session('error')}}");
             $('.toast').toast('show');
+        @endif
+        @if (Auth::user()->hasRole('student') && Auth::user()->student->form_updated == 'false')
+            $('#student-registration-alert').modal('show');
         @endif
         // Data Table Starts
         var table = $('.data-table').DataTable({

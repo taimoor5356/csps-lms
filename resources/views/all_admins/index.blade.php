@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="header-buttons ms-auto text-end">
-                        <a href="{{ route('create.admin') }}" class="btn btn-primary" target="_blank"><i class="fa fa-user-plus"></i> Add New</a>
+                        <a href="{{ route('create.admin') }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add New</a>
                         <a href="{{ route('trashed.admins') }}" class="btn btn-danger"><i class="fa fa-trash-o"></i> Trashed</a>
                     </div>
                 </div>
@@ -252,26 +252,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- Scripting Here -->
 <script>
-    /* Formatting function for row details - modify as you need */
-    function format(user) {
-        // `d` is the original data object for the row
-        return (
-            '<table class="child-table" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                '<tr>' +
-                    '<td>Full name:</td>' +
-                    '<td>' + user.name + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td>Email:</td>' +
-                    '<td>' + user.email + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td>Father Name:</td>' +
-                    '<td>'+ user.admin.father_name +'</td>' +
-                '</tr>' +
-            '</table>'
-        );
-    }
     $(document).ready(function() {
         @if (session('success'))
             $('.toast .success-header').html('Success');
@@ -355,7 +335,7 @@
             var _this = $(this);
             var adminId = _this.attr('data-admin-id');
             $.get('admins/' + adminId + '/show', function(data) {
-                $('span.batch-no').html(data.batch_no);
+                $('span.batch-no').html(data.batch.batch);
                 $('span.reg-no').html(data.reg_no);
                 $('div.father-name').html(data.father_name);
                 $('div.dob').html(data.dob);
